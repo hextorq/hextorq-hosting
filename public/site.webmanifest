@@ -1,0 +1,15 @@
+{
+  "name": "Hextorq Hosting",
+  "short_name": "Hextorq",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#06090E",
+  "theme_color": "#0EA5E9",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml"
+    }
+  ]
+}
