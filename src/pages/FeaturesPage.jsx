@@ -5,23 +5,17 @@ import DeploymentFlowAnimation from '../components/home/DeploymentFlowAnimation'
 import CtaBanner from '../components/home/CtaBanner';
 import { 
   Zap, 
-  HardDrive, 
-  Cpu, 
-  Globe, 
-  ShieldCheck, 
-  Activity, 
-  Layers, 
-  Terminal,
-  CheckCircle2,
-  Sparkles
+  CheckCircle2, 
+  Sparkles,
+  HardDrive
 } from 'lucide-react';
 
 export default function FeaturesPage() {
   return (
     <>
       <SEO
-        title="Infrastructure Features & Bare-Metal Performance"
-        description="Explore the technical capabilities of Hextorq Hosting: PCIe Gen4 NVMe arrays, AMD EPYC compute, multi-channel DDR5 ECC RAM, and 500Gbps DDoS mitigation."
+        title="Infrastructure Features & Bare-Metal Hardware — Hextorq Hosting"
+        description="Explore the technical capabilities of Hextorq Hosting: enterprise NVMe arrays, modern multi-core server processors, ECC memory, and DDoS defense."
         canonical="https://hosting.hextorq.tech/features"
       />
 
@@ -31,13 +25,13 @@ export default function FeaturesPage() {
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-16 text-center space-y-6">
           <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-cyan-950/80 border border-cyan-500/30 text-cyan-300 text-xs font-mono">
             <Zap className="w-3.5 h-3.5" />
-            <span>BARE-METAL HARDWARE ARCHITECTURE</span>
+            <span>INFRASTRUCTURE ARCHITECTURE</span>
           </div>
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-display font-extrabold text-white tracking-tight">
-            Infrastructure Engineered for <span className="text-gradient-cyan">Raw Speed</span>
+            Infrastructure Engineered for <span className="text-gradient-cyan">Modern Apps</span>
           </h1>
-          <p className="text-base sm:text-lg text-slate-300 max-w-2xl mx-auto leading-relaxed">
-            Every layer of the Hextorq stack — from silicon and NVMe arrays to edge reverse proxies — is optimized for sub-millisecond I/O and zero dropped connections.
+          <p className="text-base sm:text-lg text-slate-300 max-w-2xl mx-auto leading-relaxed font-sans">
+            Every layer of the Hextorq platform — from NVMe solid-state storage to container runtime isolation — is optimized for reliable throughput and fast execution.
           </p>
         </section>
 
@@ -47,7 +41,7 @@ export default function FeaturesPage() {
             {INFRASTRUCTURE_SPECS.map((spec) => (
               <div
                 key={spec.id}
-                className="p-8 rounded-3xl bg-slate-900/60 border border-white/[0.08] hover:border-cyan-500/30 transition-all duration-300 space-y-6 shadow-xl"
+                className="p-8 rounded-3xl bg-[#090E18] border border-white/[0.08] hover:border-white/[0.15] transition-all duration-300 space-y-6 shadow-xl"
               >
                 <div className="space-y-2">
                   <span className="text-xs font-mono text-cyan-400 uppercase tracking-wider font-semibold">
@@ -63,7 +57,7 @@ export default function FeaturesPage() {
 
                 <div className="grid grid-cols-3 gap-3 pt-2">
                   {spec.metrics.map((m, i) => (
-                    <div key={i} className="p-3.5 rounded-xl bg-slate-950/80 border border-slate-800 text-center">
+                    <div key={i} className="p-3.5 rounded-2xl bg-slate-950/80 border border-white/[0.04] text-center">
                       <span className="text-[10px] font-mono text-slate-400 block truncate">{m.label}</span>
                       <p className="text-xs font-bold text-cyan-300 font-mono mt-0.5 truncate">{m.value}</p>
                     </div>
@@ -71,56 +65,6 @@ export default function FeaturesPage() {
                 </div>
               </div>
             ))}
-          </div>
-        </section>
-
-        {/* Developer Workflows & CLI */}
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-          <div className="p-8 sm:p-12 rounded-3xl bg-[#090F1A] border border-cyan-500/30 shadow-2xl grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-            
-            <div className="lg:col-span-6 space-y-5">
-              <span className="px-2.5 py-1 rounded-md text-[10px] font-mono font-semibold bg-cyan-950 text-cyan-300 border border-cyan-500/30">
-                DEVELOPER TOOLCHAIN
-              </span>
-              <h2 className="text-2xl sm:text-3xl font-bold font-display text-white">
-                Everything You Need to Ship Faster
-              </h2>
-              <p className="text-sm text-slate-300 leading-relaxed">
-                Connect your Git repositories directly or use our CLI to stream build logs, provision database partitions, and toggle environment variables without leaving your terminal.
-              </p>
-
-              <div className="grid grid-cols-2 gap-3 text-xs font-mono text-slate-300 pt-2">
-                <div className="flex items-center space-x-2">
-                  <CheckCircle2 className="w-4 h-4 text-cyan-400" />
-                  <span>Git Webhooks & CI/CD</span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <CheckCircle2 className="w-4 h-4 text-cyan-400" />
-                  <span>Secrets & Env Vault</span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <CheckCircle2 className="w-4 h-4 text-cyan-400" />
-                  <span>Instant DNS Propagation</span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <CheckCircle2 className="w-4 h-4 text-cyan-400" />
-                  <span>HTTP/3 & Brotli Compression</span>
-                </div>
-              </div>
-            </div>
-
-            <div className="lg:col-span-6 p-5 rounded-2xl bg-slate-950 border border-white/[0.08] font-mono text-xs text-slate-300 space-y-2">
-              <div className="text-slate-400 pb-2 border-b border-slate-800">
-                # Install and deploy in seconds:
-              </div>
-              <div className="text-cyan-400">$ npm install -g @hextorq/cli</div>
-              <div className="text-slate-400">› Authenticating token with hosting.hextorq.tech...</div>
-              <div className="text-cyan-400">$ hextorq link --app=my-fullstack-app</div>
-              <div className="text-emerald-400">✔ Linked: React UI (port: 3000) & Node API (port: 8080)</div>
-              <div className="text-cyan-400">$ hextorq deploy --prod</div>
-              <div className="text-slate-300">› Uploading build artifact (1.8 MB)...</div>
-              <div className="text-emerald-400 font-bold">✔ ONLINE: https://my-fullstack-app.hextorq.app</div>
-            </div>
           </div>
         </section>
 

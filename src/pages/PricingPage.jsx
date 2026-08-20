@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import SEO from '../components/common/SEO';
 import { SHARED_FIXED_PLANS, SHARED_BURST_PLANS } from '../data/hostingPlans';
 import { VPS_TIERS } from '../data/vpsPlans';
-import { ARCHITECTURE_COMPARISON } from '../data/featuresData';
 import { useDeployModal } from '../context/DeployModalContext';
 import FAQSection from '../components/home/FAQSection';
 import CtaBanner from '../components/home/CtaBanner';
@@ -14,10 +13,8 @@ import {
   Layers, 
   TrendingUp, 
   ArrowRight, 
-  ShieldCheck, 
   Tag,
-  Info,
-  Sparkles
+  Info
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
@@ -40,13 +37,13 @@ export default function PricingPage() {
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-12 text-center space-y-6">
           <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-cyan-950/80 border border-cyan-500/30 text-cyan-300 text-xs font-mono">
             <Tag className="w-3.5 h-3.5" />
-            <span>TRANSPARENT CLOUD PRICING</span>
+            <span>TRANSPARENT PRICING</span>
           </div>
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-display font-extrabold text-white tracking-tight">
-            Simple, Honest <span className="text-gradient-cyan">Pricing</span>
+            Simple, Transparent <span className="text-gradient-cyan">Pricing</span>
           </h1>
-          <p className="text-base sm:text-lg text-slate-300 max-w-2xl mx-auto leading-relaxed">
-            No forced multi-year locks. No renewal price gouging. Pick the exact resource tier your application needs.
+          <p className="text-base sm:text-lg text-slate-300 max-w-2xl mx-auto leading-relaxed font-sans">
+            Clear upfront pricing in INR (₹) with zero renewal multipliers and no hidden surprises.
           </p>
 
           {/* Billing Cycle Switcher */}
@@ -66,21 +63,18 @@ export default function PricingPage() {
                 }`}
               ></div>
             </button>
-            <span className={`flex items-center space-x-1.5 ${billingPeriod === 'yearly' ? 'text-cyan-300 font-semibold' : 'text-slate-400'}`}>
-              <span>Yearly Billing</span>
-              <span className="px-2 py-0.5 rounded bg-emerald-950 text-emerald-400 border border-emerald-500/30 text-[10px]">
-                Save up to 18%
-              </span>
+            <span className={billingPeriod === 'yearly' ? 'text-cyan-300 font-semibold' : 'text-slate-400'}>
+              Yearly (~18% discount)
             </span>
           </div>
 
           {/* Category Filter Tabs */}
           <div className="flex flex-wrap items-center justify-center gap-2 pt-4">
             {[
-              { id: 'all', name: 'All Categories' },
+              { id: 'all', name: 'All Plans' },
               { id: 'fixed', name: 'Fixed Shared' },
               { id: 'burst', name: 'Flexible Burst' },
-              { id: 'vps', name: 'VPS Servers' }
+              { id: 'vps', name: 'VPS Hosting' }
             ].map(tab => (
               <button
                 key={tab.id}
@@ -89,7 +83,7 @@ export default function PricingPage() {
                 className={`px-4 py-2 rounded-xl text-xs font-mono transition-all ${
                   selectedTab === tab.id
                     ? 'bg-cyan-500 text-black font-bold shadow-md shadow-cyan-500/20'
-                    : 'bg-slate-900 text-slate-400 border border-slate-800 hover:text-white'
+                    : 'bg-slate-900 text-slate-400 border border-white/[0.04] hover:text-white'
                 }`}
               >
                 {tab.name}
@@ -109,12 +103,12 @@ export default function PricingPage() {
                     Fixed Resource Shared Hosting
                   </h2>
                 </div>
-                <p className="text-xs text-slate-400 mt-1">
-                  1 Frontend + 1 Backend • Predictable hard quotas • Lowest cost foundation
+                <p className="text-xs text-slate-400 mt-1 font-sans">
+                  1 Frontend + 1 Backend • Predictable resources for predictable workloads
                 </p>
               </div>
-              <span className="text-xs font-mono text-cyan-300 bg-cyan-950/80 px-3 py-1 rounded-lg border border-cyan-500/30">
-                Predictable workloads
+              <span className="text-xs font-mono text-cyan-300 bg-cyan-950/80 px-3 py-1 rounded-full border border-cyan-500/30">
+                Predictable quotas
               </span>
             </div>
 
@@ -124,22 +118,22 @@ export default function PricingPage() {
                 return (
                   <div
                     key={plan.id}
-                    className={`p-6 sm:p-7 rounded-2xl flex flex-col justify-between transition-all ${
+                    className={`p-7 rounded-3xl flex flex-col justify-between transition-all ${
                       plan.popular
                         ? 'bg-slate-900 border-2 border-cyan-500/60 shadow-xl shadow-cyan-500/10'
-                        : 'bg-slate-950/70 border border-white/[0.08] hover:border-slate-700'
+                        : 'bg-[#090E18] border border-white/[0.08] hover:border-slate-700'
                     }`}
                   >
                     <div>
                       <div className="flex items-center justify-between mb-2">
                         <h3 className="text-xl font-bold font-display text-white">{plan.name}</h3>
                         {plan.badge && (
-                          <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-cyan-950 text-cyan-400 border border-cyan-500/30">
+                          <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-cyan-950 text-cyan-400 border border-cyan-500/30">
                             {plan.badge}
                           </span>
                         )}
                       </div>
-                      <p className="text-xs text-slate-400 mb-4 min-h-[32px]">{plan.tagline}</p>
+                      <p className="text-xs text-slate-400 mb-4 min-h-[32px] font-sans">{plan.tagline}</p>
 
                       <div className="py-3 border-y border-white/[0.06] mb-5">
                         <div className="flex items-baseline space-x-1">
@@ -148,26 +142,26 @@ export default function PricingPage() {
                           <span className="text-xs font-mono text-slate-400">/mo</span>
                         </div>
                         <p className="text-[10px] font-mono text-slate-400 mt-0.5">
-                          {billingPeriod === 'yearly' ? 'Billed annually' : 'Billed monthly'} • Renew at {plan.currency}{price}/mo
+                          {billingPeriod === 'yearly' ? 'Billed annually' : 'Billed monthly'} • Renew at same rate
                         </p>
                       </div>
 
-                      <div className="p-3 rounded-xl bg-slate-900/60 border border-slate-800 text-xs font-mono space-y-1.5 mb-5">
+                      <div className="p-3.5 rounded-2xl bg-slate-950/70 border border-white/[0.04] text-xs font-mono space-y-1.5 mb-5">
                         <div className="flex justify-between text-slate-300">
-                          <span className="text-slate-400">CPU / RAM:</span>
+                          <span className="text-slate-400">Compute / RAM:</span>
                           <span className="text-white font-semibold">{plan.specs.vcpu} • {plan.specs.ram}</span>
                         </div>
                         <div className="flex justify-between text-slate-300">
-                          <span className="text-slate-400">NVMe SSD:</span>
+                          <span className="text-slate-400">NVMe Storage:</span>
                           <span className="text-white font-semibold">{plan.specs.storage}</span>
                         </div>
                         <div className="flex justify-between text-slate-300">
-                          <span className="text-slate-400">Enforcement:</span>
-                          <span className="text-cyan-400 font-semibold">Strict Hard Ceiling</span>
+                          <span className="text-slate-400">Target:</span>
+                          <span className="text-cyan-400 font-semibold">{plan.specs.apps}</span>
                         </div>
                       </div>
 
-                      <ul className="space-y-2 text-xs text-slate-300 mb-6">
+                      <ul className="space-y-2 text-xs text-slate-300 mb-6 font-sans">
                         {plan.features.map((f, i) => (
                           <li key={i} className="flex items-center space-x-2">
                             <Check className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
@@ -182,7 +176,7 @@ export default function PricingPage() {
                       onClick={() => openDeployModal(plan, 'app')}
                       className={`w-full py-3 rounded-xl text-xs font-semibold tracking-wide transition-all ${
                         plan.popular
-                          ? 'bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white shadow-lg shadow-cyan-500/20'
+                          ? 'bg-cyan-500 hover:bg-cyan-400 text-black font-bold shadow-md shadow-cyan-500/20'
                           : 'bg-slate-800 hover:bg-slate-700 text-white'
                       }`}
                     >
@@ -206,12 +200,12 @@ export default function PricingPage() {
                     Flexible / Burst Shared Hosting
                   </h2>
                 </div>
-                <p className="text-xs text-slate-400 mt-1">
-                  1 Frontend + 1 Backend • Dynamic surge buffer • Zero hard timeouts
+                <p className="text-xs text-slate-400 mt-1 font-sans">
+                  1 Frontend + 1 Backend • Resources that adapt to your workload during surges
                 </p>
               </div>
-              <span className="text-xs font-mono text-blue-300 bg-blue-950/80 px-3 py-1 rounded-lg border border-blue-500/30">
-                Surge-proof scaling
+              <span className="text-xs font-mono text-blue-300 bg-blue-950/80 px-3 py-1 rounded-full border border-blue-500/30">
+                Adaptive headroom
               </span>
             </div>
 
@@ -221,22 +215,22 @@ export default function PricingPage() {
                 return (
                   <div
                     key={plan.id}
-                    className={`p-6 sm:p-7 rounded-2xl flex flex-col justify-between transition-all ${
+                    className={`p-7 rounded-3xl flex flex-col justify-between transition-all ${
                       plan.popular
                         ? 'bg-slate-900 border-2 border-blue-500/60 shadow-xl shadow-blue-500/10'
-                        : 'bg-slate-950/70 border border-white/[0.08] hover:border-slate-700'
+                        : 'bg-[#090E18] border border-white/[0.08] hover:border-slate-700'
                     }`}
                   >
                     <div>
                       <div className="flex items-center justify-between mb-2">
                         <h3 className="text-xl font-bold font-display text-white">{plan.name}</h3>
                         {plan.badge && (
-                          <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-blue-950 text-blue-300 border border-blue-500/30">
+                          <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-blue-950 text-blue-300 border border-blue-500/30">
                             {plan.badge}
                           </span>
                         )}
                       </div>
-                      <p className="text-xs text-slate-400 mb-4 min-h-[32px]">{plan.tagline}</p>
+                      <p className="text-xs text-slate-400 mb-4 min-h-[32px] font-sans">{plan.tagline}</p>
 
                       <div className="py-3 border-y border-white/[0.06] mb-5">
                         <div className="flex items-baseline space-x-1">
@@ -245,18 +239,18 @@ export default function PricingPage() {
                           <span className="text-xs font-mono text-slate-400">/mo</span>
                         </div>
                         <p className="text-[10px] font-mono text-slate-400 mt-0.5">
-                          {billingPeriod === 'yearly' ? 'Billed annually' : 'Billed monthly'} • Renew at {plan.currency}{price}/mo
+                          {billingPeriod === 'yearly' ? 'Billed annually' : 'Billed monthly'} • Renew at same rate
                         </p>
                       </div>
 
-                      <div className="p-3 rounded-xl bg-slate-900/60 border border-slate-800 text-xs font-mono space-y-1.5 mb-5">
-                        <div className="flex justify-between text-slate-300">
-                          <span className="text-slate-400">Burst Buffer:</span>
-                          <span className="text-amber-300 font-semibold">{plan.burstCapacity}</span>
-                        </div>
+                      <div className="p-3.5 rounded-2xl bg-slate-950/70 border border-white/[0.04] text-xs font-mono space-y-1.5 mb-5">
                         <div className="flex justify-between text-slate-300">
                           <span className="text-slate-400">Base Specs:</span>
-                          <span className="text-white font-semibold">{plan.specs.vcpu}</span>
+                          <span className="text-white font-semibold">{plan.specs.vcpu} • {plan.specs.ram}</span>
+                        </div>
+                        <div className="flex justify-between text-slate-300">
+                          <span className="text-slate-400">Burst Model:</span>
+                          <span className="text-blue-300 font-semibold">{plan.burstCapacity}</span>
                         </div>
                         <div className="flex justify-between text-slate-300">
                           <span className="text-slate-400">Storage:</span>
@@ -264,7 +258,7 @@ export default function PricingPage() {
                         </div>
                       </div>
 
-                      <ul className="space-y-2 text-xs text-slate-300 mb-6">
+                      <ul className="space-y-2 text-xs text-slate-300 mb-6 font-sans">
                         {plan.features.map((f, i) => (
                           <li key={i} className="flex items-center space-x-2">
                             <Check className="w-3.5 h-3.5 text-blue-400 shrink-0" />
@@ -279,7 +273,7 @@ export default function PricingPage() {
                       onClick={() => openDeployModal(plan, 'app')}
                       className={`w-full py-3 rounded-xl text-xs font-semibold tracking-wide transition-all ${
                         plan.popular
-                          ? 'bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-400 hover:to-indigo-500 text-white shadow-lg shadow-blue-500/20'
+                          ? 'bg-blue-600 hover:bg-blue-500 text-white font-bold shadow-md shadow-blue-500/20'
                           : 'bg-slate-800 hover:bg-slate-700 text-white'
                       }`}
                     >
@@ -303,15 +297,15 @@ export default function PricingPage() {
                     Dedicated VPS Servers
                   </h2>
                 </div>
-                <p className="text-xs text-slate-400 mt-1">
-                  Full root access • OS selection • Unlimited applications • Docker container stacks
+                <p className="text-xs text-slate-400 mt-1 font-sans">
+                  Your Server. Your Rules. • Full root access • OS selection • Unlimited applications
                 </p>
               </div>
               <Link
                 to="/vps"
                 className="text-xs font-mono text-cyan-400 hover:underline flex items-center space-x-1"
               >
-                <span>Launch Custom VPS Configurator</span>
+                <span>Launch VPS Configurator</span>
                 <ArrowRight className="w-3 h-3" />
               </Link>
             </div>
@@ -322,10 +316,10 @@ export default function PricingPage() {
                 return (
                   <div
                     key={tier.id}
-                    className={`p-5 rounded-2xl flex flex-col justify-between transition-all ${
+                    className={`p-6 rounded-3xl flex flex-col justify-between transition-all ${
                       tier.popular
                         ? 'bg-slate-900 border-2 border-indigo-500/60 shadow-xl shadow-indigo-500/10'
-                        : 'bg-slate-950/70 border border-white/[0.08] hover:border-slate-700'
+                        : 'bg-[#090E18] border border-white/[0.08] hover:border-slate-700'
                     }`}
                   >
                     <div>
@@ -341,7 +335,7 @@ export default function PricingPage() {
                         <div>Compute: <strong className="text-white">{tier.specs.vcpu}</strong></div>
                         <div>RAM: <strong className="text-white">{tier.specs.ram}</strong></div>
                         <div>Storage: <strong className="text-white">{tier.specs.storage}</strong></div>
-                        <div>Transfer: <strong className="text-cyan-300">{tier.specs.bandwidth}</strong></div>
+                        <div>Bandwidth: <strong className="text-cyan-300">{tier.specs.bandwidth}</strong></div>
                       </div>
                     </div>
 
@@ -359,31 +353,31 @@ export default function PricingPage() {
           </section>
         )}
 
-        {/* RESOURCE LIMITS & RENEWAL POLICY DISCLOSURES */}
+        {/* RESOURCE POLICY DISCLOSURES */}
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-          <div className="p-8 rounded-3xl bg-slate-900/50 border border-slate-800 space-y-6">
+          <div className="p-8 rounded-3xl bg-[#090E18] border border-white/[0.08] space-y-6">
             <div className="flex items-center space-x-2 text-xs font-mono text-cyan-400 uppercase tracking-wider font-semibold">
               <Info className="w-4 h-4" />
-              <span>Transparent Resource & Renewal Guarantees</span>
+              <span>Transparent Resource & Renewal Safeguards</span>
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-xs text-slate-300 leading-relaxed font-mono">
-              <div className="space-y-2 p-4 rounded-xl bg-slate-950/60 border border-slate-800/80">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-xs text-slate-300 leading-relaxed font-sans">
+              <div className="space-y-2 p-5 rounded-2xl bg-slate-950/60 border border-white/[0.04]">
                 <h4 className="text-sm font-bold text-white font-display">Fixed Shared Policy</h4>
                 <p className="text-slate-400">
-                  Fixed plans receive strict isolated quotas. When 100% capacity is reached, incoming requests are safely queued to prevent server crashes. Upgrade anytime with 1 click.
+                  Fixed plans receive strict isolated quotas. When 100% capacity is reached, normal resource enforcement applies and incoming requests are safely queued.
                 </p>
               </div>
-              <div className="space-y-2 p-4 rounded-xl bg-slate-950/60 border border-slate-800/80">
+              <div className="space-y-2 p-5 rounded-2xl bg-slate-950/60 border border-white/[0.04]">
                 <h4 className="text-sm font-bold text-white font-display">Flexible Burst Policy</h4>
                 <p className="text-slate-400">
-                  Flexible plans dynamically draw up to 4x compute headroom from available node reserves during traffic spikes. Subject to cluster fair-use integrity.
+                  Flexible plans dynamically draw capacity from available shared node reserves during traffic spikes. Additional capacity is subject to infrastructure availability.
                 </p>
               </div>
-              <div className="space-y-2 p-4 rounded-xl bg-slate-950/60 border border-slate-800/80">
-                <h4 className="text-sm font-bold text-white font-display">Zero Renewal Shock</h4>
+              <div className="space-y-2 p-5 rounded-2xl bg-slate-950/60 border border-white/[0.04]">
+                <h4 className="text-sm font-bold text-white font-display">Transparent Renewals</h4>
                 <p className="text-slate-400">
-                  Your renewal price is the exact same standard rate as your subscription. We never double or triple prices after your first billing cycle.
+                  Your renewal price is the same standard rate as your subscription. We never increase prices after initial promotional cycles.
                 </p>
               </div>
             </div>

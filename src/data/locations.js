@@ -5,17 +5,13 @@ export const DATA_CENTERS = [
     country: 'India',
     region: 'Asia-South (bom-1)',
     flag: '🇮🇳',
-    coordinates: { x: '68.5%', y: '52%' }, // Map relative percentages
+    coordinates: { x: '68.5%', y: '52%' },
     coordinatesLonLat: [72.8777, 19.0760],
-    tier: 'Tier III+ Carrier-Neutral Facility',
-    compliance: ['ISO 27001', 'SOC 2 Type II', 'PCI-DSS'],
-    ping: '12ms',
-    status: 'Operational',
+    tier: 'Carrier-Neutral Facility',
+    status: 'Available region',
     statusColor: 'emerald',
-    uplink: '40 Gbps Redundant',
-    features: ['Direct NIXI Peering', 'Local Indian Gateway', 'Low Jitter Core Network', 'DDoS Edge Scrubbing'],
-    activeWorkloads: '18,400+ containers',
-    avgResponse: '14.2 ms'
+    description: 'Strategic low-latency hub optimized for Indian sub-continent traffic with direct local internet exchange peering.',
+    features: ['Direct NIXI Peering', 'Local Indian Gateway Routing', 'Ultra-low Domestic Jitter', 'Edge DDoS Mitigation']
   },
   {
     id: 'sg-sin',
@@ -25,15 +21,11 @@ export const DATA_CENTERS = [
     flag: '🇸🇬',
     coordinates: { x: '77.5%', y: '61%' },
     coordinatesLonLat: [103.8198, 1.3521],
-    tier: 'Tier IV Ultra-Resilient Facility',
-    compliance: ['ISO 27001', 'SS 564 Green DC', 'SOC 2'],
-    ping: '38ms',
-    status: 'Operational',
+    tier: 'Southeast Asia Hub',
+    status: 'Available region',
     statusColor: 'emerald',
-    uplink: '100 Gbps Multi-Transit',
-    features: ['Direct Equinix SG Peering', 'ASE / SEA-ME-WE Subsea Cables', 'Sub-millisecond Local Routing'],
-    activeWorkloads: '14,200+ containers',
-    avgResponse: '28.6 ms'
+    description: 'High-connectivity regional gateway with multi-subsea cable routing across ASEAN and East Asia.',
+    features: ['Direct Equinix SG Exchange Peering', 'Multi-Subsea Cable Redundancy', 'Regional Asia-Pacific Routing', 'Automated Network Failover']
   },
   {
     id: 'de-fra',
@@ -43,15 +35,11 @@ export const DATA_CENTERS = [
     flag: '🇩🇪',
     coordinates: { x: '51%', y: '33%' },
     coordinatesLonLat: [8.6821, 50.1109],
-    tier: 'Tier III+ European Hub',
-    compliance: ['GDPR Compliant', 'ISO 27001', 'EN 50600'],
-    ping: '110ms',
-    status: 'Operational',
+    tier: 'Central European Gateway',
+    status: 'Available region',
     statusColor: 'emerald',
-    uplink: '100 Gbps DE-CIX Interconnect',
-    features: ['Direct DE-CIX Frankfurt Exchange', '100% Renewable Hydro Power', 'Strict EU Data Privacy'],
-    activeWorkloads: '22,100+ containers',
-    avgResponse: '18.4 ms'
+    description: 'Direct interconnection at the heart of Europe with strict data isolation and renewable power sourcing.',
+    features: ['Direct DE-CIX Frankfurt Exchange', 'European Backbone Interconnect', 'High Reliability Power Grid', 'GDPR-Aligned Data Isolation']
   },
   {
     id: 'uk-lon',
@@ -61,32 +49,24 @@ export const DATA_CENTERS = [
     flag: '🇬🇧',
     coordinates: { x: '47.5%', y: '31%' },
     coordinatesLonLat: [-0.1278, 51.5074],
-    tier: 'Tier III+ Docklands Node',
-    compliance: ['UK-GDPR', 'Cyber Essentials Plus', 'ISO 27001'],
-    ping: '125ms',
-    status: 'Operational',
+    tier: 'Western European Node',
+    status: 'Available region',
     statusColor: 'emerald',
-    uplink: '80 Gbps LINX Exchange',
-    features: ['Direct LINX Interconnection', 'Low-latency Transatlantic Routing', 'Dual-redundant Power Feeds'],
-    activeWorkloads: '16,700+ containers',
-    avgResponse: '19.8 ms'
+    description: 'Dedicated transatlantic routing facility connecting Western Europe and the Americas with low packet overhead.',
+    features: ['Direct LINX Exchange Access', 'Transatlantic Fiber Routing', 'Dual-Redundant Power Feeds', 'Low Latency UK Distribution']
   },
   {
     id: 'us-iad',
-    name: 'Ashburn (Virginia), USA',
+    name: 'Virginia, United States',
     country: 'United States',
     region: 'US-East (iad-1)',
     flag: '🇺🇸',
     coordinates: { x: '26%', y: '38%' },
     coordinatesLonLat: [-77.4875, 39.0438],
-    tier: 'Tier IV Data Center Alley',
-    compliance: ['SOC 1/2/3', 'HIPAA Ready', 'NIST 800-53'],
-    ping: '180ms',
-    status: 'Operational',
+    tier: 'North American Hub',
+    status: 'Available region',
     statusColor: 'emerald',
-    uplink: '200 Gbps Cloud Corridor',
-    features: ['Direct Major Cloud Peering', 'Sub-millisecond US East Backbone', 'Anycast Edge Routing'],
-    activeWorkloads: '31,500+ containers',
-    avgResponse: '11.5 ms'
+    description: 'Major North American cloud corridor connected directly to Tier-1 transit backbones across the US East Coast.',
+    features: ['Direct Major Cloud Carrier Peering', 'High-Capacity US East Backbone', 'Anycast Edge Routing', 'Enterprise Power Infrastructure']
   }
 ];

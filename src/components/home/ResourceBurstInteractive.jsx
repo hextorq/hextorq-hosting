@@ -1,302 +1,219 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { 
-  Zap, 
   TrendingUp, 
-  ArrowRight, 
-  ShieldAlert, 
-  CheckCircle2, 
-  RefreshCw, 
   Cpu, 
-  HardDrive,
-  Activity,
-  Layers,
-  Sparkles,
-  Info
+  Zap, 
+  ArrowRight, 
+  Info,
+  CheckCircle2,
+  RefreshCw,
+  Sparkles
 } from 'lucide-react';
-import { useDeployModal } from '../../context/DeployModalContext';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
 
 export default function ResourceBurstInteractive() {
-  const [trafficLoad, setTrafficLoad] = useState(30); // 0 to 100%
-  const [isSurging, setIsSurging] = useState(false);
-  const { openDeployModal } = useDeployModal();
+  const [trafficStage, setTrafficStage] = useState(0); // 0: Base, 1: Spike, 2: Shared Capacity, 3: App Continues, 4: Returns Normal
+  const [isAutoPlaying, setIsAutoPlaying] = useState(true);
+  const sectionRef = useRef(null);
 
-  // Dynamic calculated metrics based on slider
-  const isBursting = trafficLoad > 50;
-  
-  // Base fixed allocation: 2 vCPU, 2.0 GB RAM
-  const baseCpu = 2.0;
-  const baseRam = 2.0;
+  const stages = [
+    {
+      title: '1. Base Allocation',
+      status: 'Normal Traffic',
+      cpu: '2 vCPU',
+      ram: '2 GB RAM',
+      desc: 'Application operates on its defined base resources during ordinary day-to-day traffic.',
+      badge: 'Base Capacity'
+    },
+    {
+      title: '2. Traffic Surge',
+      status: 'Surge Arrives',
+      cpu: 'Resource demand rises',
+      ram: 'Inbound requests increase',
+      desc: 'Sudden visitor surge from marketing, news, or product launches requires additional capacity.',
+      badge: 'Demand Rises'
+    },
+    {
+      title: '3. Available Shared Capacity',
+      status: 'Headroom Allocated',
+      cpu: 'Additional CPU unlocked',
+      ram: 'Additional RAM unlocked',
+      desc: 'Hextorq seamlessly channels available shared capacity from the cluster reserve buffer.',
+      badge: 'Shared Buffer'
+    },
+    {
+      title: '4. Application Continues',
+      status: 'Smooth Operation',
+      cpu: 'Stable execution',
+      ram: 'Zero request timeouts',
+      desc: 'Users experience fast page loads without 503 errors or sudden resource throttling.',
+      badge: 'High Availability'
+    },
+    {
+      title: '5. Traffic Returns to Normal',
+      status: 'Capacity Reclaimed',
+      cpu: '2 vCPU baseline',
+      ram: '2 GB RAM baseline',
+      desc: 'When traffic normalizes, extra capacity smoothly returns to the shared cluster pool.',
+      badge: 'Pool Restored'
+    }
+  ];
 
-  // Real-time demand values
-  const currentCpuDemand = (baseCpu + (trafficLoad / 100) * 4.0).toFixed(1); // 2.0 to 6.0 vCPU
-  const currentRamDemand = (baseRam + (trafficLoad / 100) * 4.2).toFixed(1); // 2.0 to 6.2 GB RAM
-  const activeRequests = Math.round(500 + trafficLoad * 145);
-
-  const simulateTrafficSurge = () => {
-    setIsSurging(true);
-    let target = 95;
-    setTrafficLoad(target);
-    setTimeout(() => {
-      // Return gradually
-      const returnInterval = setInterval(() => {
-        setTrafficLoad(prev => {
-          if (prev <= 35) {
-            clearInterval(returnInterval);
-            setIsSurging(false);
-            return 30;
-          }
-          return prev - 10;
-        });
-      }, 400);
+  // Auto progression
+  useEffect(() => {
+    if (!isAutoPlaying) return;
+    const interval = setInterval(() => {
+      setTrafficStage((prev) => (prev + 1) % stages.length);
     }, 4500);
-  };
+    return () => clearInterval(interval);
+  }, [isAutoPlaying]);
+
+  const current = stages[trafficStage];
 
   return (
-    <section className="py-20 lg:py-28 relative overflow-hidden bg-[#060A10]">
-      {/* Subtle Background Glows */}
-      <div className="absolute top-1/2 left-0 w-96 h-96 bg-cyan-500/10 blur-[120px] pointer-events-none"></div>
-      <div className="absolute bottom-0 right-0 w-96 h-96 bg-blue-600/10 blur-[120px] pointer-events-none"></div>
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+    <section ref={sectionRef} className="py-20 lg:py-28 relative overflow-hidden bg-[#070B14]">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 space-y-16">
         
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-14 space-y-4">
+        <div className="text-center max-w-3xl mx-auto space-y-4">
           <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-cyan-950/70 border border-cyan-500/30 text-cyan-400 text-xs font-mono">
-            <Sparkles className="w-3.5 h-3.5" />
-            <span>SIGNATURE ARCHITECTURE</span>
+            <TrendingUp className="w-3.5 h-3.5" />
+            <span>FLEXIBLE RESOURCE BEHAVIOR</span>
           </div>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-display font-bold text-white tracking-tight leading-tight">
-            How Adaptive Resource Bursting Works
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-display font-bold text-white tracking-tight">
+            How Resource Bursting Works.
           </h2>
           <p className="text-base sm:text-lg text-slate-300 leading-relaxed font-sans">
-            Your application gets its dedicated baseline resources first. When viral traffic arrives, our hypervisor seamlessly channels available shared cluster capacity — zero config, zero timeouts.
+            Resources that adapt to your workload. When demand increases, your application uses available shared capacity without manual intervention.
           </p>
         </div>
 
-        {/* Interactive Simulator Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-          
-          {/* Left: Interactive Control & Explanation (5 Cols) */}
-          <div className="lg:col-span-5 space-y-6">
-            <div className="p-6 rounded-2xl bg-slate-900/80 border border-white/[0.08] backdrop-blur-xl space-y-6">
-              <div>
+        {/* 5-Step Visual Timeline Progression */}
+        <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
+          {stages.map((stage, idx) => {
+            const isCurrent = trafficStage === idx;
+            return (
+              <button
+                key={idx}
+                type="button"
+                onClick={() => {
+                  setIsAutoPlaying(false);
+                  setTrafficStage(idx);
+                }}
+                className={`p-4 rounded-2xl border text-left transition-all relative ${
+                  isCurrent
+                    ? 'border-cyan-400 bg-cyan-950/50 shadow-lg text-white'
+                    : 'border-white/[0.06] bg-slate-900/40 text-slate-400 hover:border-slate-700 hover:text-slate-200'
+                }`}
+              >
                 <div className="flex items-center justify-between mb-2">
-                  <label className="text-xs font-mono uppercase tracking-wider text-slate-300 font-semibold flex items-center space-x-2">
-                    <Activity className="w-4 h-4 text-cyan-400" />
-                    <span>Simulated Traffic Load</span>
-                  </label>
-                  <span className="text-sm font-mono font-bold text-cyan-300">
-                    {trafficLoad}% Surge
+                  <span className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-mono font-bold ${
+                    isCurrent ? 'bg-cyan-500 text-black' : 'bg-slate-800 text-slate-400'
+                  }`}>
+                    {idx + 1}
+                  </span>
+                  <span className="text-[10px] font-mono text-slate-400">
+                    Step {idx + 1}
                   </span>
                 </div>
-                
-                {/* Range Slider */}
-                <input
-                  type="range"
-                  min="10"
-                  max="100"
-                  value={trafficLoad}
-                  onChange={(e) => setTrafficLoad(Number(e.target.value))}
-                  className="w-full h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-cyan-400"
-                />
-                
-                <div className="flex justify-between text-[10px] font-mono text-slate-400 mt-1">
-                  <span>Baseline (Normal)</span>
-                  <span>Moderate Spike</span>
-                  <span className="text-amber-400 font-semibold">Maximum Surge</span>
+                <div className="text-xs font-bold font-display text-white truncate">
+                  {stage.title.split('. ')[1]}
                 </div>
-              </div>
+              </button>
+            );
+          })}
+        </div>
 
-              {/* Trigger Instant Surge Button */}
+        {/* Detailed Product Graphic Frame */}
+        <div className="p-8 sm:p-10 rounded-3xl bg-[#090E18] border border-white/[0.08] shadow-2xl grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+          
+          {/* Left Explanation (6 cols) */}
+          <div className="lg:col-span-6 space-y-5">
+            <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-slate-900 border border-white/[0.08] text-xs font-mono text-cyan-300">
+              <span>{current.badge}</span>
+            </div>
+
+            <h3 className="text-2xl sm:text-3xl font-display font-bold text-white">
+              {current.title}
+            </h3>
+
+            <p className="text-sm sm:text-base text-slate-300 leading-relaxed font-sans">
+              {current.desc}
+            </p>
+
+            {/* Micro Specs for Current Stage */}
+            <div className="grid grid-cols-2 gap-3 pt-2">
+              <div className="p-3.5 rounded-2xl bg-slate-950/80 border border-white/[0.06]">
+                <span className="text-[10px] font-mono text-slate-400 block">Compute State</span>
+                <span className="text-xs font-bold text-white font-mono mt-0.5 block">{current.cpu}</span>
+              </div>
+              <div className="p-3.5 rounded-2xl bg-slate-950/80 border border-white/[0.06]">
+                <span className="text-[10px] font-mono text-slate-400 block">Memory State</span>
+                <span className="text-xs font-bold text-white font-mono mt-0.5 block">{current.ram}</span>
+              </div>
+            </div>
+
+            <div className="pt-2 flex items-center justify-between text-xs font-mono text-slate-400">
               <button
                 type="button"
-                onClick={simulateTrafficSurge}
-                disabled={isSurging}
-                className="w-full py-3 px-4 rounded-xl text-xs font-mono font-semibold tracking-wide text-white bg-gradient-to-r from-amber-500 via-orange-500 to-rose-500 hover:from-amber-400 hover:to-rose-400 shadow-lg shadow-orange-500/20 flex items-center justify-center space-x-2 transition-all active:scale-98 disabled:opacity-50"
+                onClick={() => setIsAutoPlaying(!isAutoPlaying)}
+                className="text-cyan-400 hover:underline flex items-center space-x-1"
               >
-                <Zap className="w-4 h-4 text-yellow-200 animate-bounce" />
-                <span>{isSurging ? 'Simulating High Surge (Returning...)' : 'Trigger 95% Flash Surge Spike'}</span>
+                <span>{isAutoPlaying ? 'Pause Auto Animation' : 'Resume Auto Animation'}</span>
               </button>
-
-              {/* Step-by-Step State Flow */}
-              <div className="space-y-3 pt-2">
-                <h4 className="text-xs font-mono uppercase tracking-wider text-slate-400">
-                  Real-Time Execution Pipeline:
-                </h4>
-                
-                <div className="space-y-2 text-xs font-mono">
-                  <div className="flex items-center space-x-2 text-slate-300">
-                    <span className="w-5 h-5 rounded-full bg-cyan-950 border border-cyan-500/40 flex items-center justify-center text-[10px] text-cyan-400">1</span>
-                    <span>Application uses included base resources (2 vCPU / 2GB)</span>
-                  </div>
-                  <div className={`flex items-center space-x-2 transition-colors ${isBursting ? 'text-amber-300 font-semibold' : 'text-slate-400'}`}>
-                    <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] ${isBursting ? 'bg-amber-950 border border-amber-500 text-amber-300' : 'bg-slate-900 text-slate-400'}`}>2</span>
-                    <span>Surge detected: Demand increases to {currentCpuDemand} vCPU</span>
-                  </div>
-                  <div className={`flex items-center space-x-2 transition-colors ${isBursting ? 'text-emerald-300 font-semibold' : 'text-slate-400'}`}>
-                    <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] ${isBursting ? 'bg-emerald-950 border border-emerald-500 text-emerald-300' : 'bg-slate-900 text-slate-400'}`}>3</span>
-                    <span>Node verifies idle cluster capacity & unlocks burst buffer</span>
-                  </div>
-                  <div className="flex items-center space-x-2 text-slate-300">
-                    <span className="w-5 h-5 rounded-full bg-cyan-950 border border-cyan-500/40 flex items-center justify-center text-[10px] text-cyan-400">4</span>
-                    <span>Traffic normalizes: Extra capacity returns to pool</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Policy Note */}
-              <div className="p-3 rounded-xl bg-slate-950/70 border border-white/[0.06] flex items-start space-x-2.5 text-[11px] text-slate-400 leading-relaxed">
-                <Info className="w-4 h-4 text-cyan-400 shrink-0 mt-0.5" />
-                <span>
-                  No hard ceiling during spikes while shared capacity is available. Fair-use safeguards protect overall cluster integrity.
-                </span>
-              </div>
             </div>
           </div>
 
-          {/* Right: Live Dynamic Visualizer Canvas (7 Cols) */}
-          <div className="lg:col-span-7 space-y-4">
+          {/* Right Product Visualization Canvas (6 cols) */}
+          <div className="lg:col-span-6 p-6 rounded-2xl bg-slate-950 border border-white/[0.06] space-y-6">
             
-            {/* Visualizer Frame */}
-            <div className="p-6 sm:p-8 rounded-2xl bg-[#090F1B] border border-cyan-500/30 shadow-2xl relative overflow-hidden">
-              
-              {/* Header Status */}
-              <div className="flex items-center justify-between pb-6 border-b border-white/[0.08]">
-                <div className="flex items-center space-x-3">
-                  <div className={`w-3 h-3 rounded-full ${isBursting ? 'bg-amber-400 animate-ping' : 'bg-emerald-400'}`}></div>
-                  <span className="font-mono text-xs font-semibold text-white">
-                    {isBursting ? 'STATE: ADAPTIVE BURST EXPANSION ACTIVE' : 'STATE: NORMAL BASELINE OPERATION'}
-                  </span>
-                </div>
-                <div className="text-xs font-mono text-cyan-400 bg-cyan-950/80 px-2.5 py-1 rounded-lg border border-cyan-500/30">
-                  {activeRequests.toLocaleString()} req/min
-                </div>
+            <div className="flex items-center justify-between pb-3 border-b border-white/[0.06] text-xs font-mono">
+              <span className="text-slate-400">Application Resource Visualization</span>
+              <span className="text-cyan-300 font-semibold">{current.status}</span>
+            </div>
+
+            {/* Base Allocation Bar */}
+            <div className="space-y-2">
+              <div className="flex justify-between text-xs font-mono">
+                <span className="text-slate-300">Base Allocation (Guaranteed)</span>
+                <span className="text-white font-bold">2 vCPU • 2 GB RAM</span>
               </div>
-
-              {/* Dynamic Resource Meters */}
-              <div className="py-6 space-y-6">
-                {/* CPU Meter */}
-                <div className="space-y-2">
-                  <div className="flex justify-between items-center text-xs font-mono">
-                    <span className="text-slate-300 flex items-center space-x-2">
-                      <Cpu className="w-4 h-4 text-cyan-400" />
-                      <span className="font-bold text-white">CPU ALLOCATION</span>
-                      <span className="text-[10px] text-slate-400 font-normal">(Base: 2.0 vCPU)</span>
-                    </span>
-                    <div className="flex items-center space-x-2">
-                      {isBursting && (
-                        <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-amber-950 text-amber-300 border border-amber-500/40">
-                          +{(currentCpuDemand - baseCpu).toFixed(1)} vCPU Burst
-                        </span>
-                      )}
-                      <span className="font-bold text-white text-sm">
-                        {currentCpuDemand} vCPU
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Multi-segmented Bar */}
-                  <div className="h-4 bg-slate-950 rounded-lg p-0.5 flex items-center border border-slate-800 overflow-hidden">
-                    {/* Base segment */}
-                    <div 
-                      className="h-full bg-cyan-500 rounded transition-all duration-300"
-                      style={{ width: `${Math.min(trafficLoad, 40) * 1.25}%` }}
-                    ></div>
-                    {/* Burst segment */}
-                    {isBursting && (
-                      <div 
-                        className="h-full bg-gradient-to-r from-amber-500 to-rose-500 rounded ml-1 transition-all duration-300 animate-pulse"
-                        style={{ width: `${(trafficLoad - 40) * 0.9}%` }}
-                      ></div>
-                    )}
-                  </div>
-                  <div className="flex justify-between text-[10px] font-mono text-slate-400">
-                    <span>0 vCPU</span>
-                    <span className="text-cyan-400">2.0 Base</span>
-                    <span className="text-amber-400">Up to 6.0 Burstable</span>
-                  </div>
-                </div>
-
-                {/* RAM Meter */}
-                <div className="space-y-2">
-                  <div className="flex justify-between items-center text-xs font-mono">
-                    <span className="text-slate-300 flex items-center space-x-2">
-                      <Zap className="w-4 h-4 text-blue-400" />
-                      <span className="font-bold text-white">MEMORY (RAM)</span>
-                      <span className="text-[10px] text-slate-400 font-normal">(Base: 2.0 GB DDR5)</span>
-                    </span>
-                    <div className="flex items-center space-x-2">
-                      {isBursting && (
-                        <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-amber-950 text-amber-300 border border-amber-500/40">
-                          +{(currentRamDemand - baseRam).toFixed(1)} GB Burst
-                        </span>
-                      )}
-                      <span className="font-bold text-white text-sm">
-                        {currentRamDemand} GB
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Multi-segmented Bar */}
-                  <div className="h-4 bg-slate-950 rounded-lg p-0.5 flex items-center border border-slate-800 overflow-hidden">
-                    {/* Base segment */}
-                    <div 
-                      className="h-full bg-blue-500 rounded transition-all duration-300"
-                      style={{ width: `${Math.min(trafficLoad, 40) * 1.25}%` }}
-                    ></div>
-                    {/* Burst segment */}
-                    {isBursting && (
-                      <div 
-                        className="h-full bg-gradient-to-r from-indigo-500 to-amber-500 rounded ml-1 transition-all duration-300 animate-pulse"
-                        style={{ width: `${(trafficLoad - 40) * 0.9}%` }}
-                      ></div>
-                    )}
-                  </div>
-                  <div className="flex justify-between text-[10px] font-mono text-slate-400">
-                    <span>0 GB</span>
-                    <span className="text-blue-400">2.0 GB Base</span>
-                    <span className="text-amber-400">Up to 6.2 GB Burstable</span>
-                  </div>
-                </div>
+              <div className="h-3 rounded-full bg-slate-900 overflow-hidden p-0.5 border border-white/[0.06]">
+                <div className="h-full bg-cyan-500 rounded-full w-full"></div>
               </div>
+            </div>
 
-              {/* Live Outcome Comparison Box */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-4 border-t border-white/[0.08]">
-                <div className="p-3 rounded-xl bg-slate-950/60 border border-red-500/20">
-                  <div className="flex items-center space-x-1.5 text-xs font-mono text-red-400 font-semibold mb-1">
-                    <ShieldAlert className="w-3.5 h-3.5" />
-                    <span>Traditional Fixed Limit</span>
-                  </div>
-                  <p className="text-[11px] text-slate-400 leading-tight">
-                    {isBursting ? '503 Service Unavailable / Request timeouts occur at 2.0 vCPU limit.' : 'Works normally during baseline traffic.'}
-                  </p>
-                </div>
-
-                <div className="p-3 rounded-xl bg-slate-950/60 border border-emerald-500/30 bg-emerald-950/10">
-                  <div className="flex items-center space-x-1.5 text-xs font-mono text-emerald-400 font-semibold mb-1">
-                    <CheckCircle2 className="w-3.5 h-3.5" />
-                    <span>Hextorq Flexible Burst</span>
-                  </div>
-                  <p className="text-[11px] text-slate-300 leading-tight">
-                    {isBursting ? 'Zero dropped requests! Application effortlessly absorbs 100% of user traffic.' : 'Zero idle waste; ready to scale instantly on demand.'}
-                  </p>
-                </div>
-              </div>
-
-              {/* Bottom CTA within Visualizer */}
-              <div className="mt-6 pt-4 border-t border-white/[0.06] flex items-center justify-between">
-                <span className="text-xs font-mono text-slate-400">
-                  Included on all Flex Launch, Flex Growth & Flex Business plans.
+            {/* Flexible Headroom Bar */}
+            <div className="space-y-2">
+              <div className="flex justify-between text-xs font-mono">
+                <span className="text-slate-300">Available Shared Capacity</span>
+                <span className={trafficStage === 2 || trafficStage === 3 ? 'text-amber-300 font-bold' : 'text-slate-400'}>
+                  {trafficStage === 2 || trafficStage === 3 ? 'Active Headroom Allocation' : 'Shared Pool Idle'}
                 </span>
-                <button
-                  type="button"
-                  onClick={() => openDeployModal(null, 'app')}
-                  className="px-4 py-2 rounded-lg text-xs font-semibold text-white bg-cyan-600 hover:bg-cyan-500 flex items-center space-x-1.5 shadow-md shadow-cyan-500/20"
-                >
-                  <span>Deploy Flex Plan</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </button>
               </div>
+              <div className="h-3 rounded-full bg-slate-900 overflow-hidden p-0.5 border border-white/[0.06]">
+                <div 
+                  className={`h-full rounded-full transition-all duration-700 ${
+                    trafficStage === 2 || trafficStage === 3
+                      ? 'w-3/4 bg-gradient-to-r from-blue-500 to-indigo-500'
+                      : 'w-0'
+                  }`}
+                ></div>
+              </div>
+            </div>
+
+            {/* Qualitative Policy Note */}
+            <div className="p-4 rounded-xl bg-slate-900/60 border border-white/[0.04] text-xs font-sans text-slate-300 leading-relaxed space-y-1">
+              <div className="font-semibold text-white font-mono flex items-center space-x-1.5 text-[11px]">
+                <Info className="w-3.5 h-3.5 text-cyan-400" />
+                <span>Fair-Use Protection</span>
+              </div>
+              <p className="text-[11px] text-slate-400">
+                Additional capacity is subject to infrastructure availability and fair-use safeguards. For permanent dedicated power, dedicated VPS instances provide fixed isolation.
+              </p>
             </div>
           </div>
         </div>

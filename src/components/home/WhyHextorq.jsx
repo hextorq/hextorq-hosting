@@ -3,116 +3,102 @@ import {
   Layers, 
   TrendingUp, 
   Zap, 
-  Server, 
   Tag, 
-  Cpu, 
-  Headphones, 
-  ShieldCheck,
-  CheckCircle2,
-  Sparkles
+  Server, 
+  Headphones,
+  Sparkles,
+  ArrowRight
 } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 export default function WhyHextorq() {
-  const points = [
+  const reasons = [
     {
       title: 'Application-Focused Hosting',
-      desc: 'Instead of outdated cPanel directory limits, we bundle your frontend and backend as a unified containerized application.',
+      desc: 'Engineered from the ground up to host one frontend and one backend as a unified containerized project, replacing outdated cPanel directories.',
       icon: Layers,
-      color: 'text-cyan-400',
+      accent: 'text-cyan-400',
       border: 'border-cyan-500/20'
     },
     {
-      title: 'Adaptive Flexible Resources',
-      desc: 'Say goodbye to sudden 503 traffic spike errors. Our hypervisor automatically allocates extra cluster headroom during viral rushes.',
+      title: 'Fixed or Flexible Resource Models',
+      desc: 'Pick strictly defined quotas for predictable monthly billing, or flexible capacity that absorbs unexpected traffic surges effortlessly.',
       icon: TrendingUp,
-      color: 'text-blue-400',
+      accent: 'text-blue-400',
       border: 'border-blue-500/20'
     },
     {
-      title: 'Git-Push Simple Deployment',
-      desc: 'Push your commits to GitHub or GitLab. We build, containerize, and provision automated SSL in under 45 seconds.',
+      title: 'Simple Deployment',
+      desc: 'Seamless connections for React, Next.js, Node.js, Python, PHP, and Go with automated Let\'s Encrypt SSL and zero reverse proxy configuration.',
       icon: Zap,
-      color: 'text-amber-400',
-      border: 'border-amber-500/20'
-    },
-    {
-      title: 'Seamless VPS Scalability',
-      desc: 'Start with fixed shared application hosting. Upgrade to dedicated root-access VPS with zero data migration friction.',
-      icon: Server,
-      color: 'text-indigo-400',
+      accent: 'text-indigo-400',
       border: 'border-indigo-500/20'
     },
     {
-      title: '100% Transparent Pricing',
-      desc: 'Clear upfront pricing in INR (₹) and USD. No fake introductory traps, no hidden renewal multipliers, no lock-in.',
+      title: 'Transparent Pricing',
+      desc: 'Clear upfront pricing in INR (₹) with zero renewal multipliers, no hidden upgrade traps, and transparent resource limit policies.',
       icon: Tag,
-      color: 'text-emerald-400',
+      accent: 'text-emerald-400',
       border: 'border-emerald-500/20'
     },
     {
-      title: 'Developer-First Infrastructure',
-      desc: 'Enterprise Gen4 NVMe arrays, high-clock AMD EPYC & Intel Xeon compute, and multi-channel DDR5 ECC memory.',
-      icon: Cpu,
-      color: 'text-cyan-400',
+      title: 'VPS Scalability',
+      desc: 'Start with shared application hosting and seamlessly transition to dedicated root-access VPS infrastructure as your compute needs grow.',
+      icon: Server,
+      accent: 'text-cyan-400',
       border: 'border-cyan-500/20'
     },
     {
-      title: 'Direct Engineer Support',
-      desc: 'Contact senior infrastructure engineers directly via email (hosting@hextorq.tech) or ticket queue with sub-1 hour response SLAs.',
+      title: 'Technical Support',
+      desc: 'Direct communication with knowledgeable infrastructure engineers via hosting@hextorq.tech for architecture advice and troubleshooting.',
       icon: Headphones,
-      color: 'text-blue-400',
+      accent: 'text-blue-400',
       border: 'border-blue-500/20'
-    },
-    {
-      title: 'Platform-Wide Security',
-      desc: 'Automated Let\'s Encrypt SSL, WAF packet sanitization, SSH key auth, isolated namespace sandboxes, and 500Gbps DDoS scrubbing.',
-      icon: ShieldCheck,
-      color: 'text-emerald-400',
-      border: 'border-emerald-500/20'
     }
   ];
 
   return (
     <section className="py-20 lg:py-28 relative bg-[#070B14] overflow-hidden">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 space-y-16">
         
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-16 space-y-4">
+        <div className="text-center max-w-3xl mx-auto space-y-4">
           <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-cyan-950/70 border border-cyan-500/30 text-cyan-400 text-xs font-mono">
             <Sparkles className="w-3.5 h-3.5" />
-            <span>THE HEXTORQ ADVANTAGE</span>
+            <span>THE HEXTORQ DIFFERENCE</span>
           </div>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-display font-bold text-white tracking-tight">
-            Hosting That Understands How Modern Applications Work.
+            Hosting That Understands Modern Applications.
           </h2>
           <p className="text-base sm:text-lg text-slate-300 leading-relaxed font-sans">
-            Built from the ground up for developers who demand high availability, predictable costs, and raw computing power.
+            Built for developers who value clarity, predictability, and reliable cloud performance.
           </p>
         </div>
 
-        {/* 8-Card Asymmetric Layout */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {points.map((item, idx) => {
+        {/* 6-Reason Editorial Layout Grid (3x2) */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {reasons.map((item, idx) => {
             const Icon = item.icon;
             return (
               <div
                 key={idx}
-                className={`p-6 rounded-2xl bg-slate-900/60 border ${item.border} hover:border-white/20 transition-all duration-300 space-y-3 flex flex-col justify-between`}
+                className="p-7 rounded-3xl bg-[#090E18] border border-white/[0.08] hover:border-white/[0.15] transition-all duration-300 flex flex-col justify-between space-y-4 group"
               >
-                <div className="space-y-3">
-                  <div className={`w-9 h-9 rounded-xl bg-slate-950 border border-slate-800 flex items-center justify-center ${item.color}`}>
-                    <Icon className="w-4 h-4" />
+                <div className="space-y-3.5">
+                  <div className="w-10 h-10 rounded-2xl bg-slate-900 border border-white/[0.06] flex items-center justify-center group-hover:border-cyan-500/40 transition-colors">
+                    <Icon className={`w-5 h-5 ${item.accent}`} />
                   </div>
-                  <h3 className="text-base font-bold font-display text-white">
+                  <h3 className="text-lg font-bold font-display text-white">
                     {item.title}
                   </h3>
-                  <p className="text-xs text-slate-400 leading-relaxed">
+                  <p className="text-xs sm:text-sm text-slate-400 leading-relaxed font-sans">
                     {item.desc}
                   </p>
                 </div>
-                <div className="pt-2 flex items-center space-x-1.5 text-[10px] font-mono text-slate-400">
-                  <CheckCircle2 className="w-3 h-3 text-cyan-400" />
-                  <span>Standard Included</span>
+
+                <div className="pt-2 border-t border-white/[0.04] text-[11px] font-mono text-slate-400 flex items-center justify-between">
+                  <span>Pillar 0{idx + 1}</span>
+                  <span className="text-cyan-400 font-medium">Standard Included</span>
                 </div>
               </div>
             );

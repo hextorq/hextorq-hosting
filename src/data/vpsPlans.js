@@ -19,11 +19,11 @@ export const VPS_TIERS = [
     features: [
       'Full Root & SSH Key Access',
       '1 Dedicated vCPU Core',
-      '1 GB ECC Memory',
-      '25 GB Gen4 NVMe Storage',
+      '1 GB Memory',
+      '25 GB NVMe Solid-State Storage',
       '1 TB High-Speed Outbound Transfer',
       'Linux OS of Your Choice',
-      'Custom ISO Mounting Support',
+      'Custom ISO Support',
       'Instant Server Rebuilds'
     ],
     ctaText: 'Deploy Nano VPS',
@@ -47,14 +47,14 @@ export const VPS_TIERS = [
       ipv6: '/64 IPv6 Subnet'
     },
     features: [
-      'Full Root & Terminal Console',
-      '1 High-Clock vCPU Core',
-      '2 GB DDR5 ECC RAM',
-      '40 GB NVMe SSD Storage',
+      'Full Root & Terminal Access',
+      '1 Compute Core',
+      '2 GB Dedicated RAM',
+      '40 GB NVMe Storage',
       '2 TB Monthly Transfer',
       'Docker & Containerd Ready',
       'Automated Weekly Snapshot',
-      '99.95% Network SLA'
+      'Standard Network Protection'
     ],
     ctaText: 'Deploy Start VPS',
     popular: false
@@ -62,7 +62,7 @@ export const VPS_TIERS = [
   {
     id: 'vps-pro',
     name: 'Pro VPS',
-    tagline: 'The developer standard for multi-app setups, Redis caches, and heavy Node/Python runtimes.',
+    tagline: 'The developer standard for multi-service setups, Redis caches, and heavy Node/Python runtimes.',
     monthlyPrice: 999,
     yearlyPrice: 849,
     currency: '₹',
@@ -77,14 +77,14 @@ export const VPS_TIERS = [
       ipv6: '/64 IPv6 Subnet'
     },
     features: [
-      '2 Dedicated High-Performance vCPUs',
-      '4 GB DDR5 ECC RAM',
-      '80 GB Enterprise NVMe',
-      '4 TB High-Bandwidth Pipeline',
-      'Native Docker, Podman & Compose Support',
-      'Custom Firewall Rule Manager',
+      '2 Dedicated Compute Cores',
+      '4 GB High-Speed RAM',
+      '80 GB NVMe Storage',
+      '4 TB High-Bandwidth Transfer',
+      'Docker & Compose Support',
+      'Custom Firewall Management',
       'Daily Automated Snapshots',
-      'Priority Re-routing & DDoS Scrubbing'
+      'Priority Network Routing'
     ],
     ctaText: 'Deploy Pro VPS',
     popular: true
@@ -96,7 +96,7 @@ export const VPS_TIERS = [
     monthlyPrice: 1699,
     yearlyPrice: 1449,
     currency: '₹',
-    badge: 'HIGH PERFORMANCE',
+    badge: 'HIGH COMPUTE',
     specs: {
       vcpu: '4 vCPU',
       ram: '8 GB RAM',
@@ -108,13 +108,13 @@ export const VPS_TIERS = [
     },
     features: [
       '4 Dedicated Compute Cores',
-      '8 GB Ultra-Speed RAM',
-      '160 GB Gen4 Enterprise NVMe',
+      '8 GB High-Speed RAM',
+      '160 GB NVMe Storage',
       '6 TB High-Speed Data Transfer',
-      'Dedicated Network Interface (10 Gbps Uplink)',
+      'High-Speed Interface Routing',
       'Custom Kernel Parameters Allowed',
       'Automated Disaster Recovery Backups',
-      'Senior Infrastructure Engineer Support'
+      'Priority Infrastructure Support'
     ],
     ctaText: 'Deploy Business VPS',
     popular: false
@@ -122,11 +122,11 @@ export const VPS_TIERS = [
   {
     id: 'vps-scale',
     name: 'Scale VPS',
-    tagline: 'Powerhouse server capacity for enterprise workloads, large traffic spikes, and AI processing.',
+    tagline: 'Powerhouse server capacity for large workloads, database clusters, and demanding traffic.',
     monthlyPrice: 2999,
     yearlyPrice: 2549,
     currency: '₹',
-    badge: 'ENTERPRISE POWER',
+    badge: 'SCALE POWER',
     specs: {
       vcpu: '6 vCPU',
       ram: '16 GB RAM',
@@ -137,14 +137,14 @@ export const VPS_TIERS = [
       ipv6: '/64 IPv6 Subnet'
     },
     features: [
-      '6 Dedicated High-Frequency Compute Cores',
-      '16 GB DDR5 Multi-Channel RAM',
-      '320 GB Gen4 NVMe in RAID-10',
+      '6 Dedicated Compute Cores',
+      '16 GB Multi-Channel RAM',
+      '320 GB NVMe in RAID Array',
       '8 TB Transfer with Global Peering',
       '2 Dedicated Static IPv4 Addresses',
-      'BGP Anycast Routing Availability',
-      'Hourly Snapshot Frequency Option',
-      'Direct Phone & Escalation Channel'
+      'Anycast Network Routing Support',
+      'Frequent Snapshot Frequency Option',
+      'Senior Support Escalation Channel'
     ],
     ctaText: 'Deploy Scale VPS',
     popular: false
@@ -180,17 +180,16 @@ export const VPS_CONFIGURATOR_OPTIONS = {
     { id: 'debian', name: 'Debian 12 Bookworm', category: 'Linux', icon: 'Debian', popular: false, licenseCost: 0 },
     { id: 'rocky', name: 'Rocky Linux 9', category: 'Linux', icon: 'Terminal', popular: false, licenseCost: 0 },
     { id: 'alma', name: 'AlmaLinux 9', category: 'Linux', icon: 'Server', popular: false, licenseCost: 0 },
-    { id: 'windows', name: 'Windows Server 2022 Datacenter', category: 'Windows', icon: 'Cpu', popular: false, licenseCost: 999 }
+    { id: 'windows', name: 'Windows Server 2022', category: 'Windows', icon: 'Cpu', popular: false, licenseCost: 999 }
   ],
   locations: [
-    { id: 'in', name: 'Mumbai, India', flag: '🇮🇳', latency: '12ms', region: 'Asia-South' },
-    { id: 'sg', name: 'Singapore', flag: '🇸🇬', latency: '38ms', region: 'Asia-Pacific' },
-    { id: 'de', name: 'Frankfurt, Germany', flag: '🇩🇪', latency: '110ms', region: 'Europe-Central' },
-    { id: 'uk', name: 'London, United Kingdom', flag: '🇬🇧', latency: '125ms', region: 'Europe-West' },
-    { id: 'us', name: 'Virginia, United States', flag: '🇺🇸', latency: '180ms', region: 'US-East' }
+    { id: 'in', name: 'Mumbai, India', flag: '🇮🇳', region: 'Asia-South' },
+    { id: 'sg', name: 'Singapore', flag: '🇸🇬', region: 'Asia-Pacific' },
+    { id: 'de', name: 'Frankfurt, Germany', flag: '🇩🇪', region: 'Europe-Central' },
+    { id: 'uk', name: 'London, United Kingdom', flag: '🇬🇧', region: 'Europe-West' },
+    { id: 'us', name: 'Virginia, United States', flag: '🇺🇸', region: 'US-East' }
   ],
   addons: [
-    { id: 'cpanel', name: 'cPanel / WebHost Manager License', price: 899, type: 'addon' },
     { id: 'managed', name: 'Full Server Management & Hardening', price: 699, type: 'addon', recommended: true },
     { id: 'backups', name: 'Daily Automated Cloud Snapshots', price: 199, type: 'addon' },
     { id: 'extra_ip', name: 'Additional Dedicated IPv4', price: 150, type: 'addon' }
@@ -199,33 +198,33 @@ export const VPS_CONFIGURATOR_OPTIONS = {
 
 export const MANAGED_SERVICES = [
   {
-    title: 'Initial Provisioning & OS Hardening',
-    description: 'Kernel parameter tuning, SSH key configuration, non-root user setup, and baseline security lockdowns.',
+    title: 'Server Provisioning & OS Hardening',
+    description: 'Kernel tuning, SSH key configuration, non-root user setup, and baseline security lockdowns before handoff.',
     icon: 'ShieldCheck'
   },
   {
-    title: 'Proactive Security & Patching',
-    description: 'Zero-day vulnerability monitoring, automatic kernel and security patches without service interruption.',
+    title: 'Security Configuration & Patching',
+    description: 'Proactive vulnerability checks, regular kernel updates, and security patches without unnecessary disruption.',
     icon: 'RefreshCw'
   },
   {
-    title: 'Web Server & Runtime Optimization',
-    description: 'Fine-tuned Nginx/Apache configurations, PHP-FPM worker pools, Node.js PM2 process clustering, and Python WSGI setups.',
+    title: 'Web Server & Runtime Setup',
+    description: 'Configurations for Nginx/Apache, Node.js PM2 process clustering, Python WSGI, and PHP-FPM environments.',
     icon: 'Cpu'
   },
   {
-    title: 'Automated Snapshot & Recovery',
-    description: 'Scheduled multi-region snapshot storage with single-click rollbacks and point-in-time database restoration.',
+    title: 'Automated Snapshot & Backup Management',
+    description: 'Scheduled multi-region snapshot storage with single-click restore assistance in case of accidental data loss.',
     icon: 'HardDrive'
   },
   {
-    title: 'Free White-Glove Migration',
-    description: 'Our senior system engineers will migrate your existing VPS, databases, and DNS from any provider with zero downtime.',
+    title: 'Migration Assistance',
+    description: 'Our technical team assists with transferring your existing VPS files, databases, and DNS from previous providers.',
     icon: 'ArrowRightLeft'
   },
   {
-    title: '24/7/365 Monitoring & Rapid Incident Response',
-    description: 'Automated ping, CPU, memory, and disk threshold monitors trigger instant engineer response within 15 minutes.',
+    title: 'Monitoring & Troubleshooting',
+    description: 'Infrastructure monitors for CPU, memory, and disk thresholds with rapid investigation when issues occur.',
     icon: 'Activity'
   }
 ];

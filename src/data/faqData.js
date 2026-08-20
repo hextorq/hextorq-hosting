@@ -4,88 +4,83 @@ export const FAQ_CATEGORIES = [
   { id: 'flexible', name: 'Flexible / Burst' },
   { id: 'vps', name: 'VPS Hosting' },
   { id: 'managed', name: 'Managed Services' },
-  { id: 'billing', name: 'Billing & Policy' }
+  { id: 'support', name: 'Support & Locations' }
 ];
 
 export const FAQ_DATA = [
   {
     category: 'shared',
     question: 'What is Hextorq Shared Hosting?',
-    answer: 'Unlike traditional cPanel hosting designed for static HTML or WordPress sites, Hextorq Shared Hosting is specifically engineered for modern full-stack web applications. Each shared account provisions an isolated runtime environment optimized to host one frontend (React, Vite, Next.js, etc.) and one backend API (Node.js, Python, PHP, Go) seamlessly.'
+    answer: 'Unlike traditional cPanel hosting designed for static HTML or simple CMS sites, Hextorq Shared Hosting is purpose-built for modern web applications. Each shared account provisions an isolated runtime environment engineered to run one frontend (such as React, Vite, Next.js, Vue, or static assets) and one backend (such as Node.js, Python, PHP, or Go) together seamlessly.'
   },
   {
     category: 'shared',
-    question: 'Can I host a frontend and backend together?',
-    answer: 'Yes, absolutely! That is the core design of Hextorq Shared Hosting. You connect your frontend repository and your backend repository into a unified project. We automatically configure reverse proxies, routing, internal communication, and SSL certificates for both.'
+    question: 'Can I host one frontend and one backend together?',
+    answer: 'Yes, that is the core concept of Hextorq Shared Hosting. You connect your frontend and backend as one application. We handle routing, internal communication between services, and automated SSL for your custom domain.'
   },
   {
     category: 'shared',
-    question: 'How many applications can I host on one shared plan?',
-    answer: 'Each Shared Hosting plan is dedicated to ONE complete application (1 Frontend + 1 Backend). If you need to host multiple distinct applications, databases, or microservices, our VPS plans allow you to run unlimited applications within your allocated virtual server compute.'
+    question: 'What is Fixed Shared Hosting?',
+    answer: 'Fixed Shared Hosting gives you a defined, predictable resource allocation (CPU, RAM, and NVMe storage) at a fixed monthly price. It is ideal for predictable workloads, staging sites, client deliverables, and applications where fixed budget predictability is essential.'
   },
   {
     category: 'flexible',
-    question: 'What is the difference between Fixed and Flexible Shared Hosting?',
-    answer: 'Fixed Shared Hosting gives you a strict, predictable allocation (e.g., 2 vCPU, 2 GB RAM) at our lowest price point. Flexible (Burst) Shared Hosting provides baseline resources, but during sudden traffic spikes, it automatically allows your application to tap into available shared cluster headroom (up to 3x-4x base capacity) so your users never experience timeouts or slowdowns.'
+    question: 'What is Flexible / Burst Hosting?',
+    answer: 'Flexible Shared Hosting provides baseline resources (e.g., 1 vCPU, 2 vCPU, or 4 vCPU base) but allows your application to tap into available shared cluster capacity during temporary traffic surges. This prevents sudden request timeouts when your traffic spikes.'
+  },
+  {
+    category: 'flexible',
+    question: 'How does resource bursting work?',
+    answer: 'When traffic demand rises, our runtime automatically allows your application to utilize additional available shared compute capacity. Once traffic subsides, resource usage returns to baseline, and the additional capacity returns to the shared pool. Additional capacity is subject to infrastructure availability and fair-use safeguards.'
+  },
+  {
+    category: 'flexible',
+    question: 'Is burst capacity guaranteed?',
+    answer: 'Burst capacity is dynamically drawn from available shared infrastructure headroom. While our nodes maintain operational reserve buffers, burst capacity is not an infinite dedicated resource. For mission-critical dedicated capacity guarantees, we recommend deploying a dedicated VPS.'
   },
   {
     category: 'shared',
-    question: 'What happens when I reach my resource limit on Fixed Shared Hosting?',
-    answer: 'On Fixed Shared Hosting, your application is kept strictly within its allocated CPU and memory threshold. If exceeded, incoming requests are gracefully queued or throttled rather than crashed. You will receive an instant dashboard alert suggesting an upgrade or a switch to our Flexible plan.'
-  },
-  {
-    category: 'flexible',
-    question: 'How does resource bursting work in practice?',
-    answer: 'When a traffic surge hits, our runtime hypervisor detects elevated CPU/RAM pressure and dynamically extends temporary compute buffers from the node\'s idle pool. Once traffic subsides, your application usage smoothly returns to base parameters, and the shared capacity returns to the cluster pool.'
-  },
-  {
-    category: 'flexible',
-    question: 'Is burst capacity 100% guaranteed at all times?',
-    answer: 'Burst capacity is dynamically allocated from available node overhead and fair-share infrastructure pools. While our cluster algorithms maintain a 40%+ reserve buffer on all burst-enabled hypervisors, it is not an infinite dedicated resource. For mission-critical dedicated capacity guarantees, we recommend deploying a dedicated VPS.'
+    question: 'What happens when fixed resources are exhausted?',
+    answer: 'On Fixed Shared Hosting, your application operates within its defined resource allocation. If resource limits are reached, normal resource enforcement applies and incoming requests are queued safely to prevent service disruption. You can upgrade your plan or switch to Flexible Bursting at any time.'
   },
   {
     category: 'vps',
-    question: 'Do I get root access on Shared Hosting vs VPS?',
-    answer: 'Shared Hosting is a fully managed container environment and does not include root or SSH system access (preventing accidental system misconfiguration). VPS Hosting grants 100% root access via SSH, allowing you to configure custom kernels, systemd daemons, package managers, and root-level utilities.'
+    question: 'Do I get root access?',
+    answer: 'On Shared Hosting (Fixed & Flexible), access is fully managed within an isolated container sandbox without raw root access, ensuring stability and ease of use. On VPS Hosting, you receive 100% full root and SSH key access with total autonomy over the operating system.'
   },
   {
     category: 'vps',
-    question: 'What is VPS hosting?',
-    answer: 'A VPS (Virtual Private Server) provides dedicated virtualized server hardware with dedicated vCPU cores, isolated DDR5 RAM, and independent NVMe storage. You select your preferred Linux distribution (or Windows Server) and have full autonomy over the operating system.'
+    question: 'What is VPS?',
+    answer: 'A VPS (Virtual Private Server) provides dedicated virtualized compute with dedicated vCPU cores, isolated RAM, and NVMe storage. You select your preferred Linux distribution (Ubuntu, Debian, Rocky, Alma) or Windows Server and have complete control over installed packages and services.'
   },
   {
     category: 'vps',
-    question: 'Can I run Node.js, Python, PHP, or Go on Hextorq?',
-    answer: 'Yes! Both our Shared Hosting and VPS infrastructure provide first-class support for modern runtimes including Node.js (all LTS versions), Python (FastAPI, Flask, Django), PHP (8.1, 8.2, 8.3), and Go compiled binaries.'
+    question: 'Can I run Node.js, Python, PHP, or Go?',
+    answer: 'Yes! Both our Shared Hosting and VPS infrastructure natively support modern runtimes including Node.js (all LTS versions), Python (FastAPI, Flask, Django), PHP (modern versions & Laravel), and Go compiled binaries.'
   },
   {
     category: 'vps',
-    question: 'Can I use Docker and Docker Compose on VPS?',
-    answer: 'Yes. All Hextorq VPS instances support native Docker, Docker Compose, Podman, and containerd. You can deploy multi-container microservices, database clusters, Redis caches, and custom webhooks effortlessly.'
+    question: 'Can I run Docker on VPS?',
+    answer: 'Yes. All Hextorq VPS plans support Docker, Docker Compose, Podman, and containerd out of the box, allowing you to run multi-container microservices, databases, Redis caches, and custom software stacks.'
   },
   {
     category: 'vps',
-    question: 'Can I upgrade or scale my VPS later?',
-    answer: 'Yes! You can scale your CPU, RAM, and NVMe storage at any time with minimal reboot downtime (under 60 seconds) directly from the control panel, preserving all your files and configuration intact.'
+    question: 'Can I upgrade or change VPS resources later?',
+    answer: 'Yes! You can scale your vCPU, RAM, and NVMe storage as your application grows directly from the configurator or dashboard with minimal reboot transition time, preserving all your files and configuration.'
   },
   {
     category: 'managed',
-    question: 'What does Managed VPS include?',
-    answer: 'With Managed VPS, our senior DevOps engineers take full responsibility for initial server hardening, OS updates, security patches, firewall tuning, automated snapshot configuration, web server optimization, and 24/7 uptime monitoring with a 15-minute response SLA.'
+    question: 'What is Managed VPS?',
+    answer: 'Managed VPS provides the compute power of a dedicated virtual server without the server administration burden. Our technical team assists with initial server setup, security configuration, regular updates, snapshot schedules, web server tuning, and migration assistance.'
   },
   {
-    category: 'shared',
-    question: 'Where are your data centers located?',
-    answer: 'We operate carrier-neutral high-availability facilities in Mumbai (India), Singapore, Frankfurt (Germany), London (United Kingdom), and Virginia (United States). You can choose your server location during deployment.'
+    category: 'support',
+    question: 'Where are your hosting locations?',
+    answer: 'We offer server locations in Mumbai (India), Singapore, Frankfurt (Germany), London (United Kingdom), and Virginia (United States). You can choose your preferred data center region during setup.'
   },
   {
-    category: 'billing',
-    question: 'Do you provide automated backups?',
-    answer: 'Yes! Fixed Shared includes weekly backups, Flexible Shared includes daily automated snapshots, and VPS plans feature configurable cloud snapshot schedules with instant point-in-time rollbacks.'
-  },
-  {
-    category: 'managed',
-    question: 'How do migrations work?',
-    answer: 'We provide migration assistance for all hosting plans and 100% free white-glove migration for all Managed VPS customers. Our engineers handle data transfer, database sync, and DNS handover without downtime.'
+    category: 'support',
+    question: 'How do I contact support?',
+    answer: 'You can reach our engineering and support team directly via email at hosting@hextorq.tech. We provide responsive assistance for technical inquiries, architecture planning, and migration support.'
   }
 ];
