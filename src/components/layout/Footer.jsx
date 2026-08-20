@@ -1,168 +1,256 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { Mail, Globe, ArrowUpRight } from 'lucide-react';
+import React, { useEffect, useRef } from 'react';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { Mail, Globe, ArrowUpRight, ShieldCheck, Sparkles, Server } from 'lucide-react';
+import { useTrialModal } from '../../context/TrialModalContext';
+import { useSmoothScroll } from '../../context/SmoothScrollContext';
+import { SUPPORT_EMAIL, DOMAIN_URL, FIXED_SHARED_PLANS } from '../../data/hostingData';
+
+gsap.registerPlugin(ScrollTrigger);
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
+  const { openTrialModal, openLegalModal } = useTrialModal();
+  const { scrollTo } = useSmoothScroll();
+  const footerRef = useRef(null);
+  const columnsRef = useRef(null);
+  const wordmarkRef = useRef(null);
+
+  useEffect(() => {
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotion) return;
+
+    const ctx = gsap.context(() => {
+      // Columns stagger
+      if (columnsRef.current?.children) {
+        gsap.fromTo(
+          columnsRef.current.children,
+          { opacity: 0, y: 30 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.8,
+            stagger: 0.1,
+            ease: 'power3.out',
+            scrollTrigger: {
+              trigger: columnsRef.current,
+              start: 'top 90%',
+              toggleActions: 'play none none none'
+            }
+          }
+        );
+      }
+
+      // Wordmark cutout reveal
+      gsap.fromTo(
+        wordmarkRef.current,
+        { opacity: 0, scale: 0.95, y: 20 },
+        {
+          opacity: 0.25,
+          scale: 1,
+          y: 0,
+          duration: 1.2,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: wordmarkRef.current,
+            start: 'top 95%',
+            toggleActions: 'play none none none'
+          }
+        }
+      );
+    }, footerRef);
+
+    return () => ctx.revert();
+  }, []);
+
+  const handleNavClick = (id) => {
+    scrollTo(`#${id}`, { offset: -80, duration: 1.4 });
+  };
 
   return (
-    <footer className="relative bg-[#04070B] border-t border-white/[0.08] pt-16 pb-12 overflow-hidden">
+    <footer ref={footerRef} className="relative bg-[rgb(10,5,20)] text-white border-t border-white/10 pt-16 pb-6 overflow-hidden">
+      
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 pb-12 border-b border-white/[0.06]">
-          
-          {/* Brand Column (2 cols) */}
+        <div ref={columnsRef} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 pb-16 border-b border-white/10">
+
+          {/* Brand Column */}
           <div className="lg:col-span-2 space-y-4">
-            <Link to="/" className="flex items-center space-x-3 group">
-              <div className="w-8 h-8 rounded-xl bg-slate-900 border border-white/[0.12] flex items-center justify-center">
-                <svg className="w-4 h-4 text-cyan-400" viewBox="0 0 100 100" fill="none">
-                  <polygon points="50,10 85,30 85,70 50,90 15,70 15,30" stroke="currentColor" strokeWidth="10" strokeLinejoin="round" />
-                  <circle cx="50" cy="50" r="14" fill="#06B6D4" />
-                </svg>
-              </div>
-              <span className="font-display font-bold text-lg tracking-wider text-white">
+            <button
+              onClick={() => scrollTo(0, { duration: 1.4 })}
+              className="flex items-center space-x-3 group text-left"
+            >
+              <svg width="32" height="32" viewBox="0 0 28 28" fill="none" aria-hidden="true" className="shrink-0 group-hover:scale-105 transition-transform">
+                <defs>
+                  <linearGradient id="nexacore-logo-footer" x1="2" y1="2" x2="26" y2="26" gradientUnits="userSpaceOnUse">
+                    <stop stopColor="rgb(28, 78, 255)"></stop>
+                    <stop offset="0.5" stopColor="rgb(172, 36, 255)"></stop>
+                    <stop offset="1" stopColor="rgb(254, 136, 27)"></stop>
+                  </linearGradient>
+                </defs>
+                <circle cx="14" cy="14" r="11" stroke="url(#nexacore-logo-footer)" strokeWidth="2.5"></circle>
+              </svg>
+              <span className="font-display font-bold text-xl tracking-tight text-white">
                 HEXTORQ HOSTING
               </span>
-            </Link>
-            
-            <p className="text-sm text-slate-400 max-w-sm leading-relaxed font-sans">
-              Modern cloud hosting built around your application. Deploy one frontend and one backend with predictable fixed resources, flexible burst headroom, or your own dedicated VPS.
+            </button>
+
+            <p className="text-xs sm:text-sm text-white/70 max-w-sm leading-relaxed font-sans">
+              Hosting built around your modern full-stack application. Deploy your frontend and backend seamlessly with fixed predictability, flexible burst headroom, or your own dedicated VPS.
             </p>
 
-            <div className="pt-2 space-y-2 text-xs font-mono text-slate-400">
+            <div className="inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-white/5 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.14em] text-white/80 backdrop-blur-sm">
+              <Sparkles className="w-3.5 h-3.5 text-cyan-400" />
+              <span>14-Day Free Trial on Every Plan</span>
+            </div>
+
+            <div className="pt-2 text-xs font-sans text-white/70 space-y-1.5">
               <div className="flex items-center space-x-2">
-                <Mail className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
-                <span>Contact:</span>
-                <a href="mailto:hosting@hextorq.tech" className="text-slate-200 hover:text-cyan-400 transition-colors">
-                  hosting@hextorq.tech
+                <Mail className="w-3.5 h-3.5 text-white/50 shrink-0" />
+                <span>Support: </span>
+                <a href={`mailto:${SUPPORT_EMAIL}`} className="text-white hover:underline font-mono">
+                  {SUPPORT_EMAIL}
                 </a>
               </div>
               <div className="flex items-center space-x-2">
-                <Globe className="w-3.5 h-3.5 text-blue-400 shrink-0" />
-                <span>Domain:</span>
-                <span className="text-slate-200">hosting.hextorq.tech</span>
+                <Globe className="w-3.5 h-3.5 text-white/50 shrink-0" />
+                <span>Portal: </span>
+                <span className="text-white font-mono">{DOMAIN_URL}</span>
               </div>
             </div>
           </div>
 
-          {/* Column 1: Hosting Products */}
-          <div className="space-y-3">
-            <h3 className="text-xs font-mono font-semibold uppercase tracking-wider text-slate-300">
+          {/* Hosting Products Column */}
+          <div className="space-y-3.5">
+            <h3 className="font-mono text-[10px] uppercase tracking-[0.14em] text-white/90 font-bold">
               Hosting
             </h3>
-            <ul className="space-y-2 text-xs font-sans">
+            <ul className="space-y-2.5 text-sm font-sans text-white/70">
               <li>
-                <Link to="/shared-hosting" className="text-slate-400 hover:text-white transition-colors">
-                  Shared Hosting
-                </Link>
+                <button onClick={() => handleNavClick('shared-hosting')} className="hover:text-white transition-colors text-left text-xs">
+                  Shared Hosting (Fixed)
+                </button>
               </li>
               <li>
-                <Link to="/shared-hosting" className="text-slate-400 hover:text-white transition-colors">
-                  Fixed Hosting
-                </Link>
+                <button onClick={() => handleNavClick('flex-burst')} className="hover:text-white transition-colors text-left text-xs">
+                  Flexible / Burst Hosting
+                </button>
               </li>
               <li>
-                <Link to="/shared-hosting#flexible" className="text-slate-400 hover:text-white transition-colors">
-                  Flexible Hosting
-                </Link>
+                <button onClick={() => handleNavClick('vps-hosting')} className="hover:text-white transition-colors text-left text-xs">
+                  VPS Hosting (Root Access)
+                </button>
               </li>
               <li>
-                <Link to="/vps" className="text-slate-400 hover:text-white transition-colors">
-                  VPS Hosting
-                </Link>
+                <button onClick={() => handleNavClick('managed-vps')} className="hover:text-white transition-colors text-left text-xs">
+                  Managed VPS Infrastructure
+                </button>
               </li>
               <li>
-                <Link to="/managed-vps" className="text-slate-400 hover:text-white transition-colors">
-                  Managed VPS
-                </Link>
+                <button onClick={() => handleNavClick('configurator')} className="hover:text-white transition-colors text-left text-xs">
+                  Custom VPS Configurator
+                </button>
               </li>
               <li>
-                <Link to="/pricing" className="text-slate-400 hover:text-white transition-colors">
-                  All Pricing
-                </Link>
+                <button onClick={() => handleNavClick('pricing')} className="hover:text-white transition-colors text-left text-xs">
+                  All Pricing Plans
+                </button>
               </li>
             </ul>
           </div>
 
-          {/* Column 2: Platform Resources */}
-          <div className="space-y-3">
-            <h3 className="text-xs font-mono font-semibold uppercase tracking-wider text-slate-300">
+          {/* Resources Column */}
+          <div className="space-y-3.5">
+            <h3 className="font-mono text-[10px] uppercase tracking-[0.14em] text-white/90 font-bold">
               Resources
             </h3>
-            <ul className="space-y-2 text-xs font-sans">
+            <ul className="space-y-2.5 text-sm font-sans text-white/70">
               <li>
-                <Link to="/features" className="text-slate-400 hover:text-white transition-colors">
-                  Features
-                </Link>
+                <button onClick={() => handleNavClick('app-architecture')} className="hover:text-white transition-colors text-left text-xs">
+                  Application Architecture
+                </button>
               </li>
               <li>
-                <Link to="/locations" className="text-slate-400 hover:text-white transition-colors">
-                  Locations
-                </Link>
+                <button onClick={() => handleNavClick('features')} className="hover:text-white transition-colors text-left text-xs">
+                  Platform Features & NVMe
+                </button>
               </li>
               <li>
-                <Link to="/security" className="text-slate-400 hover:text-white transition-colors">
-                  Security
-                </Link>
+                <button onClick={() => handleNavClick('locations')} className="hover:text-white transition-colors text-left text-xs">
+                  Data Center Locations
+                </button>
               </li>
               <li>
-                <Link to="/faq" className="text-slate-400 hover:text-white transition-colors">
-                  FAQ
-                </Link>
+                <button onClick={() => handleNavClick('compare')} className="hover:text-white transition-colors text-left text-xs">
+                  Product Comparison Matrix
+                </button>
               </li>
               <li>
-                <Link to="/contact" className="text-slate-400 hover:text-white transition-colors">
-                  Support
-                </Link>
-              </li>
-              <li>
-                <Link to="/dashboard-preview" className="text-slate-400 hover:text-white transition-colors flex items-center space-x-1">
-                  <span>Dashboard Preview</span>
-                  <ArrowUpRight className="w-3 h-3 text-cyan-400" />
-                </Link>
+                <button onClick={() => handleNavClick('faq')} className="hover:text-white transition-colors text-left text-xs">
+                  Frequently Asked Questions
+                </button>
               </li>
             </ul>
           </div>
 
-          {/* Column 3: Legal & Policies */}
-          <div className="space-y-3">
-            <h3 className="text-xs font-mono font-semibold uppercase tracking-wider text-slate-300">
-              Legal
+          {/* Company & Legal Column */}
+          <div className="space-y-3.5">
+            <h3 className="font-mono text-[10px] uppercase tracking-[0.14em] text-white/90 font-bold">
+              Company & Legal
             </h3>
-            <ul className="space-y-2 text-xs font-sans">
+            <ul className="space-y-2.5 text-sm font-sans text-white/70">
               <li>
-                <Link to="/legal/terms" className="text-slate-400 hover:text-white transition-colors">
+                <a href={`mailto:${SUPPORT_EMAIL}`} className="hover:text-white transition-colors text-xs">
+                  Contact Support
+                </a>
+              </li>
+              <li>
+                <button onClick={() => openLegalModal('terms')} className="hover:text-white transition-colors text-left text-xs">
                   Terms of Service
-                </Link>
+                </button>
               </li>
               <li>
-                <Link to="/legal/privacy" className="text-slate-400 hover:text-white transition-colors">
+                <button onClick={() => openLegalModal('privacy')} className="hover:text-white transition-colors text-left text-xs">
                   Privacy Policy
-                </Link>
+                </button>
               </li>
               <li>
-                <Link to="/legal/refund" className="text-slate-400 hover:text-white transition-colors">
-                  Refund Policy
-                </Link>
+                <button onClick={() => openLegalModal('refund')} className="hover:text-white transition-colors text-left text-xs">
+                  Refund & Trial Policy
+                </button>
               </li>
               <li>
-                <Link to="/legal/resource-policy" className="text-slate-400 hover:text-white transition-colors">
-                  Resource Policy
-                </Link>
+                <button onClick={() => openLegalModal('resource')} className="hover:text-white transition-colors text-left text-xs">
+                  Resource & Burst Policy
+                </button>
               </li>
             </ul>
           </div>
         </div>
 
-        {/* Footer Bottom Bar */}
-        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between text-xs font-mono text-slate-400 gap-3">
-          <div>
-            © {currentYear} Hextorq Hosting. All rights reserved.
-          </div>
-          <div className="flex items-center space-x-4 text-slate-400">
-            <span>Application-Focused Cloud Infrastructure</span>
+        {/* Signature Hirael Wordmark Cutout in Footer */}
+        <div className="relative pt-6 pb-2 overflow-hidden">
+          <span 
+            ref={wordmarkRef}
+            aria-hidden="true" 
+            className="wordmark-cutout pointer-events-none absolute inset-x-0 -bottom-3 text-center text-[16vw] leading-none select-none text-white"
+          >
+            HEXTORQ
+          </span>
+
+          <div className="relative flex flex-col sm:flex-row items-center justify-between text-xs font-mono text-white/60 gap-3 pt-4">
+            <div>
+              © {currentYear} Hextorq Hosting. All rights reserved.
+            </div>
+            <div className="flex flex-wrap items-center gap-3">
+              <span>Transparent Pricing</span>
+              <span>•</span>
+              <span>14-Day Free Trial</span>
+              <span>•</span>
+              <span>Application-First Infrastructure</span>
+            </div>
           </div>
         </div>
+
       </div>
     </footer>
   );

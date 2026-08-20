@@ -16,7 +16,6 @@ import {
   Zap
 } from 'lucide-react';
 import { useDeployModal } from '../../context/DeployModalContext';
-import { Link } from 'react-router-dom';
 
 export default function DeploySimulationModal() {
   const { isOpen, closeDeployModal, selectedPlan, modalType } = useDeployModal();
@@ -358,14 +357,13 @@ export default function DeploySimulationModal() {
               >
                 Deploy Another App
               </button>
-              <Link
-                to="/dashboard-preview"
+              <button
+                type="button"
                 onClick={closeDeployModal}
-                className="px-5 py-2.5 rounded-xl text-xs font-semibold text-white bg-cyan-600 hover:bg-cyan-500 flex items-center space-x-2"
+                className="px-5 py-2.5 rounded-xl text-xs font-semibold text-white bg-cyan-600 hover:bg-cyan-500"
               >
-                <span>Open Control Panel Console</span>
-                <ArrowRight className="w-3.5 h-3.5" />
-              </Link>
+                Done
+              </button>
             </div>
           )}
         </div>

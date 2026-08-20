@@ -1,301 +1,322 @@
-import React, { useState } from 'react';
-import { 
-  Server, 
-  Layers, 
-  TrendingUp, 
-  Check, 
-  ArrowRight, 
-  Cpu, 
-  HardDrive, 
-  Zap, 
-  Info,
-  ShieldCheck
-} from 'lucide-react';
-import { SHARED_FIXED_PLANS, SHARED_BURST_PLANS, SUPPORTED_STACKS } from '../../data/hostingPlans';
-import { useDeployModal } from '../../context/DeployModalContext';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect, useRef } from 'react';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { Sparkles, CheckCircle2, ArrowRight, ShieldCheck, Zap, Server, Layers, Cpu } from 'lucide-react';
+import { useTrialModal } from '../../context/TrialModalContext';
+import { FIXED_SHARED_PLANS, FLEX_SHARED_PLANS } from '../../data/hostingData';
+import BurstVisualizer from './BurstVisualizer';
+
+gsap.registerPlugin(ScrollTrigger);
 
 export default function SharedHostingSection() {
-  const [activeCategory, setActiveCategory] = useState('fixed'); // 'fixed' | 'burst'
-  const [billingPeriod, setBillingPeriod] = useState('monthly'); // 'monthly' | 'yearly'
-  const [selectedFrontend, setSelectedFrontend] = useState(SUPPORTED_STACKS.frontends[0]);
-  const [selectedBackend, setSelectedBackend] = useState(SUPPORTED_STACKS.backends[0]);
-  const { openDeployModal } = useDeployModal();
+  const [activeTab, setActiveTab] = useState('fixed'); // 'fixed' | 'flex'
+  const [isYearly, setIsYearly] = useState(false);
+  const { openTrialModal } = useTrialModal();
 
-  const currentPlans = activeCategory === 'fixed' ? SHARED_FIXED_PLANS : SHARED_BURST_PLANS;
+  const sectionRef = useRef(null);
+  const headerRef = useRef(null);
+  const tabsRef = useRef(null);
+  const bannerRef = useRef(null);
+  const cardsContainerRef = useRef(null);
+
+  useEffect(() => {
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotion) return;
+
+    const ctx = gsap.context(() => {
+      // Header ScrollTrigger
+      gsap.fromTo(
+        headerRef.current,
+        { opacity: 0, y: 35 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.9,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: headerRef.current,
+            start: 'top 85%',
+            toggleActions: 'play none none none'
+          }
+        }
+      );
+
+      // Tabs & Banner ScrollTrigger
+      gsap.fromTo(
+        [tabsRef.current, bannerRef.current],
+        { opacity: 0, y: 25 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.8,
+          stagger: 0.12,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: tabsRef.current,
+            start: 'top 85%',
+            toggleActions: 'play none none none'
+          }
+        }
+      );
+
+      // Initial Cards reveal on scroll
+      if (cardsContainerRef.current?.children) {
+        gsap.fromTo(
+          cardsContainerRef.current.children,
+          { opacity: 0, y: 50, scale: 0.96 },
+          {
+            opacity: 1,
+            y: 0,
+            scale: 1,
+            duration: 0.9,
+            stagger: 0.12,
+            ease: 'power3.out',
+            scrollTrigger: {
+              trigger: cardsContainerRef.current,
+              start: 'top 80%',
+              toggleActions: 'play none none none'
+            }
+          }
+        );
+      }
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, []);
+
+  // Animate cards on tab change
+  const handleTabChange = (newTab) => {
+    if (newTab === activeTab) return;
+    if (cardsContainerRef.current?.children) {
+      gsap.fromTo(
+        cardsContainerRef.current.children,
+        { opacity: 0, y: 20, scale: 0.97 },
+        { opacity: 1, y: 0, scale: 1, duration: 0.5, stagger: 0.08, ease: 'power2.out' }
+      );
+    }
+    setActiveTab(newTab);
+  };
+
+  const currentPlans = activeTab === 'fixed' ? FIXED_SHARED_PLANS : FLEX_SHARED_PLANS;
 
   return (
-    <section id="shared-hosting" className="py-20 lg:py-28 relative overflow-hidden bg-[#06090E]">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+    <section
+      ref={sectionRef}
+      id="shared-hosting"
+      data-slot="trusted"
+      className="py-24 relative overflow-hidden px-4 sm:px-6 lg:px-8 border-t border-white/10"
+      style={{
+        backgroundImage: "url('https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20260418_120332_3b24257a-afe6-48ca-875f-78147370f403.png&w=1280&q=85')",
+        backgroundSize: 'cover',
+        backgroundPosition: 'center'
+      }}
+    >
+      <div className="max-w-7xl mx-auto relative z-10 w-full">
         
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-14 space-y-4">
-          <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-cyan-950/70 border border-cyan-500/30 text-cyan-400 text-xs font-mono">
-            <Layers className="w-3.5 h-3.5" />
-            <span>ONE FRONTEND + ONE BACKEND</span>
+        <div ref={headerRef} className="text-center max-w-3xl mx-auto space-y-4 mb-12">
+          <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-black/40 px-4 py-1.5 font-mono text-[11px] uppercase tracking-[0.18em] text-white/90 backdrop-blur-md shadow-lg">
+            <Sparkles className="w-3.5 h-3.5 text-cyan-400" />
+            <span>FULL-STACK SHARED HOSTING</span>
           </div>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-display font-bold text-white tracking-tight">
-            Shared Hosting Built for Applications.
+
+          <h2 className="font-medium text-white tracking-tight" style={{ fontSize: 'clamp(32px, 4vw, 56px)', lineHeight: 1.2 }}>
+            Designed for 1 Frontend + 1 Backend. <br />
+            <span data-slot="gradient-text" className="nexa-grad-text">Two Tailored Product Models.</span>
           </h2>
-          <p className="text-base sm:text-lg text-slate-300 leading-relaxed font-sans">
-            Deploy one complete web application without server management. Choose predictable fixed quotas or flexible capacity that adapts to your workload.
+
+          <p className="text-white/80 text-sm sm:text-base font-sans leading-relaxed">
+            Choose between strictly predictable fixed resources for budget peace-of-mind, or elastic burst hosting that absorbs sudden traffic spikes.
           </p>
         </div>
 
-        {/* 1 Frontend + 1 Backend Interactive Composition */}
-        <div className="p-6 sm:p-8 rounded-3xl bg-[#090E18] border border-white/[0.08] mb-16 shadow-xl space-y-6">
-          <div className="text-center max-w-2xl mx-auto">
-            <h3 className="text-sm font-bold font-mono text-white uppercase tracking-wider">
-              Application Composition
-            </h3>
-            <p className="text-xs text-slate-400 mt-1">
-              Select one frontend and one backend. Hextorq bundles and deploys them as a single cohesive project.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-11 gap-4 items-center">
-            {/* Frontend Selector (5 cols) */}
-            <div className="md:col-span-5 p-4 rounded-2xl bg-slate-950/80 border border-white/[0.06] space-y-3">
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-mono font-bold text-cyan-300">
-                  1. FRONTEND
-                </span>
-                <span className="text-[11px] font-mono text-slate-400">SPA / Static</span>
-              </div>
-              <div className="grid grid-cols-3 gap-2">
-                {SUPPORTED_STACKS.frontends.map((item) => (
-                  <button
-                    key={item.name}
-                    type="button"
-                    onClick={() => setSelectedFrontend(item)}
-                    className={`px-2.5 py-2 rounded-xl text-xs font-mono transition-all text-center ${
-                      selectedFrontend.name === item.name
-                        ? 'bg-cyan-500 text-black font-bold shadow-md shadow-cyan-500/20'
-                        : 'bg-slate-900 text-slate-300 hover:bg-slate-800 border border-white/[0.04]'
-                    }`}
-                  >
-                    {item.name}
-                  </button>
-                ))}
-              </div>
-              <p className="text-[11px] font-mono text-slate-400">
-                Selected: <strong className="text-white">{selectedFrontend.name}</strong> — {selectedFrontend.desc}
-              </p>
-            </div>
-
-            {/* Plus Operator (1 col) */}
-            <div className="md:col-span-1 text-center flex items-center justify-center">
-              <div className="w-8 h-8 rounded-full bg-slate-900 border border-slate-700 flex items-center justify-center text-cyan-400 font-bold text-sm">
-                +
-              </div>
-            </div>
-
-            {/* Backend Selector (5 cols) */}
-            <div className="md:col-span-5 p-4 rounded-2xl bg-slate-950/80 border border-white/[0.06] space-y-3">
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-mono font-bold text-blue-300">
-                  2. BACKEND
-                </span>
-                <span className="text-[11px] font-mono text-slate-400">API / Runtime</span>
-              </div>
-              <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
-                {SUPPORTED_STACKS.backends.map((item) => (
-                  <button
-                    key={item.name}
-                    type="button"
-                    onClick={() => setSelectedBackend(item)}
-                    className={`px-2 py-2 rounded-xl text-xs font-mono transition-all text-center ${
-                      selectedBackend.name === item.name
-                        ? 'bg-blue-500 text-white font-bold shadow-md shadow-blue-500/20'
-                        : 'bg-slate-900 text-slate-300 hover:bg-slate-800 border border-white/[0.04]'
-                    }`}
-                  >
-                    {item.name}
-                  </button>
-                ))}
-              </div>
-              <p className="text-[11px] font-mono text-slate-400">
-                Selected: <strong className="text-white">{selectedBackend.name}</strong> — {selectedBackend.desc}
-              </p>
-            </div>
-          </div>
-        </div>
-
-        {/* Model Category Toggle & Billing Cycle */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-6 mb-10 pb-6 border-b border-white/[0.08]">
+        {/* Product Model Selector Tabs & Yearly Toggle */}
+        <div ref={tabsRef} className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-10 pb-6 border-b border-white/15">
           
-          {/* Fixed vs Flex Toggle */}
-          <div className="inline-flex p-1 rounded-xl bg-slate-900 border border-white/[0.08]">
+          {/* Fixed vs Flex Tabs */}
+          <div className="inline-flex p-1 rounded-2xl bg-black/50 border border-white/20 shadow-lg backdrop-blur-md">
             <button
-              type="button"
-              onClick={() => setActiveCategory('fixed')}
-              className={`px-5 py-2.5 rounded-lg text-xs sm:text-sm font-semibold transition-all flex items-center space-x-2 ${
-                activeCategory === 'fixed'
-                  ? 'bg-cyan-500 text-black shadow-md font-bold'
-                  : 'text-slate-400 hover:text-white'
+              onClick={() => handleTabChange('fixed')}
+              className={`px-5 py-2.5 rounded-xl text-xs font-mono font-semibold transition-all duration-200 flex items-center space-x-2 ${
+                activeTab === 'fixed'
+                  ? 'bg-white text-slate-900 shadow-md font-bold'
+                  : 'text-white/80 hover:text-white'
               }`}
             >
-              <Cpu className="w-4 h-4" />
-              <span>Fixed Shared</span>
+              <Cpu className="w-3.5 h-3.5" />
+              <span>1. Fixed Resource Hosting</span>
             </button>
 
             <button
-              type="button"
-              onClick={() => setActiveCategory('burst')}
-              className={`px-5 py-2.5 rounded-lg text-xs sm:text-sm font-semibold transition-all flex items-center space-x-2 ${
-                activeCategory === 'burst'
-                  ? 'bg-blue-600 text-white shadow-md font-bold'
-                  : 'text-slate-400 hover:text-white'
+              onClick={() => handleTabChange('flex')}
+              id="flex-burst"
+              className={`px-5 py-2.5 rounded-xl text-xs font-mono font-semibold transition-all duration-200 flex items-center space-x-2 ${
+                activeTab === 'flex'
+                  ? 'bg-white text-slate-900 shadow-md font-bold'
+                  : 'text-white/80 hover:text-white'
               }`}
             >
-              <TrendingUp className="w-4 h-4" />
-              <span>Flexible / Burst Shared</span>
+              <Zap className="w-3.5 h-3.5 text-cyan-500" />
+              <span>2. Flexible / Burst Hosting</span>
             </button>
           </div>
 
           {/* Monthly / Yearly Toggle */}
-          <div className="flex items-center space-x-3 text-xs font-mono">
-            <span className={billingPeriod === 'monthly' ? 'text-white font-semibold' : 'text-slate-400'}>
-              Monthly
-            </span>
+          <div className="flex items-center space-x-3 text-xs font-mono text-white">
+            <span className={!isYearly ? 'text-white font-semibold' : 'text-white/70'}>Monthly</span>
             <button
-              type="button"
-              onClick={() => setBillingPeriod(billingPeriod === 'monthly' ? 'yearly' : 'monthly')}
-              className="relative w-12 h-6 rounded-full bg-slate-800 border border-slate-700 p-0.5 transition-colors focus:outline-none"
-              aria-label="Toggle annual billing"
+              onClick={() => setIsYearly(!isYearly)}
+              className="w-11 h-6 rounded-full bg-white/20 border border-white/30 relative p-0.5 transition-colors focus:outline-none"
+              aria-label="Toggle Annual Discount"
             >
-              <div 
-                className={`w-5 h-5 rounded-full bg-cyan-400 transition-transform duration-300 ${
-                  billingPeriod === 'yearly' ? 'translate-x-6' : 'translate-x-0'
+              <div
+                className={`size-5 rounded-full bg-white transition-transform duration-200 ${
+                  isYearly ? 'translate-x-5' : 'translate-x-0'
                 }`}
               ></div>
             </button>
-            <span className={billingPeriod === 'yearly' ? 'text-cyan-300 font-semibold' : 'text-slate-400'}>
-              Yearly (~18% discount)
+            <span className={isYearly ? 'text-white font-semibold' : 'text-white/70'}>
+              Yearly <span className="text-cyan-300 text-[10px] font-bold">(Save ~15%)</span>
             </span>
           </div>
+
         </div>
 
-        {/* Explanatory Policy Banner */}
-        <div className="mb-10 p-5 rounded-2xl bg-slate-900/60 border border-white/[0.06] flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-          <div className="flex items-start space-x-3">
-            <div className="w-7 h-7 rounded-lg bg-slate-800 flex items-center justify-center text-cyan-400 shrink-0 mt-0.5">
-              <Info className="w-4 h-4" />
+        {/* Product Positioning Banner */}
+        <div ref={bannerRef} className="mb-10 p-5 rounded-2xl bg-[rgba(10,5,20,0.88)] border border-white/15 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 shadow-xl backdrop-blur-xl">
+          <div className="space-y-1">
+            <div className="text-[10px] font-mono uppercase text-cyan-300 font-semibold tracking-[0.14em]">
+              {activeTab === 'fixed' ? 'FIXED RESOURCE MODEL' : 'FLEXIBLE BURST MODEL'}
             </div>
-            <div>
-              <h4 className="text-xs font-bold text-white font-mono">
-                {activeCategory === 'fixed'
-                  ? 'Fixed Resource Model: "Predictable resources for predictable workloads."'
-                  : 'Flexible Resource Model: "Resources that adapt to your workload."'}
-              </h4>
-              <p className="text-xs text-slate-400 mt-0.5 leading-relaxed font-sans">
-                {activeCategory === 'fixed'
-                  ? 'Your plan includes a defined allocation of CPU and RAM. If your application reaches its allocation, normal resource enforcement applies.'
-                  : 'Use additional available shared capacity when your application needs it. Additional capacity is subject to infrastructure availability and fair-use safeguards.'}
-              </p>
-            </div>
+            <h3 className="text-base font-bold text-white font-display">
+              {activeTab === 'fixed'
+                ? 'Predictable resources. Predictable pricing.'
+                : 'Resources that adapt to your workload.'}
+            </h3>
+            <p className="text-xs text-white/80 font-sans max-w-2xl leading-relaxed">
+              {activeTab === 'fixed'
+                ? 'Strictly bounded CPU, memory, and NVMe allocations. Perfect for steady, predictable production workloads with absolute budget certainty.'
+                : 'Your plan includes a base level of resources. When demand increases, additional available capacity can temporarily be used. When demand returns to normal, that additional capacity is released.'}
+            </p>
           </div>
-          <Link
-            to="/legal/resource-policy"
-            className="text-xs font-mono text-cyan-400 hover:underline flex items-center space-x-1 shrink-0"
-          >
-            <span>Resource Policy</span>
-            <ArrowRight className="w-3.5 h-3.5" />
-          </Link>
+
+          {activeTab === 'flex' && (
+            <div className="p-3 rounded-xl bg-white/10 border border-white/15 text-[11px] font-mono text-white/90 max-w-xs shrink-0">
+              ⚡ Additional shared capacity is available when infrastructure capacity allows.
+            </div>
+          )}
         </div>
 
-        {/* Pricing Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
+        {/* Plan Cards Grid */}
+        <div ref={cardsContainerRef} className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
           {currentPlans.map((plan) => {
-            const price = billingPeriod === 'monthly' ? plan.monthlyPrice : plan.yearlyPrice;
+            const displayPrice = isYearly ? plan.yearlyPrice : plan.monthlyPrice;
+
             return (
               <div
                 key={plan.id}
-                className={`relative rounded-3xl p-6 sm:p-7 flex flex-col justify-between transition-all duration-300 ${
-                  plan.popular
-                    ? 'bg-slate-900/90 border-2 border-cyan-500/60 shadow-xl shadow-cyan-500/10'
-                    : 'bg-[#090E18]/80 border border-white/[0.08] hover:border-slate-700'
+                className={`relative rounded-[36px] p-6 sm:p-7 flex flex-col justify-between transition-all duration-300 backdrop-blur-xl hover:scale-[1.02] ${
+                  plan.highlight
+                    ? 'bg-[rgba(15,10,30,0.92)] border-2 border-cyan-400/80 shadow-2xl'
+                    : 'bg-[rgba(10,5,20,0.88)] border border-white/15 hover:border-white/30 shadow-xl'
                 }`}
               >
-                {/* Popular Tag */}
+                {/* Top Badge */}
                 {plan.badge && (
-                  <div className="absolute -top-3 left-6 px-3 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase tracking-wider bg-cyan-500 text-black">
+                  <div className="absolute -top-3 right-6 px-3 py-0.5 rounded-full bg-cyan-400 text-slate-950 text-[9px] font-mono font-bold uppercase tracking-[0.14em] shadow-md">
                     {plan.badge}
                   </div>
                 )}
 
-                <div>
-                  <div className="mb-4">
-                    <h3 className="text-xl font-bold font-display text-white">
-                      {plan.name}
-                    </h3>
-                    <p className="text-xs text-slate-400 mt-1 min-h-[32px]">
+                <div className="space-y-5">
+                  {/* Title & Tagline */}
+                  <div>
+                    <h3 className="text-xl font-bold font-display text-white">{plan.name}</h3>
+                    <p className="text-xs text-white/70 font-sans mt-1 leading-relaxed min-h-[32px]">
                       {plan.tagline}
                     </p>
                   </div>
 
-                  {/* Price */}
-                  <div className="py-4 border-y border-white/[0.06] mb-5">
+                  {/* 14-Day Free Trial Highlight Badge */}
+                  <div className="p-2.5 rounded-xl bg-white/5 border border-white/10 flex items-center justify-between text-xs font-mono">
+                    <span className="text-white font-semibold flex items-center space-x-1.5">
+                      <Sparkles className="w-3.5 h-3.5 text-cyan-300" />
+                      <span>14-Day Free Trial</span>
+                    </span>
+                    <span className="text-cyan-300 text-[10px] font-bold">₹0 upfront</span>
+                  </div>
+
+                  {/* Price display */}
+                  <div className="py-3 border-y border-white/15">
                     <div className="flex items-baseline space-x-1">
-                      <span className="text-xl font-bold text-slate-400">{plan.currency}</span>
-                      <span className="text-4xl sm:text-5xl font-extrabold font-display text-white tracking-tight">
-                        {price}
+                      <span className="text-xl font-bold text-white/60">{plan.currency}</span>
+                      <span className="text-4xl sm:text-5xl font-bold font-display text-white">
+                        {displayPrice}
                       </span>
-                      <span className="text-xs font-mono text-slate-400">/month</span>
+                      <span className="text-xs font-mono text-white/60">/month</span>
                     </div>
-                    <p className="text-[11px] font-mono text-slate-400 mt-1">
-                      {billingPeriod === 'yearly' ? 'Billed annually' : 'Billed monthly'} • Renew at same rate
-                    </p>
-                  </div>
-
-                  {/* Hardware Specs */}
-                  <div className="space-y-2 mb-6 p-3.5 rounded-2xl bg-slate-950/70 border border-white/[0.04]">
-                    <div className="flex items-center justify-between text-xs font-mono">
-                      <span className="text-slate-400">Compute:</span>
-                      <span className="text-white font-semibold">{plan.specs.vcpu}</span>
-                    </div>
-                    <div className="flex items-center justify-between text-xs font-mono">
-                      <span className="text-slate-400">Memory:</span>
-                      <span className="text-white font-semibold">{plan.specs.ram}</span>
-                    </div>
-                    <div className="flex items-center justify-between text-xs font-mono">
-                      <span className="text-slate-400">NVMe Storage:</span>
-                      <span className="text-white font-semibold">{plan.specs.storage}</span>
-                    </div>
-                    <div className="flex items-center justify-between text-xs font-mono pt-1 border-t border-slate-800">
-                      <span className="text-slate-400">Application:</span>
-                      <span className="text-cyan-300 font-semibold">{plan.specs.apps}</span>
+                    <div className="text-[11px] font-mono text-white/70 mt-1">
+                      Try free for 14 days. Pay ₹{displayPrice}/mo after trial.
                     </div>
                   </div>
 
-                  {/* Features */}
-                  <ul className="space-y-2.5 text-xs text-slate-300 mb-8 font-sans">
-                    {plan.features.map((feat, idx) => (
-                      <li key={idx} className="flex items-start space-x-2.5">
-                        <Check className="w-4 h-4 text-cyan-400 shrink-0 mt-0.5" />
-                        <span className="leading-snug">{feat}</span>
+                  {/* Spec Sheet Pills */}
+                  <div className="grid grid-cols-2 gap-2 text-xs font-mono text-white">
+                    <div className="p-2 rounded-xl bg-black/40 border border-white/10">
+                      <span className="text-[9px] text-white/60 block uppercase">COMPUTE</span>
+                      <strong className="text-white">{plan.specs.vcpu}</strong>
+                    </div>
+                    <div className="p-2 rounded-xl bg-black/40 border border-white/10">
+                      <span className="text-[9px] text-white/60 block uppercase">MEMORY</span>
+                      <strong className="text-white">{plan.specs.ram}</strong>
+                    </div>
+                    <div className="p-2 rounded-xl bg-black/40 border border-white/10">
+                      <span className="text-[9px] text-white/60 block uppercase">STORAGE</span>
+                      <strong className="text-white">{plan.specs.storage}</strong>
+                    </div>
+                    <div className="p-2 rounded-xl bg-black/40 border border-white/10">
+                      <span className="text-[9px] text-white/60 block uppercase">STACK</span>
+                      <strong className="text-white">1 FE + 1 BE</strong>
+                    </div>
+                  </div>
+
+                  {/* Feature Checklist */}
+                  <ul className="space-y-2.5 pt-2 text-xs font-sans text-white/80">
+                    {plan.features.map((feat, i) => (
+                      <li key={i} className="flex items-start space-x-2">
+                        <CheckCircle2 className="w-4 h-4 text-cyan-400 shrink-0 mt-0.5" />
+                        <span className="leading-tight text-white">{feat}</span>
                       </li>
                     ))}
                   </ul>
                 </div>
 
-                {/* CTA */}
-                <button
-                  type="button"
-                  onClick={() => openDeployModal(plan, 'app')}
-                  className={`w-full py-3 rounded-xl text-xs font-semibold tracking-wide transition-all flex items-center justify-center space-x-2 ${
-                    plan.popular
-                      ? 'bg-cyan-500 hover:bg-cyan-400 text-black font-bold shadow-md shadow-cyan-500/20'
-                      : 'bg-slate-800 hover:bg-slate-700 text-white'
-                  }`}
-                >
-                  <span>{plan.ctaText}</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </button>
+                {/* Card CTA */}
+                <div className="mt-8 pt-4 border-t border-white/15 space-y-2">
+                  <button
+                    type="button"
+                    onClick={() => openTrialModal(plan, activeTab)}
+                    className="nexa-grad-a-bg group relative inline-flex items-center justify-center rounded-xl p-px w-full shadow-lg hover:scale-105 active:scale-95 transition-all"
+                  >
+                    <span className="w-full rounded-[11px] bg-[rgb(28,78,255)] py-3 text-center text-xs font-semibold text-white transition-colors duration-300 group-hover:bg-transparent flex items-center justify-center space-x-2">
+                      <span>Start 14-Day Trial</span>
+                      <ArrowRight className="w-3.5 h-3.5" />
+                    </span>
+                  </button>
+                  <div className="text-center text-[10px] font-mono text-white/60">
+                    Zero upfront charge • Cancel anytime
+                  </div>
+                </div>
               </div>
             );
           })}
         </div>
+
+        {/* Burst Visualizer */}
+        <div className="mt-6">
+          <BurstVisualizer />
+        </div>
+
       </div>
     </section>
   );

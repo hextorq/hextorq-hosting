@@ -9,17 +9,40 @@ export default {
     extend: {
       colors: {
         background: {
-          DEFAULT: '#06090E',
-          card: '#0D131F',
-          elevated: '#131B2E',
-          subtle: '#090E17',
-          surface: '#111827',
-          glass: 'rgba(13, 19, 31, 0.75)'
+          DEFAULT: '#0d1117',
+          card: '#161b22',
+          elevated: '#1c212c',
+          subtle: '#090d13',
+          surface: '#131823',
+          glass: 'rgba(22, 27, 34, 0.75)'
+        },
+        foreground: {
+          DEFAULT: '#e7e4de',
+          muted: '#99a0ad',
+          subtle: '#6e7787'
+        },
+        card: {
+          DEFAULT: '#161b22',
+          foreground: '#e7e4de',
+          elevated: '#1a1f29'
+        },
+        muted: {
+          DEFAULT: '#232834',
+          foreground: '#99a0ad'
         },
         border: {
-          subtle: 'rgba(255, 255, 255, 0.07)',
-          strong: 'rgba(255, 255, 255, 0.15)',
-          glow: 'rgba(56, 189, 248, 0.35)'
+          DEFAULT: 'rgba(231, 228, 221, 0.09)',
+          subtle: 'rgba(231, 228, 221, 0.06)',
+          strong: 'rgba(231, 228, 221, 0.16)',
+          glow: 'rgba(58, 129, 246, 0.35)'
+        },
+        primary: {
+          DEFAULT: '#edeae3',
+          foreground: '#0d1117'
+        },
+        secondary: {
+          DEFAULT: '#2e3440',
+          foreground: '#e7e4de'
         },
         brand: {
           50: '#F0F7FF',
@@ -32,11 +55,13 @@ export default {
           700: '#0369A1',
           800: '#075985',
           900: '#0C4A6E',
-          electric: '#2563EB',
+          electric: '#1C4EFF',
           cyan: '#06B6D4',
           indigo: '#6366F1',
-          emerald: '#10B981',
-          amber: '#F59E0B'
+          purple: '#AC24FF',
+          orange: '#FE881B',
+          emerald: '#00BB7F',
+          amber: '#F99C00'
         }
       },
       fontFamily: {
@@ -45,20 +70,20 @@ export default {
         mono: ['JetBrains Mono', 'Fira Code', 'monospace']
       },
       backgroundImage: {
-        'grid-pattern': "radial-gradient(circle at 1px 1px, rgba(255, 255, 255, 0.05) 1px, transparent 0)",
-        'mesh-gradient': "radial-gradient(at 0% 0%, rgba(14, 165, 233, 0.15) 0px, transparent 50%), radial-gradient(at 100% 100%, rgba(99, 102, 241, 0.15) 0px, transparent 50%)",
-        'radial-hero': "radial-gradient(circle 800px at 50% -100px, rgba(14, 165, 233, 0.18), transparent 70%)"
+        'dot-grid': "radial-gradient(circle at 1px 1px, rgba(231, 228, 221, 0.09) 1px, transparent 0)",
+        'mesh-gradient': "radial-gradient(ellipse 55% 45% at 50% 0%, rgba(76, 130, 198, 0.12), transparent 70%), radial-gradient(ellipse 75% 50% at 50% 35%, rgba(180, 162, 129, 0.08), transparent 75%)",
+        'radial-hero': "radial-gradient(circle 800px at 50% -100px, rgba(58, 129, 246, 0.15), transparent 70%)"
       },
       boxShadow: {
-        'neon-blue': '0 0 25px -5px rgba(14, 165, 233, 0.3)',
-        'neon-cyan': '0 0 30px -5px rgba(6, 182, 212, 0.35)',
-        'neon-indigo': '0 0 30px -5px rgba(99, 102, 241, 0.35)',
-        'subtle-glow': '0 4px 20px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.07)'
+        'elevated': 'inset 0 1px 0 0 rgba(255, 255, 255, 0.06), 0 24px 60px -30px rgba(0, 0, 0, 0.6), 0 8px 24px -18px rgba(0, 0, 0, 0.4)',
+        'soft-card': '0 3px 9.1px rgba(0, 0, 0, 0.2), 0 1px 29px rgba(0, 0, 0, 0.35)',
+        'neon-blue': '0 0 25px -5px rgba(28, 78, 255, 0.3)',
+        'neon-cyan': '0 0 30px -5px rgba(6, 182, 212, 0.35)'
       },
       animation: {
         'pulse-subtle': 'pulseSubtle 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
         'float-slow': 'floatSlow 6s ease-in-out infinite',
-        'spin-slow': 'spin 12s linear infinite',
+        'ambient-drift': 'ambientDrift 25s ease-in-out infinite alternate'
       },
       keyframes: {
         pulseSubtle: {
@@ -67,7 +92,12 @@ export default {
         },
         floatSlow: {
           '0%, 100%': { transform: 'translateY(0px)' },
-          '50%': { transform: 'translateY(-8px)' }
+          '50%': { transform: 'translateY(-6px)' }
+        },
+        ambientDrift: {
+          '0%': { transform: 'scale(1) translate(0px, 0px)' },
+          '50%': { transform: 'scale(1.05) translate(15px, -10px)' },
+          '100%': { transform: 'scale(0.98) translate(-10px, 15px)' }
         }
       }
     },

@@ -1,20 +1,10 @@
 import React from 'react';
 import SEO from '../components/common/SEO';
-import VPSConfigurator from '../components/vps/VPSConfigurator';
-import ArchitectureComparison from '../components/home/ArchitectureComparison';
-import FAQSection from '../components/home/FAQSection';
-import CtaBanner from '../components/home/CtaBanner';
 import { VPS_TIERS } from '../data/vpsPlans';
 import { useDeployModal } from '../context/DeployModalContext';
-import { 
-  Cpu, 
-  Terminal, 
-  CheckCircle2, 
-  ArrowRight
-} from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Terminal, CheckCircle2 } from 'lucide-react';
 
-export default function VPSPage() {
+export default function VPSShowcasePage() {
   const { openDeployModal } = useDeployModal();
 
   return (
@@ -22,11 +12,10 @@ export default function VPSPage() {
       <SEO
         title="High-Performance VPS Hosting — Dedicated vCPU & Root Access"
         description="Deploy virtual private servers with dedicated compute, NVMe storage, custom OS selection, and 100% full root access."
-        canonical="https://hosting.hextorq.tech/vps"
+        canonical="https://hosting.hextorq.tech/"
       />
 
       <div className="pt-28 pb-20 bg-[#06090E] min-h-screen text-slate-100">
-        
         {/* Page Hero */}
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-16 text-center space-y-6">
           <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-cyan-950/80 border border-cyan-500/30 text-cyan-300 text-xs font-mono">
@@ -60,7 +49,7 @@ export default function VPSPage() {
           </div>
         </section>
 
-        {/* Predefined VPS Tiers */}
+        {/* VPS Plan Showcase */}
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
           <div className="text-center max-w-2xl mx-auto mb-12 space-y-2">
             <h2 className="text-2xl sm:text-3xl font-display font-bold text-white">
@@ -90,7 +79,7 @@ export default function VPSPage() {
                       </span>
                     )}
                   </div>
-                  
+
                   <div className="py-2 border-y border-white/[0.06]">
                     <div className="flex items-baseline space-x-1">
                       <span className="text-xl font-bold text-slate-400">{tier.currency}</span>
@@ -123,40 +112,6 @@ export default function VPSPage() {
             ))}
           </div>
         </section>
-
-        {/* Custom VPS Configurator */}
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <VPSConfigurator />
-        </section>
-
-        {/* Managed VPS Banner Callout */}
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-          <div className="p-8 rounded-3xl bg-[#090E18] border border-white/[0.08] flex flex-col md:flex-row items-center justify-between gap-6">
-            <div className="space-y-2 max-w-xl">
-              <span className="text-xs font-mono text-cyan-400 uppercase tracking-wider font-semibold">
-                Looking for zero server maintenance?
-              </span>
-              <h3 className="text-2xl font-bold font-display text-white">
-                VPS Power. Without the Server Administration.
-              </h3>
-              <p className="text-xs sm:text-sm text-slate-300 font-sans leading-relaxed">
-                Let our senior infrastructure engineers manage your initial OS hardening, security updates, snapshot schedules, and monitoring.
-              </p>
-            </div>
-            <Link
-              to="/managed-vps"
-              className="px-6 py-3 rounded-xl text-xs font-semibold text-white bg-cyan-600 hover:bg-cyan-500 flex items-center space-x-2 shrink-0 shadow-md shadow-cyan-500/20"
-            >
-              <span>Explore Managed VPS</span>
-              <ArrowRight className="w-4 h-4" />
-            </Link>
-          </div>
-        </section>
-
-        {/* Comparison & FAQ */}
-        <ArchitectureComparison />
-        <FAQSection />
-        <CtaBanner />
       </div>
     </>
   );
