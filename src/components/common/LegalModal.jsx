@@ -69,7 +69,7 @@ export default function LegalModal() {
             },
             {
               h: '3. VPS & Dedicated Server Policy',
-              p: 'VPS customers receive dedicated virtual cores and allocated memory. Users maintain full root control, but network traffic must adhere to acceptable use rules (no malicious scans, abusive crypto-mining, or spamming).'
+              p: 'VPS customers receive a dedicated allocation of virtual cores, memory, and storage, fixed at their chosen plan tier with no bursting. Network traffic must adhere to acceptable use rules (no malicious scans, abusive crypto-mining, or spamming).'
             }
           ]
         };

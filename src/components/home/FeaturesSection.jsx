@@ -125,8 +125,8 @@ export default function FeaturesSection() {
     },
     {
       icon: <Terminal className="w-5 h-5 text-rose-600" />,
-      title: 'Full Root Access on VPS',
-      desc: 'Complete administrative control over your virtual servers with custom SSH keys, custom kernel parameters, and systemd service management.'
+      title: 'Unlimited Sites on VPS',
+      desc: 'Host as many projects or client sites as fit within your allocation — Self-Hosted for full control, or Managed and let HexTorq run it.'
     },
     {
       icon: <Sliders className="w-5 h-5 text-blue-600" />,

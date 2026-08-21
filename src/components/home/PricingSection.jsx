@@ -21,7 +21,7 @@ export default function PricingSection() {
         return {
           plans: VPS_PLANS,
           title: 'Standard VPS Plans',
-          subtitle: 'Dedicated vCPU cores, isolated memory, and full root access.',
+          subtitle: 'Dedicated vCPU cores, isolated memory, and no cap on sites or apps hosted.',
           burstNote: null
         };
       case 'managed':
@@ -150,7 +150,9 @@ export default function PricingSection() {
         <div className={`grid gap-6 ${
           current.plans.length === 5
             ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-5'
-            : 'grid-cols-1 md:grid-cols-3'
+            : current.plans.length === 4
+              ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-4'
+              : 'grid-cols-1 md:grid-cols-3'
         }`}>
           {current.plans.map((plan) => {
             const displayPrice = isYearly ? plan.yearlyPrice : plan.monthlyPrice;

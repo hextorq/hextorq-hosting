@@ -184,7 +184,7 @@ export default function HeroSection() {
               <CheckCircle2 className="w-3.5 h-3.5 text-cyan-400" />
               <span>VPS Control</span>
             </div>
-            <div className="text-xs text-white font-sans mt-1 font-semibold">From ₹399/mo with Root</div>
+            <div className="text-xs text-white font-sans mt-1 font-semibold">From ₹349/mo, multi-site</div>
           </div>
         </div>
 

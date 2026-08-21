@@ -186,7 +186,7 @@ export default function ManagedVPSSection() {
           </div>
         </div>
 
-        <div ref={plansGridRef} className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div ref={plansGridRef} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {MANAGED_VPS_PLANS.map((plan) => {
             const displayPrice = isYearly ? plan.yearlyPrice : plan.monthlyPrice;
 

@@ -137,7 +137,7 @@ export default function Footer() {
               </li>
               <li>
                 <button onClick={() => handleNavClick('vps-hosting')} className="hover:text-white transition-colors text-left text-xs">
-                  VPS Hosting (Root Access)
+                  VPS Hosting (Multi-Site)
                 </button>
               </li>
               <li>
