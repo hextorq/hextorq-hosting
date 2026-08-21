@@ -258,7 +258,7 @@ export const VPS_PLANS = [
       vcpu: '1 vCore',
       ram: '2 GB RAM',
       storage: '40 GB NVMe',
-      bandwidth: '500 Mbps Bandwidth'
+      bandwidth: '500 Mbps'
     },
     features: [
       '1 Dedicated vCore',
@@ -288,7 +288,7 @@ export const VPS_PLANS = [
       vcpu: '2 vCores',
       ram: '8 GB RAM',
       storage: '75 GB NVMe',
-      bandwidth: '1 Gbps Bandwidth'
+      bandwidth: '1 Gbps'
     },
     features: [
       '2 Dedicated vCores',
@@ -318,7 +318,7 @@ export const VPS_PLANS = [
       vcpu: '2 vCores',
       ram: '12 GB RAM',
       storage: '100 GB NVMe',
-      bandwidth: '2 Gbps Bandwidth'
+      bandwidth: '2 Gbps'
     },
     features: [
       '2 Dedicated vCores',
@@ -348,7 +348,7 @@ export const VPS_PLANS = [
       vcpu: '2 vCores',
       ram: '16 GB RAM',
       storage: '100 GB NVMe',
-      bandwidth: '3 Gbps Bandwidth'
+      bandwidth: '3 Gbps'
     },
     features: [
       '2 Dedicated vCores',
@@ -381,7 +381,7 @@ export const MANAGED_VPS_PLANS = [
       vcpu: '1 vCore',
       ram: '2 GB RAM',
       storage: '40 GB NVMe',
-      bandwidth: '500 Mbps Bandwidth',
+      bandwidth: '500 Mbps',
       management: 'Full Server Care'
     },
     features: [
@@ -412,7 +412,7 @@ export const MANAGED_VPS_PLANS = [
       vcpu: '2 vCores',
       ram: '8 GB RAM',
       storage: '75 GB NVMe',
-      bandwidth: '1 Gbps Bandwidth',
+      bandwidth: '1 Gbps',
       management: 'Full Server Care + SLA'
     },
     features: [
@@ -443,7 +443,7 @@ export const MANAGED_VPS_PLANS = [
       vcpu: '2 vCores',
       ram: '12 GB RAM',
       storage: '100 GB NVMe',
-      bandwidth: '2 Gbps Bandwidth',
+      bandwidth: '2 Gbps',
       management: 'Full Server Care + SLA'
     },
     features: [
@@ -474,7 +474,7 @@ export const MANAGED_VPS_PLANS = [
       vcpu: '2 vCores',
       ram: '16 GB RAM',
       storage: '100 GB NVMe',
-      bandwidth: '3 Gbps Bandwidth',
+      bandwidth: '3 Gbps',
       management: 'Priority Hands-on Care'
     },
     features: [
