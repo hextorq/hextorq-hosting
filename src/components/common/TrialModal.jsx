@@ -1,12 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { 
   X, 
-  ShieldCheck, 
   Mail, 
   Copy, 
   ExternalLink,
-  Check,
-  Globe
+  Check
 } from 'lucide-react';
 import { useTrialModal } from '../../context/TrialModalContext';
 import { 
@@ -25,9 +23,6 @@ export default function TrialModal() {
   const [isYearly, setIsYearly] = useState(false);
   const [userName, setUserName] = useState('');
   const [userEmail, setUserEmail] = useState('');
-  const [projectName, setProjectName] = useState('');
-  const [selectedRegion, setSelectedRegion] = useState('India (Mumbai)');
-  const [customNotes, setCustomNotes] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [copied, setCopied] = useState(false);
 
@@ -52,11 +47,9 @@ export default function TrialModal() {
       
       if (selectedPlan) {
         setActivePlan(selectedPlan);
-        setProjectName(selectedPlan.name ? `${selectedPlan.name.toLowerCase().replace(/[^a-z0-9]/g, '-')}-app` : 'my-app');
       } else {
         const defaultPlan = allPlansByCategory[cat]?.[0] || FIXED_SHARED_PLANS[0];
         setActivePlan(defaultPlan);
-        setProjectName('my-production-app');
       }
     } else {
       document.body.style.overflow = '';
@@ -96,24 +89,21 @@ export default function TrialModal() {
   const constructEmailDetails = () => {
     const subject = `[Hextorq Hosting] 14-Day Free Trial Enquiry - ${currentPlan.name} (${getCategoryLabel(currentCategory)})`;
     
-    const body = `Hello Hextorq Hosting Team,
+    const body = `Hello Hextorq Hosting Operations Team,
 
-I would like to activate my 14-Day Free Trial / Plan Enquiry for the following configuration:
+I would like to activate a 14-Day Free Trial sandbox environment for the following configuration:
 
---- PLAN & CONFIGURATION ---
-• Plan Name: ${currentPlan.name}
-• Product Tier: ${getCategoryLabel(currentCategory)}
-• Pricing: ₹${displayPrice}/month (${isYearly ? 'Yearly Billing - 15% Off' : 'Monthly Billing'})
-• Resource Specs: ${getSpecsSummary()}
-• Target Region: ${selectedRegion}
+--- PLAN & SPECIFICATIONS ---
+• Plan Tier: ${currentPlan.name}
+• Product Model: ${getCategoryLabel(currentCategory)}
+• Pricing: ₹${displayPrice}/month (${isYearly ? 'Yearly Billing (15% Saved)' : 'Monthly Billing'})
+• Dedicated Allocation: ${getSpecsSummary()}
 
---- APPLICANT / PROJECT DETAILS ---
-• Name / Organization: ${userName || 'Not Specified'}
-• Contact Email: ${userEmail || 'Not Specified'}
-• Application / Subdomain: ${projectName ? `${projectName}.hextorq.app` : 'Not Specified'}
-• Notes / Tech Stack: ${customNotes || '1 Frontend + 1 Backend setup'}
+--- APPLICANT CONTACT ---
+• Full Name / Company: ${userName || 'Not Specified'}
+• Contact / Delivery Email: ${userEmail || 'Not Specified'}
 
-Please provision the 14-Day Free Trial sandbox environment and share the server access credentials.
+Please provision the 14-Day evaluation sandbox and email the server deployment access credentials.
 
 Thank you!`;
 
@@ -128,7 +118,7 @@ Thank you!`;
     if (e) e.preventDefault();
     const { mailtoUrl } = constructEmailDetails();
     
-    // Robust trigger: create anchor tag and click
+    // Programmatically open mailto link
     try {
       const a = document.createElement('a');
       a.href = mailtoUrl;
@@ -160,7 +150,7 @@ Thank you!`;
       data-lenis-prevent="true"
       data-lenis-prevent-wheel="true"
       data-lenis-prevent-touch="true"
-      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/75 backdrop-blur-md animate-fadeIn overflow-y-auto"
+      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/80 backdrop-blur-md animate-fadeIn overflow-y-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
       onClick={(e) => {
         if (e.target === e.currentTarget) closeTrialModal();
       }}
@@ -174,25 +164,20 @@ Thank you!`;
         role="dialog"
         aria-modal="true"
       >
-        {/* Fixed Header */}
+        {/* Fixed Header without icon */}
         <div className="px-6 py-4 bg-slate-50 border-b border-slate-200 flex items-center justify-between shrink-0">
-          <div className="flex items-center space-x-3">
-            <div className="size-9 rounded-xl bg-blue-600 flex items-center justify-center text-white shadow-sm shrink-0">
-              <ShieldCheck className="w-5 h-5" />
+          <div>
+            <div className="flex items-center space-x-2">
+              <h3 className="font-display font-bold text-base text-[rgb(26,11,84)]">
+                Start 14-Day Free Trial
+              </h3>
+              <span className="text-[9px] font-mono font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 uppercase tracking-wider">
+                ₹0 DUE TODAY
+              </span>
             </div>
-            <div>
-              <div className="flex items-center space-x-2">
-                <h3 className="font-display font-bold text-base text-[rgb(26,11,84)]">
-                  Start 14-Day Free Trial
-                </h3>
-                <span className="text-[9px] font-mono font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 uppercase tracking-wider">
-                  ₹0 DUE TODAY
-                </span>
-              </div>
-              <p className="text-xs text-slate-500 font-sans">
-                Direct enquiry to <strong className="text-slate-800 font-mono">{SUPPORT_EMAIL}</strong>
-              </p>
-            </div>
+            <p className="text-xs text-slate-500 font-sans mt-0.5">
+              Direct activation enquiry to <strong className="text-slate-800 font-mono">{SUPPORT_EMAIL}</strong>
+            </p>
           </div>
 
           <button
@@ -204,30 +189,19 @@ Thank you!`;
           </button>
         </div>
 
-        {/* Scrollable Body - with native smooth scroll & data-lenis-prevent */}
+        {/* Scrollable Body - with hidden native scrollbar */}
         <div 
           ref={scrollContainerRef}
           data-lenis-prevent="true"
           data-lenis-prevent-wheel="true"
           data-lenis-prevent-touch="true"
           onWheel={(e) => e.stopPropagation()}
-          className="p-6 overflow-y-auto space-y-6 flex-1 overscroll-contain"
+          className="p-6 overflow-y-auto space-y-5 flex-1 overscroll-contain [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
           style={{ WebkitOverflowScrolling: 'touch' }}
         >
           {!isSubmitted ? (
             <form id="trial-enquiry-form" onSubmit={handleStartTrial} className="space-y-5">
               
-              {/* Top Trial Banner */}
-              <div className="p-4 rounded-2xl bg-blue-50/80 border border-blue-100 flex items-start space-x-3 text-xs">
-                <ShieldCheck className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
-                <div className="space-y-1">
-                  <div className="font-bold text-blue-950 font-display">14-Day Risk-Free Evaluation</div>
-                  <p className="text-blue-900/80 font-sans leading-relaxed">
-                    Test your full application on live infrastructure. Clicking below opens a pre-filled activation enquiry directly to our technical team at <strong className="font-mono">{SUPPORT_EMAIL}</strong> for instant sandbox setup.
-                  </p>
-                </div>
-              </div>
-
               {/* Category Selector Tabs */}
               <div className="space-y-1.5">
                 <label className="block text-[11px] font-mono uppercase text-slate-500 font-bold tracking-wider">
@@ -293,7 +267,7 @@ Thank you!`;
                 </div>
               </div>
 
-              {/* Plan Tier Selector */}
+              {/* Plan Tier Selector with Fixed & Aligned Badges */}
               <div className="space-y-1.5">
                 <label className="block text-[11px] font-mono uppercase text-slate-500 font-bold tracking-wider">
                   Select Plan Tier
@@ -313,12 +287,12 @@ Thank you!`;
                             : 'border-slate-200 bg-slate-50/60 hover:border-slate-300'
                         }`}
                       >
-                        <div className="flex items-center justify-between">
+                        <div className="flex items-center justify-between gap-1 w-full">
                           <span className={`text-xs font-bold font-display ${isSel ? 'text-blue-900' : 'text-slate-900'}`}>
                             {plan.name}
                           </span>
                           {plan.badge && (
-                            <span className="text-[8px] font-mono font-bold px-1.5 py-0.5 rounded bg-blue-600 text-white uppercase">
+                            <span className="text-[8px] font-mono font-bold px-1.5 py-0.5 rounded-full bg-blue-600 text-white uppercase tracking-wider shrink-0">
                               {plan.badge}
                             </span>
                           )}
@@ -375,13 +349,13 @@ Thank you!`;
                     <strong className="text-slate-900">{currentPlan.specs?.storage || '10 GB NVMe'}</strong>
                   </div>
                   <div className="p-2 rounded-xl bg-white border border-slate-100">
-                    <span className="text-[9px] text-slate-400 block uppercase">NETWORK / STACK</span>
+                    <span className="text-[9px] text-slate-400 block uppercase">STACK / ACCESS</span>
                     <strong className="text-slate-900">{currentPlan.specs?.bandwidth || '1 FE + 1 BE'}</strong>
                   </div>
                 </div>
               </div>
 
-              {/* Applicant / Project Fields */}
+              {/* Simplified Applicant Contact Fields */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-xs font-mono font-medium text-slate-700 mb-1">
@@ -389,109 +363,63 @@ Thank you!`;
                   </label>
                   <input
                     type="text"
+                    required
                     value={userName}
                     onChange={(e) => setUserName(e.target.value)}
                     placeholder="e.g. Alex Smith"
-                    className="w-full px-3.5 py-2.5 rounded-xl text-xs font-mono bg-slate-50 border border-slate-200 text-slate-900 focus:outline-none focus:border-blue-600 focus:bg-white"
+                    className="w-full px-3.5 py-2.5 rounded-xl text-xs font-mono bg-slate-50 border border-slate-200 text-slate-900 focus:outline-none focus:border-blue-600 focus:bg-white transition-colors"
                   />
                 </div>
 
                 <div>
                   <label className="block text-xs font-mono font-medium text-slate-700 mb-1">
-                    Notification / Contact Email
+                    Delivery Email Address
                   </label>
                   <input
                     type="email"
+                    required
                     value={userEmail}
                     onChange={(e) => setUserEmail(e.target.value)}
                     placeholder="e.g. developer@company.com"
-                    className="w-full px-3.5 py-2.5 rounded-xl text-xs font-mono bg-slate-50 border border-slate-200 text-slate-900 focus:outline-none focus:border-blue-600 focus:bg-white"
+                    className="w-full px-3.5 py-2.5 rounded-xl text-xs font-mono bg-slate-50 border border-slate-200 text-slate-900 focus:outline-none focus:border-blue-600 focus:bg-white transition-colors"
                   />
                 </div>
               </div>
 
-              {/* Project Subdomain & Region */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-xs font-mono font-medium text-slate-700 mb-1">
-                    Project / Application Name
-                  </label>
-                  <div className="flex rounded-xl overflow-hidden border border-slate-200 bg-slate-50 focus-within:border-blue-600 focus-within:bg-white">
-                    <input
-                      type="text"
-                      value={projectName}
-                      onChange={(e) => setProjectName(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ''))}
-                      placeholder="my-production-app"
-                      className="flex-1 px-3 py-2 text-xs bg-transparent text-slate-900 focus:outline-none font-mono"
-                    />
-                    <span className="px-2.5 py-2 text-[11px] font-mono text-slate-400 bg-slate-100 border-l border-slate-200 flex items-center">
-                      .hextorq.app
-                    </span>
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-xs font-mono font-medium text-slate-700 mb-1">
-                    Preferred Data Center
-                  </label>
-                  <select
-                    value={selectedRegion}
-                    onChange={(e) => setSelectedRegion(e.target.value)}
-                    className="w-full px-3 py-2.5 rounded-xl text-xs font-mono bg-slate-50 border border-slate-200 text-slate-900 focus:outline-none focus:border-blue-600 focus:bg-white"
-                  >
-                    <option>India (Mumbai) - 🇮🇳</option>
-                    <option>Singapore - 🇸🇬</option>
-                    <option>Germany (Frankfurt) - 🇩🇪</option>
-                    <option>United Kingdom (London) - 🇬🇧</option>
-                    <option>United States (Virginia) - 🇺🇸</option>
-                  </select>
-                </div>
-              </div>
-
-              {/* Notes / Special requirements */}
-              <div>
-                <label className="block text-xs font-mono font-medium text-slate-700 mb-1">
-                  Stack or Migration Notes (Optional)
-                </label>
-                <input
-                  type="text"
-                  value={customNotes}
-                  onChange={(e) => setCustomNotes(e.target.value)}
-                  placeholder="e.g. React + Node.js Express, PostgreSQL, or need Docker support"
-                  className="w-full px-3.5 py-2 text-xs font-mono bg-slate-50 border border-slate-200 text-slate-900 focus:outline-none focus:border-blue-600 focus:bg-white"
-                />
+              <div className="text-[11px] text-slate-500 font-sans leading-relaxed pt-1">
+                🔒 Zero upfront billing. Instant setup access credentials will be delivered to your contact email.
               </div>
 
             </form>
           ) : (
-            /* Confirmation Screen with Direct Multi-Client Links */
-            <div className="text-center py-4 space-y-5">
+            /* Trustworthy Confirmation View */
+            <div className="text-center py-5 space-y-5">
               <div className="size-14 rounded-2xl bg-emerald-50 border border-emerald-200 flex items-center justify-center mx-auto text-emerald-600 shadow-sm">
                 <Check className="w-7 h-7" />
               </div>
 
               <div className="space-y-1.5">
                 <h4 className="text-xl font-bold font-display text-[rgb(26,11,84)]">
-                  Enquiry Prepared for {SUPPORT_EMAIL}
+                  Trial Request Formatted for {SUPPORT_EMAIL}
                 </h4>
                 <p className="text-xs text-slate-600 max-w-md mx-auto leading-relaxed">
-                  Choose your preferred email client below to send the pre-filled trial activation for <strong className="text-slate-900">{currentPlan.name}</strong>.
+                  Click your preferred email client below to send the pre-filled enquiry for <strong className="text-slate-900">{currentPlan.name}</strong>.
                 </p>
               </div>
 
-              {/* Multi-Email Client Quick Actions */}
-              <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 max-w-md mx-auto space-y-3 text-left">
+              {/* Multi-Email Client Action Card */}
+              <div className="p-5 rounded-3xl bg-slate-50 border border-slate-200 max-w-md mx-auto space-y-3 text-left shadow-sm">
                 <div className="flex items-center justify-between text-xs font-mono pb-2 border-b border-slate-200">
-                  <span className="text-slate-500">Recipient:</span>
+                  <span className="text-slate-500">Destination:</span>
                   <strong className="text-blue-700 font-bold">{SUPPORT_EMAIL}</strong>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1">
                   <a
                     href={gmailUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="p-2.5 rounded-xl bg-red-600 text-white text-xs font-mono font-semibold hover:bg-red-700 transition-colors flex items-center justify-center space-x-1.5 shadow-sm text-center"
+                    className="p-3 rounded-xl bg-red-600 text-white text-xs font-mono font-semibold hover:bg-red-700 transition-all flex items-center justify-center space-x-1.5 shadow-sm text-center active:scale-95"
                   >
                     <ExternalLink className="w-3.5 h-3.5" />
                     <span>Open in Gmail</span>
@@ -501,7 +429,7 @@ Thank you!`;
                     href={outlookUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="p-2.5 rounded-xl bg-blue-600 text-white text-xs font-mono font-semibold hover:bg-blue-700 transition-colors flex items-center justify-center space-x-1.5 shadow-sm text-center"
+                    className="p-3 rounded-xl bg-blue-600 text-white text-xs font-mono font-semibold hover:bg-blue-700 transition-all flex items-center justify-center space-x-1.5 shadow-sm text-center active:scale-95"
                   >
                     <ExternalLink className="w-3.5 h-3.5" />
                     <span>Open in Outlook</span>
@@ -509,7 +437,7 @@ Thank you!`;
 
                   <a
                     href={mailtoUrl}
-                    className="p-2.5 rounded-xl bg-slate-800 text-white text-xs font-mono font-semibold hover:bg-slate-900 transition-colors flex items-center justify-center space-x-1.5 shadow-sm text-center"
+                    className="p-3 rounded-xl bg-slate-900 text-white text-xs font-mono font-semibold hover:bg-black transition-all flex items-center justify-center space-x-1.5 shadow-sm text-center active:scale-95"
                   >
                     <Mail className="w-3.5 h-3.5" />
                     <span>Default Mail App</span>
@@ -518,7 +446,7 @@ Thank you!`;
                   <button
                     type="button"
                     onClick={handleCopyEmailDetails}
-                    className="p-2.5 rounded-xl bg-white border border-slate-300 text-slate-700 text-xs font-mono font-semibold hover:bg-slate-100 transition-colors flex items-center justify-center space-x-1.5"
+                    className="p-3 rounded-xl bg-white border border-slate-300 text-slate-800 text-xs font-mono font-semibold hover:bg-slate-100 transition-all flex items-center justify-center space-x-1.5 active:scale-95"
                   >
                     <Copy className="w-3.5 h-3.5" />
                     <span>{copied ? 'Copied Details!' : 'Copy Text'}</span>
@@ -527,13 +455,13 @@ Thank you!`;
               </div>
 
               <p className="text-[11px] text-slate-500 font-sans max-w-sm mx-auto leading-normal">
-                Our operations team provisions sandbox containers within 15–30 minutes and sends your setup credentials.
+                Our infrastructure team will provision your 14-day container environment and send you access credentials within 15–30 minutes.
               </p>
             </div>
           )}
         </div>
 
-        {/* Fixed Always-Visible Footer */}
+        {/* Fixed Footer */}
         <div className="px-6 py-4 bg-slate-50 border-t border-slate-200 flex items-center justify-between shrink-0">
           {!isSubmitted ? (
             <>
@@ -551,7 +479,7 @@ Thank you!`;
                 className="h-10 px-6 rounded-xl text-xs font-bold text-white bg-[rgb(28,78,255)] hover:bg-blue-700 transition-all shadow-md flex items-center space-x-2 active:scale-95 cursor-pointer"
               >
                 <Mail className="w-4 h-4" />
-                <span>Send 14-Day Trial Enquiry</span>
+                <span>Start 14-Day Free Trial</span>
               </button>
             </>
           ) : (
@@ -561,7 +489,7 @@ Thank you!`;
                 onClick={() => setIsSubmitted(false)}
                 className="text-xs font-mono text-blue-700 hover:underline"
               >
-                ← Edit Plan Selection
+                ← Back to Plan Options
               </button>
 
               <button
