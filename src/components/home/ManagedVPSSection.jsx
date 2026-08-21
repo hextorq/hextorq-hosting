@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { ArrowRight, ShieldCheck, Server, Lock, Cpu, HardDrive, Wrench, LifeBuoy, ChevronDown, ChevronUp } from 'lucide-react';
+import { ArrowRight, Server, Lock, Cpu, HardDrive, Wrench, LifeBuoy, ChevronDown, ChevronUp } from 'lucide-react';
 import { useTrialModal } from '../../context/TrialModalContext';
 import { MANAGED_VPS_PLANS } from '../../data/hostingData';
 
@@ -126,10 +126,9 @@ export default function ManagedVPSSection() {
     <section ref={sectionRef} id="managed-vps" className="py-24 bg-slate-50 text-[rgb(26,11,84)] relative border-t border-slate-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
-        {/* Section Heading */}
+        {/* Section Heading without icon */}
         <div ref={headerRef} className="text-center max-w-3xl mx-auto space-y-4 mb-16">
-          <div className="inline-flex items-center gap-2 rounded-full bg-white border border-slate-200 px-4 py-1.5 font-mono text-[11px] uppercase tracking-[0.18em] text-slate-700 shadow-sm">
-            <ShieldCheck className="w-3.5 h-3.5 text-blue-600" />
+          <div className="inline-flex items-center gap-2 rounded-full bg-white border border-slate-200 px-4 py-1.5 font-mono text-[11px] uppercase tracking-[0.18em] text-slate-700 shadow-sm font-bold">
             <span>MANAGED INFRASTRUCTURE</span>
           </div>
 
@@ -163,7 +162,7 @@ export default function ManagedVPSSection() {
           ))}
         </div>
 
-        {/* Managed Plans Grid */}
+        {/* Managed Plans Grid Header */}
         <div className="text-center max-w-2xl mx-auto mb-8 space-y-2">
           <h3 className="text-2xl font-bold font-display text-[rgb(26,11,84)]">
             Managed VPS Pricing Tiers
@@ -173,25 +172,36 @@ export default function ManagedVPSSection() {
           </p>
         </div>
 
-        {/* Toggle */}
+        {/* Modern Segmented Billing Toggle */}
         <div className="flex justify-center mb-10">
-          <div className="flex items-center space-x-3 text-xs font-mono p-1 rounded-2xl bg-white border border-slate-200 shadow-sm">
-            <span className={!isYearly ? 'text-slate-900 font-bold px-3 py-1 bg-slate-100 rounded-xl' : 'text-slate-500 px-3 py-1'}>
-              Monthly
-            </span>
+          <div className="inline-flex p-1 rounded-2xl bg-white border border-slate-200 shadow-sm text-xs font-mono">
             <button
-              onClick={() => setIsYearly(!isYearly)}
-              className="w-11 h-6 rounded-full bg-slate-300 relative p-0.5"
+              type="button"
+              onClick={() => setIsYearly(false)}
+              className={`px-4 py-2 rounded-xl transition-all duration-200 ${
+                !isYearly
+                  ? 'bg-slate-900 text-white font-bold shadow-sm'
+                  : 'text-slate-600 hover:text-slate-900'
+              }`}
             >
-              <div className={`size-5 rounded-full bg-blue-600 transition-transform ${isYearly ? 'translate-x-5' : 'translate-x-0'}`}></div>
+              Monthly Billing
             </button>
-            <span className={isYearly ? 'text-slate-900 font-bold px-3 py-1 bg-slate-100 rounded-xl' : 'text-slate-500 px-3 py-1'}>
-              Yearly (Save ~15%)
-            </span>
+            <button
+              type="button"
+              onClick={() => setIsYearly(true)}
+              className={`px-4 py-2 rounded-xl transition-all duration-200 flex items-center space-x-1.5 ${
+                isYearly
+                  ? 'bg-slate-900 text-white font-bold shadow-sm'
+                  : 'text-slate-600 hover:text-slate-900'
+              }`}
+            >
+              <span>Yearly</span>
+              <span className="text-blue-600 font-bold text-[10px]">(Save 15%)</span>
+            </button>
           </div>
         </div>
 
-        {/* Strictly Equal-Length, Equal-Size Managed VPS Cards */}
+        {/* Strictly Identical, Pixel-Perfect Equal-Height Managed VPS Cards */}
         <div ref={plansGridRef} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch max-w-7xl mx-auto">
           {MANAGED_VPS_PLANS.map((plan) => {
             const displayPrice = isYearly ? plan.yearlyPrice : plan.monthlyPrice;
@@ -209,29 +219,39 @@ export default function ManagedVPSSection() {
                 }`}
               >
                 <div className="space-y-4">
-                  {/* Fixed-Height Title + Badge + Tagline Box */}
-                  <div className="min-h-[64px] flex flex-col justify-start">
-                    <div className="flex items-center justify-between gap-2">
-                      <h4 className="text-xl font-bold font-display text-[rgb(26,11,84)]">{plan.name}</h4>
-                      {plan.badge ? (
-                        <span className="px-2 py-0.5 rounded-full bg-blue-600 text-white text-[8px] font-mono font-bold uppercase tracking-[0.14em] shadow-sm shrink-0">
-                          {plan.badge}
-                        </span>
-                      ) : (
-                        <span className="h-4"></span>
-                      )}
-                    </div>
-                    <p className="text-xs text-slate-500 font-sans mt-0.5 leading-snug">{plan.tagline}</p>
+                  
+                  {/* Fixed Top Meta Row with Badge */}
+                  <div className="h-6 flex items-center justify-between">
+                    <span className="text-[10px] font-mono font-bold text-slate-400 uppercase tracking-wider">
+                      MANAGED TIER
+                    </span>
+                    {plan.badge ? (
+                      <span className="px-2 py-0.5 rounded-full bg-blue-600 text-white text-[8px] font-mono font-bold uppercase tracking-[0.14em] shadow-xs shrink-0">
+                        {plan.badge}
+                      </span>
+                    ) : (
+                      <span className="h-4"></span>
+                    )}
                   </div>
 
-                  {/* 14-Day Trial Badge */}
-                  <div className="p-2 rounded-xl bg-blue-50 border border-blue-100 text-xs font-mono text-blue-900 flex items-center justify-between">
+                  {/* Plan Title & Tagline Box - Exact Equal Height */}
+                  <div className="h-[68px] flex flex-col justify-start">
+                    <h4 className="text-xl font-bold font-display text-[rgb(26,11,84)] tracking-tight">
+                      {plan.name}
+                    </h4>
+                    <p className="text-xs text-slate-500 font-sans mt-1 leading-snug line-clamp-2">
+                      {plan.tagline}
+                    </p>
+                  </div>
+
+                  {/* 14-Day Trial Badge - Exact Equal Height */}
+                  <div className="h-9 px-3 rounded-xl bg-blue-50 border border-blue-100 text-xs font-mono text-blue-900 flex items-center justify-between">
                     <span className="font-semibold">14-Day Free Trial</span>
                     <span className="text-blue-700 font-bold text-[10px]">₹0 upfront</span>
                   </div>
 
-                  {/* Price display */}
-                  <div className="py-2.5 border-y border-slate-100">
+                  {/* Price display - Exact Equal Height */}
+                  <div className="h-[72px] py-2 border-y border-slate-100 flex flex-col justify-center">
                     <div className="flex items-baseline space-x-1">
                       <span className="text-xl font-bold text-slate-400">{plan.currency}</span>
                       <span className="text-4xl font-bold font-display text-[rgb(26,11,84)]">{displayPrice}</span>
@@ -242,33 +262,33 @@ export default function ManagedVPSSection() {
                     </div>
                   </div>
 
-                  {/* Specs */}
+                  {/* Specs - 4 Identical Dimension Boxes */}
                   <div className="grid grid-cols-2 gap-2 text-xs font-mono text-slate-700">
-                    <div className="p-2 rounded-xl bg-slate-50 border border-slate-100">
-                      <span className="text-[9px] text-slate-500 block uppercase">COMPUTE</span>
-                      <strong className="text-slate-900">{plan.specs.vcpu}</strong>
+                    <div className="p-2 rounded-xl bg-slate-50 border border-slate-100 h-12 flex flex-col justify-center">
+                      <span className="text-[9px] text-slate-400 block uppercase">COMPUTE</span>
+                      <strong className="text-slate-900 leading-tight">{plan.specs.vcpu}</strong>
                     </div>
-                    <div className="p-2 rounded-xl bg-slate-50 border border-slate-100">
-                      <span className="text-[9px] text-slate-500 block uppercase">MEMORY</span>
-                      <strong className="text-slate-900">{plan.specs.ram}</strong>
+                    <div className="p-2 rounded-xl bg-slate-50 border border-slate-100 h-12 flex flex-col justify-center">
+                      <span className="text-[9px] text-slate-400 block uppercase">MEMORY</span>
+                      <strong className="text-slate-900 leading-tight">{plan.specs.ram}</strong>
                     </div>
-                    <div className="p-2 rounded-xl bg-slate-50 border border-slate-100">
-                      <span className="text-[9px] text-slate-500 block uppercase">STORAGE</span>
-                      <strong className="text-slate-900">{plan.specs.storage}</strong>
+                    <div className="p-2 rounded-xl bg-slate-50 border border-slate-100 h-12 flex flex-col justify-center">
+                      <span className="text-[9px] text-slate-400 block uppercase">STORAGE</span>
+                      <strong className="text-slate-900 leading-tight">{plan.specs.storage}</strong>
                     </div>
-                    <div className="p-2 rounded-xl bg-slate-50 border border-slate-100">
-                      <span className="text-[9px] text-slate-500 block uppercase">MANAGEMENT</span>
-                      <strong className="text-emerald-600">Full Ops Care</strong>
+                    <div className="p-2 rounded-xl bg-slate-50 border border-slate-100 h-12 flex flex-col justify-center">
+                      <span className="text-[9px] text-slate-400 block uppercase">MANAGEMENT</span>
+                      <strong className="text-emerald-600 leading-tight">Full Ops Care</strong>
                     </div>
                   </div>
 
-                  {/* Features without ticks & with View More toggle */}
-                  <div className="pt-1 space-y-2 min-h-[110px] flex flex-col justify-between">
+                  {/* Features List with Strict Equal Baseline */}
+                  <div className="pt-2 space-y-2 min-h-[125px] flex flex-col justify-between">
                     <ul className="space-y-2 text-xs font-sans text-slate-700">
                       {primaryFeatures.map((feat, i) => (
                         <li key={i} className="flex items-start space-x-2">
                           <span className="text-blue-600 font-mono text-xs select-none">—</span>
-                          <span className="text-slate-800">{feat}</span>
+                          <span className="text-slate-800 leading-tight">{feat}</span>
                         </li>
                       ))}
                     </ul>
@@ -280,7 +300,7 @@ export default function ManagedVPSSection() {
                             {secondaryFeatures.map((feat, i) => (
                               <li key={i} className="flex items-start space-x-2">
                                 <span className="text-blue-600 font-mono text-xs select-none">—</span>
-                                <span className="text-slate-800">{feat}</span>
+                                <span className="text-slate-800 leading-tight">{feat}</span>
                               </li>
                             ))}
                           </ul>
@@ -299,6 +319,7 @@ export default function ManagedVPSSection() {
                   </div>
                 </div>
 
+                {/* Bottom CTA Button */}
                 <div className="mt-6 pt-4 border-t border-slate-100">
                   <button
                     type="button"

@@ -16,7 +16,6 @@ export default function SharedHostingSection() {
 
   const sectionRef = useRef(null);
   const headerRef = useRef(null);
-  const tabsRef = useRef(null);
   const bannerRef = useRef(null);
   const cardsContainerRef = useRef(null);
 
@@ -46,35 +45,34 @@ export default function SharedHostingSection() {
         }
       );
 
-      // Tabs & Banner ScrollTrigger
+      // Positioning Banner
       gsap.fromTo(
-        [tabsRef.current, bannerRef.current],
+        bannerRef.current,
         { opacity: 0, y: 25 },
         {
           opacity: 1,
           y: 0,
           duration: 0.8,
-          stagger: 0.12,
           ease: 'power3.out',
           scrollTrigger: {
-            trigger: tabsRef.current,
+            trigger: bannerRef.current,
             start: 'top 85%',
             toggleActions: 'play none none none'
           }
         }
       );
 
-      // Initial Cards reveal on scroll
+      // Cards Container Stagger
       if (cardsContainerRef.current?.children) {
         gsap.fromTo(
           cardsContainerRef.current.children,
-          { opacity: 0, y: 50, scale: 0.96 },
+          { opacity: 0, y: 45, scale: 0.96 },
           {
             opacity: 1,
             y: 0,
             scale: 1,
-            duration: 0.9,
-            stagger: 0.12,
+            duration: 0.85,
+            stagger: 0.1,
             ease: 'power3.out',
             scrollTrigger: {
               trigger: cardsContainerRef.current,
@@ -87,20 +85,7 @@ export default function SharedHostingSection() {
     }, sectionRef);
 
     return () => ctx.revert();
-  }, []);
-
-  // Animate cards on tab change
-  const handleTabChange = (newTab) => {
-    if (newTab === activeTab) return;
-    if (cardsContainerRef.current?.children) {
-      gsap.fromTo(
-        cardsContainerRef.current.children,
-        { opacity: 0, y: 20, scale: 0.97 },
-        { opacity: 1, y: 0, scale: 1, duration: 0.5, stagger: 0.08, ease: 'power2.out' }
-      );
-    }
-    setActiveTab(newTab);
-  };
+  }, [activeTab]);
 
   const currentPlans = activeTab === 'fixed' ? FIXED_SHARED_PLANS : FLEX_SHARED_PLANS;
 
@@ -108,58 +93,57 @@ export default function SharedHostingSection() {
     <section
       ref={sectionRef}
       id="shared-hosting"
-      data-slot="trusted"
-      className="py-24 relative overflow-hidden px-4 sm:px-6 lg:px-8 border-t border-white/10"
-      style={{
-        backgroundImage: "url('https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20260418_120332_3b24257a-afe6-48ca-875f-78147370f403.png&w=1280&q=85')",
-        backgroundSize: 'cover',
-        backgroundPosition: 'center'
-      }}
+      data-slot="shared-hosting"
+      className="py-24 relative overflow-hidden bg-[#06090E] text-slate-100 border-t border-white/10"
     >
-      <div className="max-w-7xl mx-auto relative z-10 w-full flex flex-col items-center">
+      {/* Background Accent Gradients */}
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-cyan-500/5 blur-[140px] pointer-events-none rounded-full" />
+      <div className="absolute bottom-10 right-10 w-[500px] h-[300px] bg-blue-600/5 blur-[120px] pointer-events-none rounded-full" />
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 flex flex-col items-center">
         
         {/* Section Header */}
-        <div ref={headerRef} className="text-center max-w-3xl mx-auto space-y-3 mb-12">
-          <div className="text-[11px] font-mono uppercase tracking-[0.2em] text-cyan-300 font-bold">
-            FULL-STACK SHARED HOSTING
+        <div ref={headerRef} className="text-center max-w-3xl mx-auto space-y-4 mb-12">
+          <div className="inline-flex items-center gap-2 rounded-full bg-white/10 border border-white/15 px-4 py-1.5 font-mono text-[11px] uppercase tracking-[0.18em] text-cyan-300 shadow-sm font-bold backdrop-blur-md">
+            <span>FULL-STACK SHARED HOSTING</span>
           </div>
 
-          <h2 className="font-medium text-white tracking-tight" style={{ fontSize: 'clamp(32px, 4vw, 56px)', lineHeight: 1.2 }}>
-            Designed for 1 Frontend + 1 Backend. <br />
-            <span data-slot="gradient-text" className="nexa-grad-text">Two Tailored Product Models.</span>
+          <h2 className="font-medium text-white tracking-tight" style={{ fontSize: 'clamp(32px, 4vw, 56px)', lineHeight: 1.15 }}>
+            Shared Hosting Built For <br />
+            <span className="nexa-grad-text">Modern Web Applications.</span>
           </h2>
 
-          <p className="text-white/80 text-sm sm:text-base font-sans leading-relaxed">
-            Choose between strictly predictable fixed resources for budget peace-of-mind, or elastic burst hosting that absorbs sudden traffic spikes.
+          <p className="text-sm sm:text-base text-slate-300 font-sans leading-relaxed">
+            Every plan includes an integrated environment for 1 Frontend + 1 Backend, fully isolated NVMe partitions, and an unconditional 14-Day Free Trial.
           </p>
         </div>
 
-        {/* Product Model Selector Tabs & Yearly Toggle */}
-        <div ref={tabsRef} className="w-full flex flex-col sm:flex-row items-center justify-between gap-4 mb-10 pb-6 border-b border-white/15 max-w-5xl">
+        {/* Tab Controls & Billing Toggle */}
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-10 w-full">
           
-          {/* Fixed vs Flex Tabs */}
-          <div className="inline-flex p-1 rounded-2xl bg-black/50 border border-white/20 shadow-lg backdrop-blur-md">
+          {/* Fixed vs Flex Pill Selector */}
+          <div className="inline-flex p-1 rounded-2xl bg-[rgba(10,5,20,0.9)] border border-white/20 shadow-md backdrop-blur-md">
             <button
-              onClick={() => handleTabChange('fixed')}
-              className={`px-5 py-2.5 rounded-xl text-xs font-mono font-semibold transition-all duration-200 ${
+              type="button"
+              onClick={() => setActiveTab('fixed')}
+              className={`px-5 py-2.5 rounded-xl text-xs font-mono font-semibold transition-all ${
                 activeTab === 'fixed'
-                  ? 'bg-white text-slate-900 shadow-md font-bold'
-                  : 'text-white/80 hover:text-white'
+                  ? 'bg-[rgb(28,78,255)] text-white shadow-md font-bold'
+                  : 'text-white/70 hover:text-white'
               }`}
             >
-              1. Fixed Resource Hosting
+              Fixed Resources
             </button>
-
             <button
-              onClick={() => handleTabChange('flex')}
-              id="flex-burst"
-              className={`px-5 py-2.5 rounded-xl text-xs font-mono font-semibold transition-all duration-200 ${
+              type="button"
+              onClick={() => setActiveTab('flex')}
+              className={`px-5 py-2.5 rounded-xl text-xs font-mono font-semibold transition-all ${
                 activeTab === 'flex'
-                  ? 'bg-white text-slate-900 shadow-md font-bold'
-                  : 'text-white/80 hover:text-white'
+                  ? 'bg-[rgb(28,78,255)] text-white shadow-md font-bold'
+                  : 'text-white/70 hover:text-white'
               }`}
             >
-              2. Flexible / Burst Hosting
+              Flexible / Burst
             </button>
           </div>
 
@@ -235,36 +219,44 @@ export default function SharedHostingSection() {
             return (
               <div
                 key={plan.id}
-                className={`relative rounded-3xl p-6 flex flex-col justify-between transition-all duration-300 backdrop-blur-xl hover:border-white/40 h-full ${
+                className={`p-6 rounded-3xl flex flex-col justify-between transition-all duration-300 backdrop-blur-xl hover:border-white/40 h-full ${
                   plan.highlight
                     ? 'bg-[rgba(15,10,30,0.92)] border-2 border-cyan-400/80 shadow-2xl'
                     : 'bg-[rgba(10,5,20,0.88)] border border-white/15 shadow-xl'
                 }`}
               >
-                {/* Top Badge */}
-                {plan.badge && (
-                  <div className="absolute -top-3 right-6 px-3 py-0.5 rounded-full bg-cyan-400 text-slate-950 text-[9px] font-mono font-bold uppercase tracking-[0.14em] shadow-md">
-                    {plan.badge}
-                  </div>
-                )}
-
                 <div className="space-y-4">
-                  {/* Title & Tagline with Unified Min-Height */}
-                  <div className="min-h-[56px]">
-                    <h3 className="text-xl font-bold font-display text-white">{plan.name}</h3>
-                    <p className="text-xs text-white/70 font-sans mt-1 leading-snug">
+                  
+                  {/* Fixed Top Meta Row with Badge */}
+                  <div className="h-6 flex items-center justify-between">
+                    <span className="text-[10px] font-mono font-bold text-cyan-300/80 uppercase tracking-wider">
+                      {activeTab === 'fixed' ? 'FIXED SHARED' : 'FLEX BURST'}
+                    </span>
+                    {plan.badge ? (
+                      <span className="px-2 py-0.5 rounded-full bg-cyan-400 text-slate-950 text-[9px] font-mono font-bold uppercase tracking-[0.14em] shadow-xs shrink-0">
+                        {plan.badge}
+                      </span>
+                    ) : (
+                      <span className="h-4"></span>
+                    )}
+                  </div>
+
+                  {/* Title & Tagline Box - Exact Equal Height */}
+                  <div className="h-[68px] flex flex-col justify-start">
+                    <h3 className="text-xl font-bold font-display text-white tracking-tight">{plan.name}</h3>
+                    <p className="text-xs text-white/70 font-sans mt-1 leading-snug line-clamp-2">
                       {plan.tagline}
                     </p>
                   </div>
 
-                  {/* 14-Day Free Trial Notice */}
-                  <div className="px-3 py-2 rounded-xl bg-white/5 border border-white/10 flex items-center justify-between text-xs font-mono">
+                  {/* 14-Day Free Trial Notice - Exact Equal Height */}
+                  <div className="h-9 px-3 rounded-xl bg-white/5 border border-white/10 flex items-center justify-between text-xs font-mono">
                     <span className="text-white font-semibold">14-Day Free Trial</span>
                     <span className="text-cyan-300 text-[10px] font-bold">₹0 upfront</span>
                   </div>
 
-                  {/* Price display */}
-                  <div className="py-2.5 border-y border-white/15">
+                  {/* Price display - Exact Equal Height */}
+                  <div className="h-[72px] py-2 border-y border-white/15 flex flex-col justify-center">
                     <div className="flex items-baseline space-x-1">
                       <span className="text-xl font-bold text-white/60">{plan.currency}</span>
                       <span className="text-4xl font-bold font-display text-white">
@@ -277,28 +269,28 @@ export default function SharedHostingSection() {
                     </div>
                   </div>
 
-                  {/* Spec Sheet Pills */}
+                  {/* Spec Sheet Pills - 4 Identical Dimension Boxes */}
                   <div className="grid grid-cols-2 gap-2 text-xs font-mono text-white">
-                    <div className="p-2 rounded-xl bg-black/40 border border-white/10">
+                    <div className="p-2 rounded-xl bg-black/40 border border-white/10 h-12 flex flex-col justify-center">
                       <span className="text-[9px] text-white/60 block uppercase">COMPUTE</span>
-                      <strong className="text-white">{plan.specs.vcpu}</strong>
+                      <strong className="text-white leading-tight">{plan.specs.vcpu}</strong>
                     </div>
-                    <div className="p-2 rounded-xl bg-black/40 border border-white/10">
+                    <div className="p-2 rounded-xl bg-black/40 border border-white/10 h-12 flex flex-col justify-center">
                       <span className="text-[9px] text-white/60 block uppercase">MEMORY</span>
-                      <strong className="text-white">{plan.specs.ram}</strong>
+                      <strong className="text-white leading-tight">{plan.specs.ram}</strong>
                     </div>
-                    <div className="p-2 rounded-xl bg-black/40 border border-white/10">
+                    <div className="p-2 rounded-xl bg-black/40 border border-white/10 h-12 flex flex-col justify-center">
                       <span className="text-[9px] text-white/60 block uppercase">STORAGE</span>
-                      <strong className="text-white">{plan.specs.storage}</strong>
+                      <strong className="text-white leading-tight">{plan.specs.storage}</strong>
                     </div>
-                    <div className="p-2 rounded-xl bg-black/40 border border-white/10">
+                    <div className="p-2 rounded-xl bg-black/40 border border-white/10 h-12 flex flex-col justify-center">
                       <span className="text-[9px] text-white/60 block uppercase">STACK</span>
-                      <strong className="text-white">1 FE + 1 BE</strong>
+                      <strong className="text-white leading-tight">1 FE + 1 BE</strong>
                     </div>
                   </div>
 
                   {/* Competitor-Style Feature Checklist without ticks */}
-                  <div className="pt-2 space-y-2">
+                  <div className="pt-2 space-y-2 min-h-[125px] flex flex-col justify-between">
                     <ul className="space-y-2 text-xs font-sans text-white/80">
                       {primaryFeatures.map((feat, i) => (
                         <li key={i} className="flex items-start space-x-2.5">

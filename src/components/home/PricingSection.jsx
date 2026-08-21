@@ -194,34 +194,44 @@ export default function PricingSection() {
             return (
               <div
                 key={plan.id}
-                className={`relative rounded-3xl p-6 flex flex-col justify-between transition-all duration-300 backdrop-blur-xl h-full ${
+                className={`p-6 rounded-3xl flex flex-col justify-between transition-all duration-300 backdrop-blur-xl h-full ${
                   plan.highlight
                     ? 'bg-white border-2 border-purple-600 shadow-2xl scale-[1.02]'
                     : 'bg-white/90 border border-white/80 hover:border-slate-300 shadow-xl'
                 }`}
               >
-                {plan.badge && (
-                  <div className="absolute -top-3 right-6 px-3 py-0.5 rounded-full bg-purple-600 text-white text-[9px] font-mono font-bold uppercase tracking-[0.14em] shadow-md">
-                    {plan.badge}
-                  </div>
-                )}
-
                 <div className="space-y-4">
-                  <div className="min-h-[58px]">
-                    <h3 className="text-xl font-bold font-display text-[rgb(26,11,84)]">{plan.name}</h3>
-                    <p className="text-xs text-slate-500 font-sans mt-0.5 leading-snug">
+                  
+                  {/* Fixed Top Meta Row with Badge */}
+                  <div className="h-6 flex items-center justify-between">
+                    <span className="text-[10px] font-mono font-bold text-slate-400 uppercase tracking-wider">
+                      {activeTab === 'fixed' ? 'FIXED SHARED' : activeTab === 'flex' ? 'FLEX BURST' : activeTab === 'vps' ? 'STANDARD VPS' : 'MANAGED VPS'}
+                    </span>
+                    {plan.badge ? (
+                      <span className="px-2 py-0.5 rounded-full bg-purple-600 text-white text-[8px] font-mono font-bold uppercase tracking-[0.14em] shadow-xs shrink-0">
+                        {plan.badge}
+                      </span>
+                    ) : (
+                      <span className="h-4"></span>
+                    )}
+                  </div>
+
+                  {/* Title & Tagline Box - Exact Equal Height */}
+                  <div className="h-[68px] flex flex-col justify-start">
+                    <h3 className="text-xl font-bold font-display text-[rgb(26,11,84)] tracking-tight">{plan.name}</h3>
+                    <p className="text-xs text-slate-500 font-sans mt-1 leading-snug line-clamp-2">
                       {plan.tagline}
                     </p>
                   </div>
 
-                  {/* 14-Day Free Trial Notice without icon */}
-                  <div className="p-2.5 rounded-xl bg-purple-50 border border-purple-100 text-xs font-mono text-purple-900 flex items-center justify-between">
+                  {/* 14-Day Free Trial Notice - Exact Equal Height */}
+                  <div className="h-9 px-3 rounded-xl bg-purple-50 border border-purple-100 text-xs font-mono text-purple-900 flex items-center justify-between">
                     <span className="font-bold">14-Day Free Trial</span>
                     <span className="text-purple-700 text-[10px] font-bold">₹0 upfront</span>
                   </div>
 
-                  {/* Price */}
-                  <div className="py-2.5 border-y border-slate-100">
+                  {/* Price display - Exact Equal Height */}
+                  <div className="h-[72px] py-2 border-y border-slate-100 flex flex-col justify-center">
                     <div className="flex items-baseline space-x-1">
                       <span className="text-xl font-bold text-slate-400">{plan.currency}</span>
                       <span className="text-4xl font-bold font-display text-[rgb(26,11,84)]">
@@ -229,7 +239,7 @@ export default function PricingSection() {
                       </span>
                       <span className="text-xs font-mono text-slate-500">/mo</span>
                     </div>
-                    <div className="text-[10px] font-mono text-slate-500 mt-1">
+                    <div className="text-[10px] font-mono text-slate-500 mt-0.5">
                       Start free today. ₹{displayPrice}/mo after trial.
                     </div>
                   </div>
@@ -245,7 +255,7 @@ export default function PricingSection() {
                   </div>
 
                   {/* Features list with modern dash bullets */}
-                  <ul className="space-y-2 pt-2 text-xs font-sans text-slate-700">
+                  <ul className="space-y-2 pt-2 text-xs font-sans text-slate-700 min-h-[125px]">
                     {plan.features.slice(0, 5).map((f, i) => (
                       <li key={i} className="flex items-start space-x-2">
                         <span className="text-purple-600 font-mono text-xs select-none">—</span>

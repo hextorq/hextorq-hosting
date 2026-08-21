@@ -105,7 +105,7 @@ export default function VPSSuperioritySection() {
               onClick={() => setIsYearly(false)}
               className={`px-4 py-2 rounded-xl transition-all duration-200 ${
                 !isYearly
-                  ? 'bg-white text-slate-900 font-bold shadow-sm'
+                  ? 'bg-slate-900 text-white font-bold shadow-sm'
                   : 'text-slate-600 hover:text-slate-900'
               }`}
             >
@@ -116,7 +116,7 @@ export default function VPSSuperioritySection() {
               onClick={() => setIsYearly(true)}
               className={`px-4 py-2 rounded-xl transition-all duration-200 flex items-center space-x-1.5 ${
                 isYearly
-                  ? 'bg-white text-slate-900 font-bold shadow-sm'
+                  ? 'bg-slate-900 text-white font-bold shadow-sm'
                   : 'text-slate-600 hover:text-slate-900'
               }`}
             >
@@ -137,36 +137,46 @@ export default function VPSSuperioritySection() {
             return (
               <div
                 key={plan.id}
-                className={`relative rounded-3xl p-6 flex flex-col justify-between transition-all duration-300 bg-white h-full ${
+                className={`p-6 rounded-3xl flex flex-col justify-between transition-all duration-300 bg-white h-full ${
                   plan.highlight
                     ? 'border-2 border-blue-600 shadow-xl'
                     : 'border border-slate-200 hover:border-slate-300 shadow-md'
                 }`}
               >
                 <div className="space-y-4">
-                  {/* Fixed-Height Title + Badge + Tagline Box */}
-                  <div className="min-h-[64px] flex flex-col justify-start">
-                    <div className="flex items-center justify-between gap-2">
-                      <h3 className="text-xl font-bold font-display text-[rgb(26,11,84)]">{plan.name}</h3>
-                      {plan.badge ? (
-                        <span className="px-2 py-0.5 rounded-full bg-blue-600 text-white text-[8px] font-mono font-bold uppercase tracking-[0.14em] shadow-sm shrink-0">
-                          {plan.badge}
-                        </span>
-                      ) : (
-                        <span className="h-4"></span>
-                      )}
-                    </div>
-                    <p className="text-xs text-slate-500 font-sans mt-0.5 leading-snug">{plan.tagline}</p>
+                  
+                  {/* Fixed Top Meta Row with Badge */}
+                  <div className="h-6 flex items-center justify-between">
+                    <span className="text-[10px] font-mono font-bold text-slate-400 uppercase tracking-wider">
+                      DEDICATED SLICE
+                    </span>
+                    {plan.badge ? (
+                      <span className="px-2 py-0.5 rounded-full bg-blue-600 text-white text-[8px] font-mono font-bold uppercase tracking-[0.14em] shadow-xs shrink-0">
+                        {plan.badge}
+                      </span>
+                    ) : (
+                      <span className="h-4"></span>
+                    )}
                   </div>
 
-                  {/* 14-Day Free Trial Notice */}
-                  <div className="px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs font-mono text-slate-700 flex items-center justify-between">
+                  {/* Plan Title & Tagline Box - Exact Equal Height */}
+                  <div className="h-[68px] flex flex-col justify-start">
+                    <h3 className="text-xl font-bold font-display text-[rgb(26,11,84)] tracking-tight">
+                      {plan.name}
+                    </h3>
+                    <p className="text-xs text-slate-500 font-sans mt-1 leading-snug line-clamp-2">
+                      {plan.tagline}
+                    </p>
+                  </div>
+
+                  {/* 14-Day Free Trial Notice - Exact Equal Height */}
+                  <div className="h-9 px-3 rounded-xl bg-slate-50 border border-slate-200 text-xs font-mono text-slate-700 flex items-center justify-between">
                     <span className="font-semibold text-blue-700">14-Day Free Trial</span>
                     <span className="text-slate-500 text-[10px]">₹0 today</span>
                   </div>
 
-                  {/* Price display with tight typography */}
-                  <div className="py-2.5 border-y border-slate-100">
+                  {/* Price display - Exact Equal Height */}
+                  <div className="h-[72px] py-2 border-y border-slate-100 flex flex-col justify-center">
                     <div className="flex items-baseline space-x-1">
                       <span className="text-xl font-bold text-slate-400">{plan.currency}</span>
                       <span className="text-4xl font-bold font-display text-[rgb(26,11,84)]">
@@ -205,7 +215,7 @@ export default function VPSSuperioritySection() {
                 </div>
 
                 {/* Card CTA */}
-                <div className="mt-6 pt-4 border-t border-slate-100 space-y-1.5">
+                <div className="mt-6 pt-4 border-t border-slate-100">
                   <button
                     type="button"
                     onClick={() => openTrialModal(plan, 'vps')}
@@ -216,9 +226,6 @@ export default function VPSSuperioritySection() {
                       <ArrowRight className="w-3.5 h-3.5" />
                     </span>
                   </button>
-                  <div className="text-center text-[10px] font-mono text-slate-500">
-                    Zero upfront charge • Cancel anytime
-                  </div>
                 </div>
               </div>
             );
