@@ -88,13 +88,13 @@ export default function HeroSection() {
         style={{ background: 'linear-gradient(to bottom, transparent, #000201)' }}
       ></div>
 
-      <div className="relative z-10 flex max-w-4xl flex-col items-center gap-6 text-center mx-auto px-4">
+      <div className="relative z-10 flex max-w-4xl flex-col items-center gap-6 text-center mx-auto px-2 sm:px-4">
         
         {/* Main Headline */}
         <h1
           ref={headlineRef}
           className="font-bold leading-tight text-white md:whitespace-nowrap tracking-tight drop-shadow-[0_4px_16px_rgba(0,0,0,0.9)]"
-          style={{ fontSize: 'clamp(34px, 4.5vw, 64px)' }}
+          style={{ fontSize: 'clamp(28px, 5.5vw, 64px)' }}
         >
           Hosting Built Around <br className="hidden sm:inline" />
           <span className="nexa-grad-text drop-shadow-[0_4px_20px_rgba(0,0,0,0.8)]">Your Application.</span>
@@ -103,19 +103,19 @@ export default function HeroSection() {
         {/* Subtitle with High Contrast & Perfect Spacing */}
         <p
           ref={subtextRef}
-          className="text-slate-100 max-w-2xl mx-auto leading-relaxed font-sans font-medium tracking-normal drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)] text-base sm:text-lg"
+          className="text-slate-100 max-w-2xl mx-auto leading-relaxed font-sans font-medium tracking-normal drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)] text-sm sm:text-lg px-2"
         >
           Deploy your frontend and backend with simple shared hosting, flexible resource options, or your own dedicated VPS.
         </p>
 
         {/* Action CTAs */}
-        <div ref={ctaRef} className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2">
+        <div ref={ctaRef} className="flex flex-col sm:flex-row items-center justify-center gap-3.5 pt-2 w-full sm:w-auto">
           <button
             type="button"
             onClick={() => openTrialModal(FIXED_SHARED_PLANS[1], 'fixed')}
-            className="nexa-grad-a-bg group relative inline-flex items-center justify-center rounded-xl p-px shadow-2xl hover:scale-105 active:scale-95 transition-all duration-300"
+            className="nexa-grad-a-bg group relative inline-flex items-center justify-center rounded-xl p-px shadow-2xl hover:scale-105 active:scale-95 transition-all duration-300 w-full sm:w-auto"
           >
-            <span className="w-full rounded-[11px] bg-[rgb(28,78,255)] px-8 py-3.5 text-center text-sm font-semibold text-white transition-colors duration-300 group-hover:bg-transparent flex items-center space-x-2 shadow-lg">
+            <span className="w-full rounded-[11px] bg-[rgb(28,78,255)] px-8 py-3.5 text-center text-sm font-semibold text-white transition-colors duration-300 group-hover:bg-transparent flex items-center justify-center space-x-2 shadow-lg">
               <span>Start 14-Day Trial</span>
               <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1.5 duration-200" />
             </span>
@@ -124,7 +124,7 @@ export default function HeroSection() {
           <button
             type="button"
             onClick={scrollToVPS}
-            className="px-7 py-3.5 rounded-xl text-sm font-medium text-white bg-black/50 hover:bg-black/70 border border-white/30 backdrop-blur-md transition-all duration-200 flex items-center justify-center space-x-2 hover:scale-105 active:scale-95 shadow-xl"
+            className="w-full sm:w-auto px-7 py-3.5 rounded-xl text-sm font-medium text-white bg-black/50 hover:bg-black/70 border border-white/30 backdrop-blur-md transition-all duration-200 flex items-center justify-center space-x-2 hover:scale-105 active:scale-95 shadow-xl"
           >
             <Server className="w-4 h-4 text-cyan-300" />
             <span>Explore VPS</span>

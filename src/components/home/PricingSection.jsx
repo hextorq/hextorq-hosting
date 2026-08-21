@@ -105,10 +105,10 @@ export default function PricingSection() {
         <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-10 pb-6 border-b border-slate-200/80">
           
           {/* Category Tabs */}
-          <div className="flex flex-wrap items-center justify-center p-1 rounded-2xl bg-white/90 border border-white/80 gap-1 shadow-lg backdrop-blur-md">
+          <div className="grid grid-cols-2 sm:flex sm:flex-wrap items-center justify-center p-1 rounded-2xl bg-white/90 border border-white/80 gap-1 shadow-lg backdrop-blur-md w-full sm:w-auto">
             <button
               onClick={() => setActiveTab('fixed')}
-              className={`px-4 py-2.5 rounded-xl text-xs font-mono font-semibold transition-all ${
+              className={`px-3 sm:px-4 py-2.5 rounded-xl text-xs font-mono font-semibold transition-all text-center ${
                 activeTab === 'fixed'
                   ? 'bg-[rgb(28,78,255)] text-white shadow-md'
                   : 'text-slate-600 hover:text-slate-900'
@@ -119,7 +119,7 @@ export default function PricingSection() {
 
             <button
               onClick={() => setActiveTab('flex')}
-              className={`px-4 py-2.5 rounded-xl text-xs font-mono font-semibold transition-all ${
+              className={`px-3 sm:px-4 py-2.5 rounded-xl text-xs font-mono font-semibold transition-all text-center ${
                 activeTab === 'flex'
                   ? 'bg-[rgb(28,78,255)] text-white shadow-md'
                   : 'text-slate-600 hover:text-slate-900'
@@ -130,7 +130,7 @@ export default function PricingSection() {
 
             <button
               onClick={() => setActiveTab('vps')}
-              className={`px-4 py-2.5 rounded-xl text-xs font-mono font-semibold transition-all ${
+              className={`px-3 sm:px-4 py-2.5 rounded-xl text-xs font-mono font-semibold transition-all text-center ${
                 activeTab === 'vps'
                   ? 'bg-[rgb(28,78,255)] text-white shadow-md'
                   : 'text-slate-600 hover:text-slate-900'
@@ -141,7 +141,7 @@ export default function PricingSection() {
 
             <button
               onClick={() => setActiveTab('managed')}
-              className={`px-4 py-2.5 rounded-xl text-xs font-mono font-semibold transition-all ${
+              className={`px-3 sm:px-4 py-2.5 rounded-xl text-xs font-mono font-semibold transition-all text-center ${
                 activeTab === 'managed'
                   ? 'bg-[rgb(28,78,255)] text-white shadow-md'
                   : 'text-slate-600 hover:text-slate-900'

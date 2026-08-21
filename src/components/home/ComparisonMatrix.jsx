@@ -76,8 +76,13 @@ export default function ComparisonMatrix() {
           </p>
         </div>
 
+        {/* Mobile Swipe Hint */}
+        <div className="text-center sm:hidden text-[11px] font-mono text-slate-500 mb-3 flex items-center justify-center space-x-1.5">
+          <span>← Swipe horizontally to compare all 4 models →</span>
+        </div>
+
         {/* Comparison Table Container */}
-        <div ref={tableRef} className="overflow-x-auto rounded-3xl border border-slate-200 bg-white shadow-2xl">
+        <div ref={tableRef} className="overflow-x-auto rounded-3xl border border-slate-200 bg-white shadow-2xl overscroll-x-contain">
           <table className="w-full text-left border-collapse min-w-[700px]">
             <thead>
               <tr className="border-b border-slate-200 bg-slate-50">
