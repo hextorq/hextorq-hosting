@@ -116,9 +116,9 @@ export default function SharedHostingSection() {
         backgroundPosition: 'center'
       }}
     >
-      <div className="max-w-7xl mx-auto relative z-10 w-full">
+      <div className="max-w-7xl mx-auto relative z-10 w-full flex flex-col items-center">
         
-        {/* Section Header without icon */}
+        {/* Section Header */}
         <div ref={headerRef} className="text-center max-w-3xl mx-auto space-y-3 mb-12">
           <div className="text-[11px] font-mono uppercase tracking-[0.2em] text-cyan-300 font-bold">
             FULL-STACK SHARED HOSTING
@@ -135,7 +135,7 @@ export default function SharedHostingSection() {
         </div>
 
         {/* Product Model Selector Tabs & Yearly Toggle */}
-        <div ref={tabsRef} className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-10 pb-6 border-b border-white/15">
+        <div ref={tabsRef} className="w-full flex flex-col sm:flex-row items-center justify-between gap-4 mb-10 pb-6 border-b border-white/15 max-w-5xl">
           
           {/* Fixed vs Flex Tabs */}
           <div className="inline-flex p-1 rounded-2xl bg-black/50 border border-white/20 shadow-lg backdrop-blur-md">
@@ -185,7 +185,7 @@ export default function SharedHostingSection() {
         </div>
 
         {/* Product Positioning Banner */}
-        <div ref={bannerRef} className="mb-10 p-5 rounded-2xl bg-[rgba(10,5,20,0.88)] border border-white/15 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 shadow-xl backdrop-blur-xl">
+        <div ref={bannerRef} className="w-full max-w-5xl mb-10 p-5 rounded-2xl bg-[rgba(10,5,20,0.88)] border border-white/15 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 shadow-xl backdrop-blur-xl">
           <div className="space-y-1">
             <div className="text-[10px] font-mono uppercase text-cyan-300 font-semibold tracking-[0.14em]">
               {activeTab === 'fixed' ? 'FIXED RESOURCE MODEL' : 'FLEXIBLE BURST MODEL'}
@@ -209,8 +209,8 @@ export default function SharedHostingSection() {
           )}
         </div>
 
-        {/* Collapsible & Compact Plan Cards Grid with Competitor-Style Bullet Rows */}
-        <div ref={cardsContainerRef} className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16 items-start">
+        {/* Aligned, Equal-Height Plan Cards Grid */}
+        <div ref={cardsContainerRef} className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16 items-stretch w-full max-w-5xl">
           {currentPlans.map((plan) => {
             const displayPrice = isYearly ? plan.yearlyPrice : plan.monthlyPrice;
             const isExpanded = expandedCards[plan.id];
@@ -220,7 +220,7 @@ export default function SharedHostingSection() {
             return (
               <div
                 key={plan.id}
-                className={`relative rounded-3xl p-6 flex flex-col justify-between transition-all duration-300 backdrop-blur-xl hover:border-white/40 ${
+                className={`relative rounded-3xl p-6 flex flex-col justify-between transition-all duration-300 backdrop-blur-xl hover:border-white/40 h-full ${
                   plan.highlight
                     ? 'bg-[rgba(15,10,30,0.92)] border-2 border-cyan-400/80 shadow-2xl'
                     : 'bg-[rgba(10,5,20,0.88)] border border-white/15 shadow-xl'
@@ -234,10 +234,10 @@ export default function SharedHostingSection() {
                 )}
 
                 <div className="space-y-4">
-                  {/* Title & Tagline */}
-                  <div>
+                  {/* Title & Tagline with Unified Min-Height */}
+                  <div className="min-h-[56px]">
                     <h3 className="text-xl font-bold font-display text-white">{plan.name}</h3>
-                    <p className="text-xs text-white/70 font-sans mt-1 leading-snug min-h-[28px]">
+                    <p className="text-xs text-white/70 font-sans mt-1 leading-snug">
                       {plan.tagline}
                     </p>
                   </div>
@@ -342,7 +342,7 @@ export default function SharedHostingSection() {
         </div>
 
         {/* 5-Step Burst Visualizer */}
-        <div className="mt-6">
+        <div className="w-full max-w-5xl mt-6">
           <BurstVisualizer />
         </div>
 

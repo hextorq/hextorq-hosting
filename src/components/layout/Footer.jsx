@@ -79,7 +79,7 @@ export default function Footer() {
         {/* Main Links Grid */}
         <div ref={linksContainerRef} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 pb-16 border-b border-white/10">
           
-          {/* Brand Info (2 cols on lg) without logo icon */}
+          {/* Brand Info (2 cols on lg) */}
           <div className="lg:col-span-2 space-y-4">
             <button
               onClick={() => scrollTo(0, { duration: 1.2 })}
@@ -93,15 +93,6 @@ export default function Footer() {
             <p className="text-xs sm:text-sm text-white/70 max-w-sm leading-relaxed font-sans">
               Hosting built around your modern full-stack application. Deploy your frontend and backend seamlessly with fixed predictability, flexible burst headroom, or your own dedicated VPS.
             </p>
-
-            {/* Interactive Live Status Display instead of pill badge */}
-            <div className="p-3 rounded-2xl bg-white/[0.04] border border-white/10 flex items-center space-x-3 text-xs font-mono text-white/80 hover:border-white/20 transition-colors max-w-sm">
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-400"></span>
-              </span>
-              <span>All Systems Operational • 14-Day Free Evaluation</span>
-            </div>
 
             <div className="pt-2 text-xs font-sans text-white/70 space-y-1.5">
               <div className="flex items-center space-x-2">

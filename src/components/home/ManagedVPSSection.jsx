@@ -191,8 +191,8 @@ export default function ManagedVPSSection() {
           </div>
         </div>
 
-        {/* Collapsible & Compact Managed VPS Cards */}
-        <div ref={plansGridRef} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 items-start">
+        {/* Strictly Equal-Length, Equal-Size Managed VPS Cards */}
+        <div ref={plansGridRef} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch max-w-7xl mx-auto">
           {MANAGED_VPS_PLANS.map((plan) => {
             const displayPrice = isYearly ? plan.yearlyPrice : plan.monthlyPrice;
             const isExpanded = expandedCards[plan.id];
@@ -202,30 +202,35 @@ export default function ManagedVPSSection() {
             return (
               <div
                 key={plan.id}
-                className={`p-6 rounded-3xl flex flex-col justify-between transition-all duration-300 bg-white ${
+                className={`p-6 rounded-3xl flex flex-col justify-between transition-all duration-300 bg-white h-full ${
                   plan.highlight
                     ? 'border-2 border-blue-600 shadow-xl'
                     : 'border border-slate-200 hover:border-slate-300 shadow-md'
                 }`}
               >
                 <div className="space-y-4">
-                  <div className="flex items-center justify-between">
-                    <div>
+                  {/* Fixed-Height Title + Badge + Tagline Box */}
+                  <div className="min-h-[64px] flex flex-col justify-start">
+                    <div className="flex items-center justify-between gap-2">
                       <h4 className="text-xl font-bold font-display text-[rgb(26,11,84)]">{plan.name}</h4>
-                      <p className="text-xs text-slate-500 font-sans mt-0.5">{plan.tagline}</p>
+                      {plan.badge ? (
+                        <span className="px-2 py-0.5 rounded-full bg-blue-600 text-white text-[8px] font-mono font-bold uppercase tracking-[0.14em] shadow-sm shrink-0">
+                          {plan.badge}
+                        </span>
+                      ) : (
+                        <span className="h-4"></span>
+                      )}
                     </div>
-                    {plan.badge && (
-                      <span className="px-2.5 py-0.5 rounded-full bg-blue-600 text-white text-[9px] font-mono font-bold uppercase tracking-[0.14em] shadow-md">
-                        {plan.badge}
-                      </span>
-                    )}
+                    <p className="text-xs text-slate-500 font-sans mt-0.5 leading-snug">{plan.tagline}</p>
                   </div>
 
+                  {/* 14-Day Trial Badge */}
                   <div className="p-2 rounded-xl bg-blue-50 border border-blue-100 text-xs font-mono text-blue-900 flex items-center justify-between">
                     <span className="font-semibold">14-Day Free Trial</span>
                     <span className="text-blue-700 font-bold text-[10px]">₹0 upfront</span>
                   </div>
 
+                  {/* Price display */}
                   <div className="py-2.5 border-y border-slate-100">
                     <div className="flex items-baseline space-x-1">
                       <span className="text-xl font-bold text-slate-400">{plan.currency}</span>
@@ -258,7 +263,7 @@ export default function ManagedVPSSection() {
                   </div>
 
                   {/* Features without ticks & with View More toggle */}
-                  <div className="pt-1 space-y-2">
+                  <div className="pt-1 space-y-2 min-h-[110px] flex flex-col justify-between">
                     <ul className="space-y-2 text-xs font-sans text-slate-700">
                       {primaryFeatures.map((feat, i) => (
                         <li key={i} className="flex items-start space-x-2">

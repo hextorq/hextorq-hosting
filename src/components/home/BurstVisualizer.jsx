@@ -91,19 +91,12 @@ export default function BurstVisualizer() {
   return (
     <div className="rounded-[36px] bg-[rgba(10,5,20,0.88)] border border-white/15 p-6 sm:p-8 shadow-2xl relative overflow-hidden backdrop-blur-xl">
       
-      {/* Visualizer Header */}
+      {/* Visualizer Header without dot */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-6 border-b border-white/10">
         <div>
-          <div className="flex items-center space-x-2.5">
-            <span className="relative flex h-2.5 w-2.5">
-              <span className="size-2.5 rounded-full bg-cyan-400/30 ring-1 ring-cyan-400/50 flex items-center justify-center">
-                <span className="size-1.5 rounded-full bg-cyan-400"></span>
-              </span>
-            </span>
-            <h3 className="text-base font-bold text-white font-display">
-              5-Step Elastic Burst Lifecycle Architecture
-            </h3>
-          </div>
+          <h3 className="text-base font-bold text-white font-display">
+            5-Step Elastic Burst Lifecycle Architecture
+          </h3>
           <p className="text-xs text-white/70 mt-1 font-sans">
             How Hextorq Flexible Hosting absorbs sudden traffic spikes when shared capacity allows.
           </p>
@@ -129,9 +122,8 @@ export default function BurstVisualizer() {
           {/* Base Allocation Bar */}
           <div className="space-y-2">
             <div className="flex justify-between text-xs font-mono">
-              <span className="text-white flex items-center space-x-2">
-                <span className="size-1.5 rounded-full bg-slate-400"></span>
-                <span>Base Dedicated Resource Allocation</span>
+              <span className="text-white">
+                Base Dedicated Resource Allocation
               </span>
               <span className="text-white font-bold">{current.baseLoad}%</span>
             </div>
@@ -146,9 +138,8 @@ export default function BurstVisualizer() {
           {/* Burst Buffer Bar */}
           <div className="space-y-2">
             <div className="flex justify-between text-xs font-mono">
-              <span className="text-white flex items-center space-x-2">
-                <span className="size-1.5 rounded-full bg-cyan-400"></span>
-                <span>Available Shared Burst Headroom</span>
+              <span className="text-white">
+                Available Shared Burst Headroom
               </span>
               <span className="text-cyan-300 font-bold">
                 {current.burstLoad > 0 ? `+${current.burstLoad}% Headroom Active` : 'Standby / Released'}
@@ -219,7 +210,7 @@ export default function BurstVisualizer() {
                 setActiveStep(idx);
                 setIsPlaying(false);
               }}
-              className={`w-full p-3 rounded-xl text-left transition-all border flex items-start space-x-3 ${
+              className={`w-full p-3.5 rounded-xl text-left transition-all border flex items-start space-x-3 ${
                 activeStep === idx
                   ? 'bg-white/10 border-white/30 shadow-md'
                   : 'bg-black/20 border-white/5 hover:border-white/15 opacity-70 hover:opacity-100'

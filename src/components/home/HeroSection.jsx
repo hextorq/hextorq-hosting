@@ -10,7 +10,6 @@ export default function HeroSection() {
   const headlineRef = useRef(null);
   const subtextRef = useRef(null);
   const ctaRef = useRef(null);
-  const badgeRef = useRef(null);
   const chipsRef = useRef(null);
 
   useEffect(() => {
@@ -21,15 +20,9 @@ export default function HeroSection() {
       const tl = gsap.timeline({ defaults: { ease: 'power4.out' } });
 
       tl.fromTo(
-        badgeRef.current,
-        { opacity: 0, y: -20 },
-        { opacity: 1, y: 0, duration: 0.9, delay: 0.1 }
-      )
-      .fromTo(
         headlineRef.current,
         { opacity: 0, y: 36, scale: 0.97 },
-        { opacity: 1, y: 0, scale: 1, duration: 1.1 },
-        '-=0.6'
+        { opacity: 1, y: 0, scale: 1, duration: 1.1, delay: 0.1 }
       )
       .fromTo(
         subtextRef.current,
@@ -97,19 +90,6 @@ export default function HeroSection() {
 
       <div className="relative z-10 flex max-w-4xl flex-col items-center gap-6 text-center mx-auto px-4">
         
-        {/* Top Subheading without capsule wrapping */}
-        <div ref={badgeRef} className="flex flex-col items-center gap-2">
-          <span data-slot="gradient-text" className="nexa-grad-text text-base sm:text-lg font-bold tracking-wide drop-shadow-md">
-            Infrastructure Built to Last
-          </span>
-          <div className="flex items-center space-x-2 text-xs font-mono tracking-wider text-slate-300">
-            <span className="size-1.5 rounded-full bg-emerald-400"></span>
-            <span className="uppercase font-semibold">14-Day Free Trial on Every Plan</span>
-            <span className="text-white/30">•</span>
-            <span className="text-cyan-300 font-bold uppercase">₹0 Upfront</span>
-          </div>
-        </div>
-
         {/* Main Headline */}
         <h1
           ref={headlineRef}
@@ -152,38 +132,42 @@ export default function HeroSection() {
           </button>
         </div>
 
-        {/* Value Highlights Cards without tick icons */}
-        <div ref={chipsRef} className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-6 max-w-3xl mx-auto text-left w-full">
-          <div className="p-3.5 rounded-2xl bg-[rgba(10,5,20,0.85)] border border-white/20 shadow-2xl backdrop-blur-xl hover:border-cyan-400/60 hover:bg-[rgba(10,5,20,0.95)] transition-all duration-300">
-            <div className="text-[10px] font-mono text-cyan-300 uppercase tracking-[0.14em] flex items-center space-x-2 font-bold">
-              <span className="size-1.5 rounded-full bg-cyan-400"></span>
-              <span>14-Day Free Trial</span>
+        {/* Value Highlights Cards with Clean Alignment & Identical Heights */}
+        <div ref={chipsRef} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 pt-6 max-w-4xl mx-auto text-left w-full items-stretch">
+          <div className="p-4 rounded-2xl bg-[rgba(10,5,20,0.85)] border border-white/20 shadow-2xl backdrop-blur-xl hover:border-cyan-400/60 hover:bg-[rgba(10,5,20,0.95)] transition-all duration-300 flex flex-col justify-center">
+            <div className="text-[11px] font-mono text-cyan-300 uppercase tracking-[0.14em] font-bold">
+              14-Day Free Trial
             </div>
-            <div className="text-xs text-white font-sans mt-1 font-semibold">Try any plan at zero risk</div>
+            <div className="text-xs text-white font-sans mt-1 font-semibold">
+              Try any plan at zero risk
+            </div>
           </div>
 
-          <div className="p-3.5 rounded-2xl bg-[rgba(10,5,20,0.85)] border border-white/20 shadow-2xl backdrop-blur-xl hover:border-cyan-400/60 hover:bg-[rgba(10,5,20,0.95)] transition-all duration-300">
-            <div className="text-[10px] font-mono text-cyan-300 uppercase tracking-[0.14em] flex items-center space-x-2 font-bold">
-              <span className="size-1.5 rounded-full bg-cyan-400"></span>
-              <span>Transparent Pricing</span>
+          <div className="p-4 rounded-2xl bg-[rgba(10,5,20,0.85)] border border-white/20 shadow-2xl backdrop-blur-xl hover:border-cyan-400/60 hover:bg-[rgba(10,5,20,0.95)] transition-all duration-300 flex flex-col justify-center">
+            <div className="text-[11px] font-mono text-cyan-300 uppercase tracking-[0.14em] font-bold">
+              Transparent Pricing
             </div>
-            <div className="text-xs text-white font-sans mt-1 font-semibold">Shared from ₹79/mo</div>
+            <div className="text-xs text-white font-sans mt-1 font-semibold">
+              Shared from ₹79/mo
+            </div>
           </div>
 
-          <div className="p-3.5 rounded-2xl bg-[rgba(10,5,20,0.85)] border border-white/20 shadow-2xl backdrop-blur-xl hover:border-cyan-400/60 hover:bg-[rgba(10,5,20,0.95)] transition-all duration-300">
-            <div className="text-[10px] font-mono text-cyan-300 uppercase tracking-[0.14em] flex items-center space-x-2 font-bold">
-              <span className="size-1.5 rounded-full bg-cyan-400"></span>
-              <span>Unified Stack</span>
+          <div className="p-4 rounded-2xl bg-[rgba(10,5,20,0.85)] border border-white/20 shadow-2xl backdrop-blur-xl hover:border-cyan-400/60 hover:bg-[rgba(10,5,20,0.95)] transition-all duration-300 flex flex-col justify-center">
+            <div className="text-[11px] font-mono text-cyan-300 uppercase tracking-[0.14em] font-bold">
+              Unified Stack
             </div>
-            <div className="text-xs text-white font-sans mt-1 font-semibold">1 Frontend + 1 Backend</div>
+            <div className="text-xs text-white font-sans mt-1 font-semibold">
+              1 Frontend + 1 Backend
+            </div>
           </div>
 
-          <div className="p-3.5 rounded-2xl bg-[rgba(10,5,20,0.85)] border border-white/20 shadow-2xl backdrop-blur-xl hover:border-cyan-400/60 hover:bg-[rgba(10,5,20,0.95)] transition-all duration-300">
-            <div className="text-[10px] font-mono text-cyan-300 uppercase tracking-[0.14em] flex items-center space-x-2 font-bold">
-              <span className="size-1.5 rounded-full bg-cyan-400"></span>
-              <span>VPS Control</span>
+          <div className="p-4 rounded-2xl bg-[rgba(10,5,20,0.85)] border border-white/20 shadow-2xl backdrop-blur-xl hover:border-cyan-400/60 hover:bg-[rgba(10,5,20,0.95)] transition-all duration-300 flex flex-col justify-center">
+            <div className="text-[11px] font-mono text-cyan-300 uppercase tracking-[0.14em] font-bold">
+              VPS Control
             </div>
-            <div className="text-xs text-white font-sans mt-1 font-semibold">From ₹349/mo, multi-site</div>
+            <div className="text-xs text-white font-sans mt-1 font-semibold">
+              From ₹349/mo, multi-site
+            </div>
           </div>
         </div>
 

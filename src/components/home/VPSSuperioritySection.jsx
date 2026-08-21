@@ -125,10 +125,10 @@ export default function VPSSuperioritySection() {
           </div>
         </div>
 
-        {/* 5-Column Centered VPS Plan Showcase Grid */}
+        {/* 5-Column Centered & Equal-Height VPS Plan Showcase Grid */}
         <div
           ref={cardsContainerRef}
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3.5 mb-16 items-stretch justify-center w-full max-w-7xl mx-auto"
+          className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3.5 mb-16 items-stretch justify-center w-full max-w-7xl mx-auto"
         >
           {VPS_PLANS.map((plan) => {
             const displayPrice = isYearly ? plan.yearlyPrice : plan.monthlyPrice;
@@ -136,7 +136,7 @@ export default function VPSSuperioritySection() {
             return (
               <div
                 key={plan.id}
-                className={`relative rounded-2xl p-4 sm:p-5 flex flex-col justify-between transition-all duration-300 hover:scale-[1.02] ${
+                className={`relative rounded-2xl p-4 sm:p-5 flex flex-col justify-between transition-all duration-300 hover:scale-[1.02] h-full ${
                   plan.highlight
                     ? 'bg-white border-2 border-blue-600 shadow-xl'
                     : 'bg-white border border-slate-200 hover:border-slate-300 shadow-md'
@@ -150,10 +150,10 @@ export default function VPSSuperioritySection() {
                 )}
 
                 <div className="space-y-3">
-                  {/* Plan Name & Tagline */}
-                  <div>
+                  {/* Plan Name & Tagline with Unified Min-Height */}
+                  <div className="min-h-[52px]">
                     <h3 className="text-base font-bold font-display text-[rgb(26,11,84)]">{plan.name}</h3>
-                    <p className="text-[10px] text-slate-500 font-sans mt-0.5 leading-tight min-h-[26px]">
+                    <p className="text-[10px] text-slate-500 font-sans mt-0.5 leading-tight">
                       {plan.tagline}
                     </p>
                   </div>
