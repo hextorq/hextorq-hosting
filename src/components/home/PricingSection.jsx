@@ -1,51 +1,78 @@
-import React, { useState } from 'react';
-import { Sparkles, CheckCircle2, ArrowRight, ShieldCheck, Zap, Server, Cpu, Layers } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { ArrowRight } from 'lucide-react';
 import { useTrialModal } from '../../context/TrialModalContext';
-import { FIXED_SHARED_PLANS, FLEX_SHARED_PLANS, VPS_PLANS, MANAGED_VPS_PLANS } from '../../data/hostingData';
+import { 
+  FIXED_SHARED_PLANS, 
+  FLEX_SHARED_PLANS, 
+  VPS_PLANS, 
+  MANAGED_VPS_PLANS 
+} from '../../data/hostingData';
+
+gsap.registerPlugin(ScrollTrigger);
 
 export default function PricingSection() {
-  const [activeTab, setActiveTab] = useState('fixed'); // 'fixed', 'flex', 'vps', 'managed'
+  const [activeTab, setActiveTab] = useState('fixed'); // 'fixed' | 'flex' | 'vps' | 'managed'
   const [isYearly, setIsYearly] = useState(false);
   const { openTrialModal } = useTrialModal();
 
-  const getPlans = () => {
-    switch (activeTab) {
-      case 'flex':
-        return {
-          plans: FLEX_SHARED_PLANS,
-          title: 'Flexible Shared Hosting Plans',
-          subtitle: 'Base resources with elastic burst headroom when traffic surges.',
-          burstNote: 'Additional shared capacity is available when infrastructure capacity allows.'
-        };
-      case 'vps':
-        return {
-          plans: VPS_PLANS,
-          title: 'Standard VPS Plans',
-          subtitle: 'Dedicated vCPU cores, isolated memory, and no cap on sites or apps hosted.',
-          burstNote: null
-        };
-      case 'managed':
-        return {
-          plans: MANAGED_VPS_PLANS,
-          title: 'Managed VPS Plans',
-          subtitle: 'Full hands-off server setup, security hardening, monitoring, and backups.',
-          burstNote: null
-        };
-      case 'fixed':
-      default:
-        return {
-          plans: FIXED_SHARED_PLANS,
-          title: 'Fixed Shared Hosting Plans',
-          subtitle: 'Predictable resources, predictable pricing, and dedicated application allocations.',
-          burstNote: null
-        };
+  const sectionRef = useRef(null);
+  const headerRef = useRef(null);
+
+  useEffect(() => {
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotion) return;
+
+    const ctx = gsap.context(() => {
+      gsap.fromTo(
+        headerRef.current,
+        { opacity: 0, y: 35 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.9,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: headerRef.current,
+            start: 'top 85%',
+            toggleActions: 'play none none none'
+          }
+        }
+      );
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, []);
+
+  const categories = {
+    fixed: {
+      title: 'Fixed Shared Hosting',
+      desc: 'Predictable pricing for 1 Frontend + 1 Backend apps.',
+      plans: FIXED_SHARED_PLANS
+    },
+    flex: {
+      title: 'Flexible / Burst Hosting',
+      desc: 'Base resources with elastic burst headroom when traffic surges.',
+      plans: FLEX_SHARED_PLANS
+    },
+    vps: {
+      title: 'Standard VPS Servers',
+      desc: 'Dedicated compute partitions with root access for multi-site hosting.',
+      plans: VPS_PLANS
+    },
+    managed: {
+      title: 'Managed VPS Infrastructure',
+      desc: 'Full systems management, security hardening, and 24/7 server monitoring.',
+      plans: MANAGED_VPS_PLANS
     }
   };
 
-  const current = getPlans();
+  const current = categories[activeTab];
 
   return (
     <section
+      ref={sectionRef}
       id="pricing"
       data-slot="precision"
       className="py-24 relative overflow-hidden px-4 sm:px-6 lg:px-8 border-t border-slate-200"
@@ -58,10 +85,9 @@ export default function PricingSection() {
     >
       <div className="max-w-7xl mx-auto relative z-10 w-full text-[rgb(26,11,84)]">
         
-        {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto space-y-4 mb-12">
-          <div className="inline-flex items-center gap-2 rounded-full bg-white/90 border border-white/60 px-4 py-1.5 font-mono text-[11px] uppercase tracking-[0.18em] text-slate-700 shadow-md backdrop-blur-md">
-            <Sparkles className="w-3.5 h-3.5 text-purple-600" />
+        {/* Section Header without icon */}
+        <div ref={headerRef} className="text-center max-w-3xl mx-auto space-y-4 mb-12">
+          <div className="inline-flex items-center gap-2 rounded-full bg-white/90 border border-white/60 px-4 py-1.5 font-mono text-[11px] uppercase tracking-[0.18em] text-slate-700 shadow-md backdrop-blur-md font-bold">
             <span>TRANSPARENT PRICING</span>
           </div>
 
@@ -75,10 +101,10 @@ export default function PricingSection() {
           </p>
         </div>
 
-        {/* Navigation Tabs & Billing Switch */}
+        {/* Navigation Tabs & Modern Billing Segmented Button */}
         <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-10 pb-6 border-b border-slate-200/80">
           
-          {/* Tabs */}
+          {/* Category Tabs */}
           <div className="flex flex-wrap items-center justify-center p-1 rounded-2xl bg-white/90 border border-white/80 gap-1 shadow-lg backdrop-blur-md">
             <button
               onClick={() => setActiveTab('fixed')}
@@ -125,34 +151,42 @@ export default function PricingSection() {
             </button>
           </div>
 
-          {/* Yearly Toggle */}
-          <div className="flex items-center space-x-3 text-xs font-mono text-slate-800">
-            <span className={!isYearly ? 'font-bold text-slate-900' : 'text-slate-500'}>Monthly</span>
+          {/* Modern Segmented Billing Toggle Button */}
+          <div className="inline-flex p-1 rounded-2xl bg-white/90 border border-white/80 shadow-md backdrop-blur-md text-xs font-mono">
             <button
-              onClick={() => setIsYearly(!isYearly)}
-              className="w-11 h-6 rounded-full bg-slate-300 relative p-0.5"
-              aria-label="Toggle Annual Billing"
+              type="button"
+              onClick={() => setIsYearly(false)}
+              className={`px-4 py-2 rounded-xl transition-all duration-200 ${
+                !isYearly
+                  ? 'bg-[rgb(28,78,255)] text-white font-bold shadow-sm'
+                  : 'text-slate-600 hover:text-slate-900'
+              }`}
             >
-              <div
-                className={`size-5 rounded-full bg-white shadow-md transition-transform ${
-                  isYearly ? 'translate-x-5' : 'translate-x-0'
-                }`}
-              ></div>
+              Monthly Billing
             </button>
-            <span className={isYearly ? 'font-bold text-slate-900' : 'text-slate-500'}>
-              Yearly <span className="text-purple-600 font-semibold text-[10px]">(Save ~15%)</span>
-            </span>
+            <button
+              type="button"
+              onClick={() => setIsYearly(true)}
+              className={`px-4 py-2 rounded-xl transition-all duration-200 flex items-center space-x-1.5 ${
+                isYearly
+                  ? 'bg-[rgb(28,78,255)] text-white font-bold shadow-sm'
+                  : 'text-slate-600 hover:text-slate-900'
+              }`}
+            >
+              <span>Yearly</span>
+              <span className={isYearly ? 'text-cyan-200 font-bold text-[10px]' : 'text-purple-600 font-bold text-[10px]'}>
+                (Save 15%)
+              </span>
+            </button>
           </div>
 
         </div>
 
         {/* Dynamic Cards Grid */}
         <div className={`grid gap-6 ${
-          current.plans.length === 5
-            ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-5'
-            : current.plans.length === 4
-              ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-4'
-              : 'grid-cols-1 md:grid-cols-3'
+          current.plans.length === 4
+            ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-4'
+            : 'grid-cols-1 md:grid-cols-3'
         }`}>
           {current.plans.map((plan) => {
             const displayPrice = isYearly ? plan.yearlyPrice : plan.monthlyPrice;
@@ -160,7 +194,7 @@ export default function PricingSection() {
             return (
               <div
                 key={plan.id}
-                className={`relative rounded-3xl p-6 flex flex-col justify-between transition-all duration-300 backdrop-blur-xl ${
+                className={`relative rounded-3xl p-6 flex flex-col justify-between transition-all duration-300 backdrop-blur-xl h-full ${
                   plan.highlight
                     ? 'bg-white border-2 border-purple-600 shadow-2xl scale-[1.02]'
                     : 'bg-white/90 border border-white/80 hover:border-slate-300 shadow-xl'
@@ -173,19 +207,16 @@ export default function PricingSection() {
                 )}
 
                 <div className="space-y-4">
-                  <div>
-                    <h3 className="text-lg font-bold font-display text-[rgb(26,11,84)]">{plan.name}</h3>
-                    <p className="text-[11px] text-slate-500 font-sans mt-1 leading-snug min-h-[30px]">
+                  <div className="min-h-[58px]">
+                    <h3 className="text-xl font-bold font-display text-[rgb(26,11,84)]">{plan.name}</h3>
+                    <p className="text-xs text-slate-500 font-sans mt-0.5 leading-snug">
                       {plan.tagline}
                     </p>
                   </div>
 
-                  {/* 14-Day Free Trial Notice */}
+                  {/* 14-Day Free Trial Notice without icon */}
                   <div className="p-2.5 rounded-xl bg-purple-50 border border-purple-100 text-xs font-mono text-purple-900 flex items-center justify-between">
-                    <span className="flex items-center space-x-1.5 font-bold">
-                      <Sparkles className="w-3.5 h-3.5 text-purple-600" />
-                      <span>14-Day Free Trial</span>
-                    </span>
+                    <span className="font-bold">14-Day Free Trial</span>
                     <span className="text-purple-700 text-[10px] font-bold">₹0 upfront</span>
                   </div>
 
@@ -205,20 +236,20 @@ export default function PricingSection() {
 
                   {/* Quick specs */}
                   <div className="space-y-1.5 text-xs font-mono text-slate-700">
-                    <div className="flex justify-between"><span>Compute:</span> <strong className="text-slate-900">{plan.specs.vcpu}</strong></div>
-                    <div className="flex justify-between"><span>Memory:</span> <strong className="text-slate-900">{plan.specs.ram}</strong></div>
-                    <div className="flex justify-between"><span>Storage:</span> <strong className="text-slate-900">{plan.specs.storage}</strong></div>
+                    <div className="flex justify-between py-0.5 border-b border-slate-100"><span>Compute:</span> <strong className="text-slate-900">{plan.specs.vcpu}</strong></div>
+                    <div className="flex justify-between py-0.5 border-b border-slate-100"><span>Memory:</span> <strong className="text-slate-900">{plan.specs.ram}</strong></div>
+                    <div className="flex justify-between py-0.5 border-b border-slate-100"><span>Storage:</span> <strong className="text-slate-900">{plan.specs.storage}</strong></div>
                     {plan.specs.bandwidth && (
-                      <div className="flex justify-between"><span>Bandwidth:</span> <strong className="text-slate-900">{plan.specs.bandwidth}</strong></div>
+                      <div className="flex justify-between py-0.5"><span>Bandwidth:</span> <strong className="text-slate-900">{plan.specs.bandwidth}</strong></div>
                     )}
                   </div>
 
-                  {/* Features list */}
+                  {/* Features list with modern dash bullets */}
                   <ul className="space-y-2 pt-2 text-xs font-sans text-slate-700">
                     {plan.features.slice(0, 5).map((f, i) => (
                       <li key={i} className="flex items-start space-x-2">
-                        <CheckCircle2 className="w-3.5 h-3.5 text-purple-600 shrink-0 mt-0.5" />
-                        <span className="leading-tight text-[11px] text-slate-800">{f}</span>
+                        <span className="text-purple-600 font-mono text-xs select-none">—</span>
+                        <span className="leading-tight text-slate-800">{f}</span>
                       </li>
                     ))}
                   </ul>

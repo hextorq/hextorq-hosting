@@ -100,11 +100,10 @@ export default function HeroSection() {
           <span className="nexa-grad-text drop-shadow-[0_4px_20px_rgba(0,0,0,0.8)]">Your Application.</span>
         </h1>
 
-        {/* Subtitle with High Contrast & Readability */}
+        {/* Subtitle with High Contrast & Perfect Spacing */}
         <p
           ref={subtextRef}
-          className="text-slate-100 max-w-2xl mx-auto leading-relaxed font-sans font-medium drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]"
-          style={{ fontSize: 'clamp(15px, 1.2vw, 20px)' }}
+          className="text-slate-100 max-w-2xl mx-auto leading-relaxed font-sans font-medium tracking-normal drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)] text-base sm:text-lg"
         >
           Deploy your frontend and backend with simple shared hosting, flexible resource options, or your own dedicated VPS.
         </p>

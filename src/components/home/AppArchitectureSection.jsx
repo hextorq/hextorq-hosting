@@ -380,15 +380,15 @@ export default function AppArchitectureSection() {
         </div>
 
         {/* 14-Day Free Trial Banner with Generous Spacing */}
-        <div ref={bannerRef} className="mt-12 p-7 sm:p-8 rounded-[36px] bg-[rgba(10,5,20,0.88)] border border-white/15 flex flex-col md:flex-row items-center justify-between gap-6 shadow-2xl backdrop-blur-xl">
-          <div className="space-y-2 text-left max-w-2xl">
-            <div className="text-[10px] font-mono uppercase tracking-[0.16em] text-cyan-300 font-bold">
+        <div ref={bannerRef} className="mt-12 p-8 sm:p-9 rounded-[36px] bg-[rgba(10,5,20,0.88)] border border-white/15 flex flex-col md:flex-row items-center justify-between gap-6 shadow-2xl backdrop-blur-xl">
+          <div className="space-y-3 text-left max-w-2xl">
+            <div className="text-[11px] font-mono uppercase tracking-[0.18em] text-cyan-300 font-bold">
               EVALUATE PRODUCTION RISK-FREE
             </div>
-            <h4 className="text-lg sm:text-xl font-bold text-white font-display">
+            <h4 className="text-xl sm:text-2xl font-bold text-white font-display">
               Ready to deploy your complete application?
             </h4>
-            <p className="text-xs sm:text-sm text-white/80 font-sans leading-relaxed">
+            <p className="text-sm text-slate-200 font-sans leading-relaxed tracking-normal">
               Every Fixed Shared, Flex Burst, and VPS tier includes a full 14-Day Free Trial. No upfront commitment required.
             </p>
           </div>

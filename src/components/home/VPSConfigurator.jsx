@@ -80,8 +80,7 @@ export default function VPSConfigurator() {
         
         {/* Header */}
         <div className="text-center max-w-3xl mx-auto space-y-4 mb-14">
-          <div className="inline-flex items-center gap-2 rounded-full bg-slate-100 border border-slate-200 px-4 py-1.5 font-mono text-[11px] uppercase tracking-[0.18em] text-slate-700 shadow-sm">
-            <Sliders className="w-3.5 h-3.5 text-blue-600" />
+          <div className="inline-flex items-center gap-2 rounded-full bg-slate-100 border border-slate-200 px-4 py-1.5 font-mono text-[11px] uppercase tracking-[0.18em] text-slate-700 shadow-sm font-bold">
             <span>INTERACTIVE BUILDER</span>
           </div>
 

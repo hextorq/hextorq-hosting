@@ -166,8 +166,8 @@ export default function Footer() {
                 </button>
               </li>
               <li>
-                <button onClick={() => handleNavClick('locations')} className="hover:text-white transition-colors text-left text-xs">
-                  Data Center Locations
+                <button onClick={() => handleNavClick('configurator')} className="hover:text-white transition-colors text-left text-xs">
+                  Interactive VPS Builder
                 </button>
               </li>
               <li>

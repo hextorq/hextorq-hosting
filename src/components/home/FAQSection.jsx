@@ -1,42 +1,65 @@
-import React, { useState, useMemo } from 'react';
-import { HelpCircle, ChevronDown, ChevronUp, Search, Mail, Sparkles } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { ChevronDown, ChevronUp, Search, Mail } from 'lucide-react';
 import { FAQS, SUPPORT_EMAIL } from '../../data/hostingData';
+
+gsap.registerPlugin(ScrollTrigger);
 
 export default function FAQSection() {
   const [openIndex, setOpenIndex] = useState(0);
   const [searchQuery, setSearchQuery] = useState('');
 
-  const filteredFaqs = useMemo(() => {
-    if (!searchQuery.trim()) return FAQS;
-    const q = searchQuery.toLowerCase();
-    return FAQS.filter(
-      (item) =>
-        item.q.toLowerCase().includes(q) || item.a.toLowerCase().includes(q)
-    );
-  }, [searchQuery]);
+  const sectionRef = useRef(null);
+  const headerRef = useRef(null);
 
-  const toggleFaq = (index) => {
-    setOpenIndex(openIndex === index ? null : index);
+  useEffect(() => {
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotion) return;
+
+    const ctx = gsap.context(() => {
+      gsap.fromTo(
+        headerRef.current,
+        { opacity: 0, y: 35 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.9,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: headerRef.current,
+            start: 'top 85%',
+            toggleActions: 'play none none none'
+          }
+        }
+      );
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, []);
+
+  const filteredFaqs = FAQS.filter(
+    (faq) =>
+      faq.q.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      faq.a.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  const toggleFaq = (idx) => {
+    setOpenIndex(openIndex === idx ? -1 : idx);
   };
 
   return (
-    <section
-      id="faq"
-      data-slot="precision"
-      className="py-24 relative overflow-hidden px-4 sm:px-6 lg:px-8 border-t border-slate-200"
-      style={{
-        backgroundImage: "url('https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20260418_125638_553b96dc-a1fd-4b2b-81a9-ed7daa80006e.png&w=1280&q=85')",
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundRepeat: 'no-repeat'
-      }}
+    <section 
+      ref={sectionRef} 
+      id="faq" 
+      data-slot="features" 
+      className="py-24 relative overflow-hidden bg-slate-50 text-[rgb(26,11,84)] border-t border-slate-200"
     >
-      <div className="max-w-4xl mx-auto relative z-10 w-full text-[rgb(26,11,84)]">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
         {/* Section Header */}
-        <div className="text-center space-y-4 mb-12">
-          <div className="inline-flex items-center gap-2 rounded-full bg-white/90 border border-white/60 px-4 py-1.5 font-mono text-[11px] uppercase tracking-[0.18em] text-slate-700 shadow-md backdrop-blur-md">
-            <HelpCircle className="w-3.5 h-3.5 text-blue-600" />
+        <div ref={headerRef} className="text-center max-w-3xl mx-auto space-y-4 mb-16">
+          <div className="inline-flex items-center gap-2 rounded-full bg-white border border-slate-200 px-4 py-1.5 font-mono text-[11px] uppercase tracking-[0.18em] text-slate-700 shadow-sm font-bold">
             <span>KNOWLEDGE & CLARITY</span>
           </div>
 
@@ -48,23 +71,23 @@ export default function FAQSection() {
             Clear, honest answers regarding our 14-day free trial, application architecture, burst policies, and VPS servers.
           </p>
 
-          {/* Search Bar */}
-          <div className="pt-4 max-w-md mx-auto relative">
+          {/* Perfectly Centered & Aligned Search Bar */}
+          <div className="pt-4 max-w-md mx-auto relative flex items-center">
+            <Search className="w-4 h-4 text-slate-400 absolute left-4 pointer-events-none" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search questions (e.g. 14-day trial, Python, Bursting)..."
-              className="w-full px-4 py-3 pl-10 rounded-2xl bg-white border border-slate-200 text-xs font-mono text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-600 transition-colors shadow-lg"
+              className="w-full px-4 py-3.5 pl-11 rounded-2xl bg-white border border-slate-200 text-xs font-mono text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-600 transition-colors shadow-lg"
             />
-            <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-3.5" />
           </div>
         </div>
 
-        {/* Accordion FAQ List */}
-        <div className="space-y-3">
+        {/* 2-Column Responsive & Balanced FAQ Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-start">
           {filteredFaqs.length === 0 ? (
-            <div className="text-center py-10 text-xs font-mono text-slate-600 bg-white rounded-3xl p-6 border border-slate-200 shadow-lg">
+            <div className="md:col-span-2 text-center py-10 text-xs font-mono text-slate-600 bg-white rounded-3xl p-6 border border-slate-200 shadow-lg">
               No questions found matching "{searchQuery}". Reach out directly to <a href={`mailto:${SUPPORT_EMAIL}`} className="text-blue-700 underline">{SUPPORT_EMAIL}</a>.
             </div>
           ) : (
@@ -77,7 +100,7 @@ export default function FAQSection() {
                   className={`rounded-3xl border transition-all duration-200 overflow-hidden ${
                     isOpen
                       ? 'bg-white border-blue-500 shadow-xl'
-                      : 'bg-white/90 border-white/80 hover:border-slate-300 shadow-md backdrop-blur-md'
+                      : 'bg-white border-slate-200 hover:border-slate-300 shadow-md'
                   }`}
                 >
                   <button

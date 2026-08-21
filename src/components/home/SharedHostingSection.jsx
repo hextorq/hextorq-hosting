@@ -163,39 +163,47 @@ export default function SharedHostingSection() {
             </button>
           </div>
 
-          {/* Monthly / Yearly Toggle */}
-          <div className="flex items-center space-x-3 text-xs font-mono text-white">
-            <span className={!isYearly ? 'text-white font-semibold' : 'text-white/70'}>Monthly</span>
+          {/* Monthly / Yearly Modern Segmented Toggle */}
+          <div className="inline-flex p-1 rounded-2xl bg-black/50 border border-white/20 shadow-md backdrop-blur-md text-xs font-mono">
             <button
-              onClick={() => setIsYearly(!isYearly)}
-              className="w-11 h-6 rounded-full bg-white/20 border border-white/30 relative p-0.5 transition-colors focus:outline-none"
-              aria-label="Toggle Annual Discount"
+              type="button"
+              onClick={() => setIsYearly(false)}
+              className={`px-3.5 py-2 rounded-xl transition-all duration-200 ${
+                !isYearly
+                  ? 'bg-white text-slate-900 font-bold shadow-sm'
+                  : 'text-white/70 hover:text-white'
+              }`}
             >
-              <div
-                className={`size-5 rounded-full bg-white transition-transform duration-200 ${
-                  isYearly ? 'translate-x-5' : 'translate-x-0'
-                }`}
-              ></div>
+              Monthly Billing
             </button>
-            <span className={isYearly ? 'text-white font-semibold' : 'text-white/70'}>
-              Yearly <span className="text-cyan-300 text-[10px] font-bold">(Save ~15%)</span>
-            </span>
+            <button
+              type="button"
+              onClick={() => setIsYearly(true)}
+              className={`px-3.5 py-2 rounded-xl transition-all duration-200 flex items-center space-x-1.5 ${
+                isYearly
+                  ? 'bg-white text-slate-900 font-bold shadow-sm'
+                  : 'text-white/70 hover:text-white'
+              }`}
+            >
+              <span>Yearly</span>
+              <span className="text-cyan-300 font-bold text-[10px]">(Save 15%)</span>
+            </button>
           </div>
 
         </div>
 
         {/* Product Positioning Banner */}
-        <div ref={bannerRef} className="w-full max-w-5xl mb-10 p-5 rounded-2xl bg-[rgba(10,5,20,0.88)] border border-white/15 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 shadow-xl backdrop-blur-xl">
-          <div className="space-y-1">
-            <div className="text-[10px] font-mono uppercase text-cyan-300 font-semibold tracking-[0.14em]">
+        <div ref={bannerRef} className="w-full max-w-5xl mb-10 p-6 sm:p-7 rounded-3xl bg-[rgba(10,5,20,0.88)] border border-white/15 flex flex-col md:flex-row items-start md:items-center justify-between gap-5 shadow-xl backdrop-blur-xl">
+          <div className="space-y-2">
+            <div className="text-[10px] font-mono uppercase text-cyan-300 font-semibold tracking-[0.16em]">
               {activeTab === 'fixed' ? 'FIXED RESOURCE MODEL' : 'FLEXIBLE BURST MODEL'}
             </div>
-            <h3 className="text-base font-bold text-white font-display">
+            <h3 className="text-lg font-bold text-white font-display">
               {activeTab === 'fixed'
                 ? 'Predictable resources. Predictable pricing.'
                 : 'Resources that adapt to your workload.'}
             </h3>
-            <p className="text-xs text-white/80 font-sans max-w-2xl leading-relaxed">
+            <p className="text-xs sm:text-sm text-slate-200 font-sans max-w-2xl leading-relaxed tracking-normal">
               {activeTab === 'fixed'
                 ? 'Strictly bounded CPU, memory, and NVMe allocations. Perfect for steady, predictable production workloads with absolute budget certainty.'
                 : 'Your plan includes a base level of resources. When demand increases, additional available capacity can temporarily be used. When demand returns to normal, that additional capacity is released.'}
@@ -203,7 +211,7 @@ export default function SharedHostingSection() {
           </div>
 
           {activeTab === 'flex' && (
-            <div className="p-3 rounded-xl bg-white/10 border border-white/15 text-[11px] font-mono text-white/90 max-w-xs shrink-0">
+            <div className="p-3.5 rounded-2xl bg-white/10 border border-white/15 text-xs font-mono text-white/90 max-w-xs shrink-0">
               ⚡ Additional shared capacity is available when infrastructure capacity allows.
             </div>
           )}

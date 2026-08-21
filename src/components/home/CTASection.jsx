@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { ArrowRight, Sparkles, Server, CheckCircle2, ShieldCheck } from 'lucide-react';
+import { ArrowRight, Server } from 'lucide-react';
 import { useTrialModal } from '../../context/TrialModalContext';
 import { FIXED_SHARED_PLANS, SUPPORT_EMAIL } from '../../data/hostingData';
 
@@ -19,12 +19,12 @@ export default function CTASection() {
     const ctx = gsap.context(() => {
       gsap.fromTo(
         cardRef.current,
-        { opacity: 0, scale: 0.93, y: 50 },
+        { opacity: 0, y: 50, scale: 0.96 },
         {
           opacity: 1,
-          scale: 1,
           y: 0,
-          duration: 1.0,
+          scale: 1,
+          duration: 1,
           ease: 'power3.out',
           scrollTrigger: {
             trigger: cardRef.current,
@@ -62,9 +62,9 @@ export default function CTASection() {
       <div className="max-w-5xl mx-auto relative z-10 w-full">
         <div ref={cardRef} className="p-8 sm:p-14 rounded-[36px] bg-white/95 border border-white/80 text-center space-y-8 shadow-2xl backdrop-blur-xl hover:shadow-[0_20px_60px_-15px_rgba(28,78,255,0.15)] transition-shadow duration-500">
           
-          <div className="inline-flex items-center gap-2 rounded-full bg-slate-100 border border-slate-200 px-4 py-1.5 font-mono text-[11px] uppercase tracking-[0.18em] text-slate-700 shadow-sm">
-            <span className="size-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-            <span className="font-bold text-slate-900">ZERO RISK • ₹0 UPFRONT</span>
+          {/* Top pill without dot */}
+          <div className="inline-flex items-center gap-2 rounded-full bg-slate-100 border border-slate-200 px-4 py-1.5 font-mono text-[11px] uppercase tracking-[0.18em] text-slate-700 shadow-sm font-bold">
+            <span className="text-slate-900">ZERO RISK • ₹0 UPFRONT</span>
           </div>
 
           <div className="space-y-4 max-w-2xl mx-auto">
@@ -101,18 +101,18 @@ export default function CTASection() {
             </button>
           </div>
 
-          {/* Value Bullet Points */}
+          {/* Value Bullet Points without ticks */}
           <div className="flex flex-wrap items-center justify-center gap-6 pt-4 text-xs font-mono text-slate-600">
-            <span className="flex items-center space-x-1.5">
-              <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+            <span className="flex items-center space-x-2">
+              <span className="text-blue-600 font-bold select-none">—</span>
               <span>14-day free trial on every plan</span>
             </span>
-            <span className="flex items-center space-x-1.5">
-              <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+            <span className="flex items-center space-x-2">
+              <span className="text-blue-600 font-bold select-none">—</span>
               <span>No immediate credit card required</span>
             </span>
-            <span className="flex items-center space-x-1.5">
-              <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+            <span className="flex items-center space-x-2">
+              <span className="text-blue-600 font-bold select-none">—</span>
               <span>Direct support: {SUPPORT_EMAIL}</span>
             </span>
           </div>

@@ -9,7 +9,6 @@ import VPSConfigurator from '../components/home/VPSConfigurator';
 import ComparisonMatrix from '../components/home/ComparisonMatrix';
 import PricingSection from '../components/home/PricingSection';
 import FeaturesSection from '../components/home/FeaturesSection';
-import LocationsSection from '../components/home/LocationsSection';
 import WorkloadsSection from '../components/home/WorkloadsSection';
 import FAQSection from '../components/home/FAQSection';
 import CTASection from '../components/home/CTASection';
@@ -33,7 +32,6 @@ export default function HomePage() {
         <ComparisonMatrix />
         <PricingSection />
         <FeaturesSection />
-        <LocationsSection />
         <WorkloadsSection />
         <FAQSection />
         <CTASection />
