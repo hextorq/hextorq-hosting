@@ -64,7 +64,7 @@ export default function VPSSuperioritySection() {
 
   return (
     <section ref={sectionRef} id="vps-hosting" data-slot="freedom" className="py-24 bg-white text-[rgb(26,11,84)] relative">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 flex flex-col items-center">
         
         {/* Section Header */}
         <div ref={headerRef} className="text-center max-w-3xl mx-auto space-y-4 mb-14">
@@ -125,8 +125,11 @@ export default function VPSSuperioritySection() {
           </div>
         </div>
 
-        {/* 5-Column Compact, Well-Aligned VPS Plan Grid */}
-        <div ref={cardsContainerRef} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-3.5 mb-16 items-stretch">
+        {/* 5-Column Centered VPS Plan Showcase Grid */}
+        <div
+          ref={cardsContainerRef}
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3.5 mb-16 items-stretch justify-center w-full max-w-7xl mx-auto"
+        >
           {VPS_PLANS.map((plan) => {
             const displayPrice = isYearly ? plan.yearlyPrice : plan.monthlyPrice;
 

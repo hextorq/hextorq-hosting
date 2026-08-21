@@ -62,3 +62,11 @@ export function useTrialModal() {
   }
   return context;
 }
+
+export function useLegalModal() {
+  const context = useContext(TrialModalContext);
+  if (!context) {
+    throw new Error('useLegalModal must be used within a TrialModalProvider');
+  }
+  return context;
+}

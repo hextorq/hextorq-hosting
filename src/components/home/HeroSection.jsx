@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
-import { ArrowRight, Server, CheckCircle2 } from 'lucide-react';
+import { ArrowRight, Server } from 'lucide-react';
 import { useTrialModal } from '../../context/TrialModalContext';
 import { FIXED_SHARED_PLANS } from '../../data/hostingData';
 
@@ -22,8 +22,8 @@ export default function HeroSection() {
 
       tl.fromTo(
         badgeRef.current,
-        { opacity: 0, y: -24, scale: 0.92 },
-        { opacity: 1, y: 0, scale: 1, duration: 0.9, delay: 0.1 }
+        { opacity: 0, y: -20 },
+        { opacity: 1, y: 0, duration: 0.9, delay: 0.1 }
       )
       .fromTo(
         headlineRef.current,
@@ -97,17 +97,16 @@ export default function HeroSection() {
 
       <div className="relative z-10 flex max-w-4xl flex-col items-center gap-6 text-center mx-auto px-4">
         
-        {/* Top Subheading & Refined Professional Glass Badge */}
-        <div ref={badgeRef} className="flex flex-col items-center gap-3">
+        {/* Top Subheading without capsule wrapping */}
+        <div ref={badgeRef} className="flex flex-col items-center gap-2">
           <span data-slot="gradient-text" className="nexa-grad-text text-base sm:text-lg font-bold tracking-wide drop-shadow-md">
             Infrastructure Built to Last
           </span>
-
-          <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.04] px-4 py-1.5 text-xs text-white/90 backdrop-blur-md shadow-[0_0_24px_rgba(0,0,0,0.5)] ring-1 ring-inset ring-white/10 hover:border-white/25 transition-all">
-            <span className="flex h-1.5 w-1.5 rounded-full bg-emerald-400"></span>
-            <span className="font-mono text-[11px] tracking-wide text-slate-200 uppercase">14-Day Free Trial</span>
-            <span className="text-white/20">|</span>
-            <span className="font-mono text-[11px] text-cyan-300 font-semibold uppercase">₹0 Upfront • Cancel Anytime</span>
+          <div className="flex items-center space-x-2 text-xs font-mono tracking-wider text-slate-300">
+            <span className="size-1.5 rounded-full bg-emerald-400"></span>
+            <span className="uppercase font-semibold">14-Day Free Trial on Every Plan</span>
+            <span className="text-white/30">•</span>
+            <span className="text-cyan-300 font-bold uppercase">₹0 Upfront</span>
           </div>
         </div>
 
@@ -153,35 +152,35 @@ export default function HeroSection() {
           </button>
         </div>
 
-        {/* Value Highlights Chips with High-Contrast Glass Dark Background */}
+        {/* Value Highlights Cards without tick icons */}
         <div ref={chipsRef} className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-6 max-w-3xl mx-auto text-left w-full">
           <div className="p-3.5 rounded-2xl bg-[rgba(10,5,20,0.85)] border border-white/20 shadow-2xl backdrop-blur-xl hover:border-cyan-400/60 hover:bg-[rgba(10,5,20,0.95)] transition-all duration-300">
-            <div className="text-[10px] font-mono text-cyan-300 uppercase tracking-[0.14em] flex items-center space-x-1.5 font-bold">
-              <CheckCircle2 className="w-3.5 h-3.5 text-cyan-400" />
+            <div className="text-[10px] font-mono text-cyan-300 uppercase tracking-[0.14em] flex items-center space-x-2 font-bold">
+              <span className="size-1.5 rounded-full bg-cyan-400"></span>
               <span>14-Day Free Trial</span>
             </div>
             <div className="text-xs text-white font-sans mt-1 font-semibold">Try any plan at zero risk</div>
           </div>
 
           <div className="p-3.5 rounded-2xl bg-[rgba(10,5,20,0.85)] border border-white/20 shadow-2xl backdrop-blur-xl hover:border-cyan-400/60 hover:bg-[rgba(10,5,20,0.95)] transition-all duration-300">
-            <div className="text-[10px] font-mono text-cyan-300 uppercase tracking-[0.14em] flex items-center space-x-1.5 font-bold">
-              <CheckCircle2 className="w-3.5 h-3.5 text-cyan-400" />
+            <div className="text-[10px] font-mono text-cyan-300 uppercase tracking-[0.14em] flex items-center space-x-2 font-bold">
+              <span className="size-1.5 rounded-full bg-cyan-400"></span>
               <span>Transparent Pricing</span>
             </div>
             <div className="text-xs text-white font-sans mt-1 font-semibold">Shared from ₹79/mo</div>
           </div>
 
           <div className="p-3.5 rounded-2xl bg-[rgba(10,5,20,0.85)] border border-white/20 shadow-2xl backdrop-blur-xl hover:border-cyan-400/60 hover:bg-[rgba(10,5,20,0.95)] transition-all duration-300">
-            <div className="text-[10px] font-mono text-cyan-300 uppercase tracking-[0.14em] flex items-center space-x-1.5 font-bold">
-              <CheckCircle2 className="w-3.5 h-3.5 text-cyan-400" />
+            <div className="text-[10px] font-mono text-cyan-300 uppercase tracking-[0.14em] flex items-center space-x-2 font-bold">
+              <span className="size-1.5 rounded-full bg-cyan-400"></span>
               <span>Unified Stack</span>
             </div>
             <div className="text-xs text-white font-sans mt-1 font-semibold">1 Frontend + 1 Backend</div>
           </div>
 
           <div className="p-3.5 rounded-2xl bg-[rgba(10,5,20,0.85)] border border-white/20 shadow-2xl backdrop-blur-xl hover:border-cyan-400/60 hover:bg-[rgba(10,5,20,0.95)] transition-all duration-300">
-            <div className="text-[10px] font-mono text-cyan-300 uppercase tracking-[0.14em] flex items-center space-x-1.5 font-bold">
-              <CheckCircle2 className="w-3.5 h-3.5 text-cyan-400" />
+            <div className="text-[10px] font-mono text-cyan-300 uppercase tracking-[0.14em] flex items-center space-x-2 font-bold">
+              <span className="size-1.5 rounded-full bg-cyan-400"></span>
               <span>VPS Control</span>
             </div>
             <div className="text-xs text-white font-sans mt-1 font-semibold">From ₹349/mo, multi-site</div>

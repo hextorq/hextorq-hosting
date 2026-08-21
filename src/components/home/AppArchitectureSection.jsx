@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { ArrowRight, CheckCircle2, Code2, Database, ShieldCheck, Cpu, ArrowLeftRight, Terminal, Network } from 'lucide-react';
+import { ArrowRight, Code2, Database, ArrowLeftRight } from 'lucide-react';
 import { useTrialModal } from '../../context/TrialModalContext';
 import { FIXED_SHARED_PLANS } from '../../data/hostingData';
 
@@ -182,8 +182,8 @@ export default function AppArchitectureSection() {
                   </div>
                 </div>
 
-                <div className="pt-2 border-t border-white/10 flex items-center space-x-1.5 text-[11px] text-white/80 font-mono">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-cyan-400" />
+                <div className="pt-2 border-t border-white/10 flex items-center space-x-2 text-[11px] text-white/80 font-mono">
+                  <span className="size-1.5 rounded-full bg-cyan-400"></span>
                   <span>Free SSL & CDN Edge Caching</span>
                 </div>
               </div>
@@ -222,8 +222,8 @@ export default function AppArchitectureSection() {
                   </div>
                 </div>
 
-                <div className="pt-2 border-t border-white/10 flex items-center space-x-1.5 text-[11px] text-white/80 font-mono">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-blue-400" />
+                <div className="pt-2 border-t border-white/10 flex items-center space-x-2 text-[11px] text-white/80 font-mono">
+                  <span className="size-1.5 rounded-full bg-blue-400"></span>
                   <span>Dedicated vCPU + NVMe Backing</span>
                 </div>
               </div>
@@ -232,19 +232,15 @@ export default function AppArchitectureSection() {
             {/* Gradient Line Accent */}
             <div className="h-[1px] w-full nexa-grad-line-bg opacity-40 my-2"></div>
 
-            {/* Bottom Result Box */}
+            {/* Bottom Result Box without bulky icon */}
             <div className="mt-4 p-4 rounded-2xl bg-white/5 border border-white/15 flex flex-col sm:flex-row items-center justify-between gap-4 backdrop-blur-md">
-              <div className="flex items-center space-x-3 text-left">
-                <div className="size-8 rounded-xl bg-white/10 border border-white/20 flex items-center justify-center text-cyan-300 shrink-0">
-                  <Cpu className="w-4 h-4" />
+              <div className="space-y-0.5 text-left">
+                <div className="text-xs font-bold text-white font-display flex items-center space-x-2">
+                  <span className="size-2 rounded-full bg-cyan-400"></span>
+                  <span>ONE COMPLETE APPLICATION</span>
                 </div>
-                <div>
-                  <div className="text-xs font-bold text-white font-display">
-                    ONE COMPLETE APPLICATION
-                  </div>
-                  <div className="text-[11px] text-white/70 font-sans">
-                    Unified port mapping, zero configuration reverse proxy, and isolated memory.
-                  </div>
+                <div className="text-[11px] text-white/70 font-sans pl-4">
+                  Unified port mapping, zero configuration reverse proxy, and isolated memory.
                 </div>
               </div>
 
@@ -258,11 +254,10 @@ export default function AppArchitectureSection() {
           </div>
         </div>
 
-        {/* Section Heading */}
-        <div ref={headingRef} className="text-center max-w-3xl mx-auto space-y-4 mb-16">
-          <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-black/40 px-4 py-1.5 font-mono text-[11px] uppercase tracking-[0.18em] text-white/90 backdrop-blur-md shadow-lg">
-            <Network className="w-3.5 h-3.5 text-cyan-400" />
-            <span>THE MODERN ARCHITECTURE STANDARD</span>
+        {/* Section Heading without pill design */}
+        <div ref={headingRef} className="text-center max-w-3xl mx-auto space-y-3 mb-16">
+          <div className="text-[11px] font-mono uppercase tracking-[0.2em] text-cyan-300 font-bold">
+            THE MODERN ARCHITECTURE STANDARD
           </div>
 
           <h2 className="font-medium text-white tracking-tight" style={{ fontSize: 'clamp(32px, 4vw, 56px)', lineHeight: 1.2 }}>
@@ -316,9 +311,10 @@ export default function AppArchitectureSection() {
               </div>
             </div>
 
+            {/* Bottom column footer without tick icon */}
             <div className="mt-6 pt-4 border-t border-white/15 flex items-center justify-between text-xs font-mono text-white/70">
-              <span className="flex items-center space-x-1.5 text-white">
-                <CheckCircle2 className="w-3.5 h-3.5 text-cyan-400" />
+              <span className="flex items-center space-x-2 text-white font-semibold">
+                <span className="size-1.5 rounded-full bg-cyan-400"></span>
                 <span>Zero Port Conflicts</span>
               </span>
               <span>Included in Shared & VPS</span>
@@ -378,9 +374,10 @@ export default function AppArchitectureSection() {
               </div>
             </div>
 
+            {/* Bottom column footer without tick icon */}
             <div className="mt-6 pt-4 border-t border-white/15 flex items-center justify-between text-xs font-mono text-white/70">
-              <span className="flex items-center space-x-1.5 text-white">
-                <CheckCircle2 className="w-3.5 h-3.5 text-blue-400" />
+              <span className="flex items-center space-x-2 text-white font-semibold">
+                <span className="size-1.5 rounded-full bg-blue-400"></span>
                 <span>Isolated Environment</span>
               </span>
               <span>Node / Python / PHP / Go</span>
@@ -389,20 +386,18 @@ export default function AppArchitectureSection() {
 
         </div>
 
-        {/* 14-Day Free Trial banner */}
-        <div ref={bannerRef} className="mt-10 p-6 rounded-[36px] bg-[rgba(10,5,20,0.88)] border border-white/15 flex flex-col md:flex-row items-center justify-between gap-6 shadow-2xl backdrop-blur-xl">
-          <div className="flex items-center space-x-4 text-left">
-            <div className="size-10 rounded-xl bg-white/10 border border-white/20 flex items-center justify-center text-cyan-300 shrink-0">
-              <ShieldCheck className="w-5 h-5" />
+        {/* 14-Day Free Trial banner without icon */}
+        <div ref={bannerRef} className="mt-10 p-6 sm:p-7 rounded-[36px] bg-[rgba(10,5,20,0.88)] border border-white/15 flex flex-col md:flex-row items-center justify-between gap-6 shadow-2xl backdrop-blur-xl">
+          <div className="space-y-1 text-left">
+            <div className="text-[10px] font-mono uppercase tracking-[0.14em] text-cyan-300 font-semibold">
+              EVALUATE PRODUCTION RISK-FREE
             </div>
-            <div>
-              <h4 className="text-base font-bold text-white font-display">
-                Ready to deploy your complete application?
-              </h4>
-              <p className="text-xs text-white/80 font-sans mt-0.5">
-                Every Fixed Shared, Flex Burst, and VPS tier includes a full 14-Day Free Trial. No upfront commitment.
-              </p>
-            </div>
+            <h4 className="text-base sm:text-lg font-bold text-white font-display">
+              Ready to deploy your complete application?
+            </h4>
+            <p className="text-xs text-white/80 font-sans">
+              Every Fixed Shared, Flex Burst, and VPS tier includes a full 14-Day Free Trial. No upfront commitment.
+            </p>
           </div>
 
           <button

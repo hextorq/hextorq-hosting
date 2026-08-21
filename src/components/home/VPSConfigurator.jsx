@@ -1,82 +1,109 @@
-import React, { useState, useMemo } from 'react';
-import { Sliders, Cpu, HardDrive, Server, Globe, ShieldCheck, ArrowRight, Sparkles, CheckCircle2 } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { ArrowRight, Sliders } from 'lucide-react';
 import { useTrialModal } from '../../context/TrialModalContext';
 import { CONFIGURATOR_OPTIONS } from '../../data/hostingData';
 
+gsap.registerPlugin(ScrollTrigger);
+
 export default function VPSConfigurator() {
+  const [selectedCpu, setSelectedCpu] = useState(CONFIGURATOR_OPTIONS.cpu[1]);
+  const [selectedRam, setSelectedRam] = useState(CONFIGURATOR_OPTIONS.ram[1]);
+  const [selectedStorage, setSelectedStorage] = useState(CONFIGURATOR_OPTIONS.storage[1]);
+  const [selectedOS, setSelectedOS] = useState(CONFIGURATOR_OPTIONS.os[0]);
+  const [selectedLocation, setSelectedLocation] = useState(CONFIGURATOR_OPTIONS.locations[0]);
+  const [isYearly, setIsYearly] = useState(false);
   const { openTrialModal } = useTrialModal();
 
-  const [selectedCpu, setSelectedCpu] = useState(CONFIGURATOR_OPTIONS.cpu[1]); // 2 vCPU
-  const [selectedRam, setSelectedRam] = useState(CONFIGURATOR_OPTIONS.ram[2]); // 4 GB RAM
-  const [selectedStorage, setSelectedStorage] = useState(CONFIGURATOR_OPTIONS.storage[2]); // 80 GB NVMe
-  const [selectedOS, setSelectedOS] = useState(CONFIGURATOR_OPTIONS.os[0]); // Ubuntu 24.04
-  const [selectedLocation, setSelectedLocation] = useState(CONFIGURATOR_OPTIONS.locations[0]); // India (Mumbai)
-  const [isYearly, setIsYearly] = useState(false);
+  const sectionRef = useRef(null);
+  const containerRef = useRef(null);
 
-  const monthlyEstimatedPrice = useMemo(() => {
-    const base = 299;
-    const cpuCost = selectedCpu.priceMultiplier;
-    const ramCost = selectedRam.priceMultiplier;
-    const storageCost = selectedStorage.priceMultiplier;
-    const osCost = selectedOS.priceAddon;
-    return base + cpuCost + ramCost + storageCost + osCost;
-  }, [selectedCpu, selectedRam, selectedStorage, selectedOS]);
+  useEffect(() => {
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotion) return;
 
-  const displayPrice = isYearly
-    ? Math.round(monthlyEstimatedPrice * 0.85)
-    : monthlyEstimatedPrice;
+    const ctx = gsap.context(() => {
+      gsap.fromTo(
+        containerRef.current,
+        { opacity: 0, y: 40 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.9,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: containerRef.current,
+            start: 'top 85%',
+            toggleActions: 'play none none none'
+          }
+        }
+      );
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, []);
+
+  const calculateMonthlyPrice = () => {
+    let base = 349;
+    base += selectedCpu.priceAddon;
+    base += selectedRam.priceAddon;
+    base += selectedStorage.priceAddon;
+    base += selectedOS.priceAddon;
+    return isYearly ? Math.round(base * 0.85) : base;
+  };
+
+  const calculatedPrice = calculateMonthlyPrice();
+  const displayPrice = calculatedPrice.toLocaleString('en-IN');
 
   const handleStartTrial = () => {
     const customPlan = {
       id: 'custom-vps',
       name: `Custom VPS (${selectedCpu.label}, ${selectedRam.label})`,
-      category: 'custom-vps',
-      price: displayPrice,
-      monthlyPrice: displayPrice,
+      tagline: `${selectedOS.name} in ${selectedLocation.city}`,
       currency: '₹',
+      monthlyPrice: calculateMonthlyPrice(),
+      yearlyPrice: Math.round(calculateMonthlyPrice() * 0.85),
       specs: {
         vcpu: selectedCpu.label,
         ram: selectedRam.label,
         storage: selectedStorage.label,
-        os: selectedOS.name,
-        location: `${selectedLocation.name} (${selectedLocation.city})`
+        bandwidth: '10 TB / mo'
       }
     };
-    openTrialModal(customPlan, 'custom-vps');
+    openTrialModal(customPlan, 'vps');
   };
 
   return (
-    <section id="configurator" className="py-24 bg-slate-50 text-[rgb(26,11,84)] relative border-t border-slate-200">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+    <section ref={sectionRef} id="configurator" className="py-24 bg-white text-[rgb(26,11,84)] relative border-t border-slate-200">
+      <div ref={containerRef} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
-        {/* Section Header */}
+        {/* Header */}
         <div className="text-center max-w-3xl mx-auto space-y-4 mb-14">
-          <div className="inline-flex items-center gap-2 rounded-full bg-white border border-slate-200 px-4 py-1.5 font-mono text-[11px] uppercase tracking-[0.18em] text-slate-700 shadow-sm">
+          <div className="inline-flex items-center gap-2 rounded-full bg-slate-100 border border-slate-200 px-4 py-1.5 font-mono text-[11px] uppercase tracking-[0.18em] text-slate-700 shadow-sm">
             <Sliders className="w-3.5 h-3.5 text-blue-600" />
-            <span>INTERACTIVE HARDWARE BUILDER</span>
+            <span>INTERACTIVE BUILDER</span>
           </div>
 
           <h2 className="font-medium text-[rgb(26,11,84)] tracking-tight" style={{ fontSize: 'clamp(32px, 4vw, 56px)', lineHeight: 1.15 }}>
-            Custom VPS <span className="nexa-grad-text">Configurator.</span>
+            Configure Your <span className="nexa-grad-text">Custom VPS Slice.</span>
           </h2>
 
           <p className="text-sm sm:text-base text-slate-600 font-sans leading-relaxed">
-            Tailor your exact compute, memory, and NVMe disk parameters. Test your custom server configuration with a full 14-day free trial.
+            Dial in the exact vCPU count, memory allocation, NVMe storage, and global location tailored to your workload.
           </p>
         </div>
 
-        {/* Configurator Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           
-          {/* Controls Column (8 Cols) */}
-          <div className="lg:col-span-8 space-y-8 p-6 sm:p-8 rounded-3xl bg-white border border-slate-200 shadow-xl">
+          {/* Controls Column (8 Cols) without redundant icons before numbered titles */}
+          <div className="lg:col-span-8 space-y-8 p-6 sm:p-8 rounded-3xl bg-white border border-slate-200 shadow-lg">
             
             {/* 1. vCPU Cores */}
             <div className="space-y-3">
               <div className="flex items-center justify-between text-xs font-mono">
-                <span className="text-slate-900 font-semibold flex items-center space-x-2">
-                  <Cpu className="w-4 h-4 text-blue-600" />
-                  <span>1. Dedicated Virtual CPU (vCPU)</span>
+                <span className="text-slate-900 font-semibold">
+                  1. Dedicated Virtual CPU
                 </span>
                 <span className="text-slate-900 font-bold px-2 py-0.5 rounded-full bg-slate-100 border border-slate-200 text-[10px]">
                   {selectedCpu.label}
@@ -104,9 +131,8 @@ export default function VPSConfigurator() {
             {/* 2. RAM Memory */}
             <div className="space-y-3">
               <div className="flex items-center justify-between text-xs font-mono">
-                <span className="text-slate-900 font-semibold flex items-center space-x-2">
-                  <Server className="w-4 h-4 text-purple-600" />
-                  <span>2. Dedicated RAM Memory</span>
+                <span className="text-slate-900 font-semibold">
+                  2. Dedicated RAM Memory
                 </span>
                 <span className="text-slate-900 font-bold px-2 py-0.5 rounded-full bg-slate-100 border border-slate-200 text-[10px]">
                   {selectedRam.label}
@@ -134,9 +160,8 @@ export default function VPSConfigurator() {
             {/* 3. NVMe Storage */}
             <div className="space-y-3">
               <div className="flex items-center justify-between text-xs font-mono">
-                <span className="text-slate-900 font-semibold flex items-center space-x-2">
-                  <HardDrive className="w-4 h-4 text-indigo-600" />
-                  <span>3. High-Speed NVMe Storage</span>
+                <span className="text-slate-900 font-semibold">
+                  3. High-Speed NVMe Storage
                 </span>
                 <span className="text-slate-900 font-bold px-2 py-0.5 rounded-full bg-slate-100 border border-slate-200 text-[10px]">
                   {selectedStorage.label}
@@ -164,9 +189,8 @@ export default function VPSConfigurator() {
             {/* 4. Operating System */}
             <div className="space-y-3">
               <div className="flex items-center justify-between text-xs font-mono">
-                <span className="text-slate-900 font-semibold flex items-center space-x-2">
-                  <ShieldCheck className="w-4 h-4 text-emerald-600" />
-                  <span>4. Operating System</span>
+                <span className="text-slate-900 font-semibold">
+                  4. Operating System
                 </span>
                 <span className="text-slate-600 font-mono text-xs">
                   {selectedOS.name}
@@ -197,9 +221,8 @@ export default function VPSConfigurator() {
             {/* 5. Data Center Location */}
             <div className="space-y-3">
               <div className="flex items-center justify-between text-xs font-mono">
-                <span className="text-slate-900 font-semibold flex items-center space-x-2">
-                  <Globe className="w-4 h-4 text-cyan-600" />
-                  <span>5. Deployment Region</span>
+                <span className="text-slate-900 font-semibold">
+                  5. Deployment Region
                 </span>
                 <span className="text-slate-700 font-mono text-xs">
                   {selectedLocation.flag} {selectedLocation.name} ({selectedLocation.city})
@@ -240,12 +263,9 @@ export default function VPSConfigurator() {
               </h3>
             </div>
 
-            {/* 14-Day Free Trial Prominent Badge */}
+            {/* 14-Day Free Trial Notice without icon */}
             <div className="p-3 rounded-xl bg-blue-50 border border-blue-100 text-xs font-mono text-blue-900 flex items-center justify-between">
-              <span className="flex items-center space-x-1.5 font-bold">
-                <Sparkles className="w-4 h-4 text-blue-600" />
-                <span>14-Day Free Trial</span>
-              </span>
+              <span className="font-bold">14-Day Free Trial</span>
               <span className="text-emerald-600 font-bold">₹0 Due Today</span>
             </div>
 

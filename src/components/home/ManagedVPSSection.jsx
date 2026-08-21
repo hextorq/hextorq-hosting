@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { ShieldCheck, CheckCircle2, ArrowRight, Server, Wrench, RefreshCw, Activity, HardDrive, Sparkles, LifeBuoy } from 'lucide-react';
+import { ArrowRight, ShieldCheck, Server, Lock, Cpu, HardDrive, Wrench, LifeBuoy, ChevronDown, ChevronUp } from 'lucide-react';
 import { useTrialModal } from '../../context/TrialModalContext';
 import { MANAGED_VPS_PLANS } from '../../data/hostingData';
 
@@ -9,12 +9,17 @@ gsap.registerPlugin(ScrollTrigger);
 
 export default function ManagedVPSSection() {
   const [isYearly, setIsYearly] = useState(false);
+  const [expandedCards, setExpandedCards] = useState({});
   const { openTrialModal } = useTrialModal();
 
   const sectionRef = useRef(null);
   const headerRef = useRef(null);
   const servicesGridRef = useRef(null);
   const plansGridRef = useRef(null);
+
+  const toggleExpand = (id) => {
+    setExpandedCards((prev) => ({ ...prev, [id]: !prev[id] }));
+  };
 
   useEffect(() => {
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -38,7 +43,7 @@ export default function ManagedVPSSection() {
         }
       );
 
-      // 6 Services Grid Stagger
+      // 6 Services Grid
       if (servicesGridRef.current?.children) {
         gsap.fromTo(
           servicesGridRef.current.children,
@@ -47,8 +52,8 @@ export default function ManagedVPSSection() {
             opacity: 1,
             y: 0,
             scale: 1,
-            duration: 0.8,
-            stagger: 0.08,
+            duration: 0.85,
+            stagger: 0.1,
             ease: 'power3.out',
             scrollTrigger: {
               trigger: servicesGridRef.current,
@@ -59,11 +64,11 @@ export default function ManagedVPSSection() {
         );
       }
 
-      // Plans Grid Stagger
+      // Plans Grid
       if (plansGridRef.current?.children) {
         gsap.fromTo(
           plansGridRef.current.children,
-          { opacity: 0, y: 50, scale: 0.96 },
+          { opacity: 0, y: 45, scale: 0.96 },
           {
             opacity: 1,
             y: 0,
@@ -87,16 +92,16 @@ export default function ManagedVPSSection() {
   const services = [
     {
       icon: <Server className="w-5 h-5 text-blue-600" />,
-      title: 'Initial Server Setup & Hardening',
-      desc: 'We configure firewalls, disable root password risks, optimize kernel network buffers, and provision your choice of Linux distribution.'
+      title: 'Full OS & Stack Provisioning',
+      desc: 'Ubuntu, Debian, AlmaLinux, Docker, Node.js, Python, PostgreSQL, MySQL configured with enterprise best practices out of the box.'
     },
     {
-      icon: <ShieldCheck className="w-5 h-5 text-emerald-600" />,
-      title: 'Automated Security & OS Patching',
-      desc: 'Continuous vulnerability scanning and automated zero-downtime security kernel updates keeping your OS hardened against exploits.'
+      icon: <Lock className="w-5 h-5 text-emerald-600" />,
+      title: 'Automated Security Hardening',
+      desc: 'Automated weekly CVE vulnerability patching, SSH key protection, Fail2ban intrusion defense, and zero-day firewall rules.'
     },
     {
-      icon: <Activity className="w-5 h-5 text-purple-600" />,
+      icon: <Cpu className="w-5 h-5 text-cyan-600" />,
       title: 'Proactive Health & Uptime Monitoring',
       desc: 'Our monitoring systems keep constant watch on daemon health, CPU/RAM thresholds, and disk space with instant incident mitigation.'
     },
@@ -186,24 +191,28 @@ export default function ManagedVPSSection() {
           </div>
         </div>
 
-        <div ref={plansGridRef} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {/* Collapsible & Compact Managed VPS Cards */}
+        <div ref={plansGridRef} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 items-start">
           {MANAGED_VPS_PLANS.map((plan) => {
             const displayPrice = isYearly ? plan.yearlyPrice : plan.monthlyPrice;
+            const isExpanded = expandedCards[plan.id];
+            const primaryFeatures = plan.features.slice(0, 3);
+            const secondaryFeatures = plan.features.slice(3);
 
             return (
               <div
                 key={plan.id}
-                className={`p-7 rounded-3xl flex flex-col justify-between transition-all duration-300 bg-white hover:scale-105 ${
+                className={`p-6 rounded-3xl flex flex-col justify-between transition-all duration-300 bg-white ${
                   plan.highlight
-                    ? 'border-2 border-blue-600 shadow-2xl scale-[1.02]'
-                    : 'border border-slate-200 hover:border-slate-300 shadow-lg'
+                    ? 'border-2 border-blue-600 shadow-xl'
+                    : 'border border-slate-200 hover:border-slate-300 shadow-md'
                 }`}
               >
-                <div className="space-y-5">
+                <div className="space-y-4">
                   <div className="flex items-center justify-between">
                     <div>
                       <h4 className="text-xl font-bold font-display text-[rgb(26,11,84)]">{plan.name}</h4>
-                      <p className="text-xs text-slate-500 font-sans mt-1">{plan.tagline}</p>
+                      <p className="text-xs text-slate-500 font-sans mt-0.5">{plan.tagline}</p>
                     </div>
                     {plan.badge && (
                       <span className="px-2.5 py-0.5 rounded-full bg-blue-600 text-white text-[9px] font-mono font-bold uppercase tracking-[0.14em] shadow-md">
@@ -212,18 +221,18 @@ export default function ManagedVPSSection() {
                     )}
                   </div>
 
-                  <div className="p-2.5 rounded-xl bg-blue-50 border border-blue-100 text-xs font-mono text-blue-900 flex items-center justify-between">
+                  <div className="p-2 rounded-xl bg-blue-50 border border-blue-100 text-xs font-mono text-blue-900 flex items-center justify-between">
                     <span className="font-semibold">14-Day Free Trial</span>
                     <span className="text-blue-700 font-bold text-[10px]">₹0 upfront</span>
                   </div>
 
-                  <div className="py-3 border-y border-slate-100">
+                  <div className="py-2.5 border-y border-slate-100">
                     <div className="flex items-baseline space-x-1">
                       <span className="text-xl font-bold text-slate-400">{plan.currency}</span>
                       <span className="text-4xl font-bold font-display text-[rgb(26,11,84)]">{displayPrice}</span>
                       <span className="text-xs font-mono text-slate-500">/month</span>
                     </div>
-                    <div className="text-[11px] font-mono text-slate-500 mt-1">
+                    <div className="text-[10px] font-mono text-slate-500 mt-0.5">
                       Evaluate free for 14 days. ₹{displayPrice}/mo after trial.
                     </div>
                   </div>
@@ -248,24 +257,50 @@ export default function ManagedVPSSection() {
                     </div>
                   </div>
 
-                  {/* Features */}
-                  <ul className="space-y-2 text-xs font-sans text-slate-700 pt-1">
-                    {plan.features.map((feat, i) => (
-                      <li key={i} className="flex items-start space-x-2">
-                        <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
-                        <span className="text-slate-800">{feat}</span>
-                      </li>
-                    ))}
-                  </ul>
+                  {/* Features without ticks & with View More toggle */}
+                  <div className="pt-1 space-y-2">
+                    <ul className="space-y-2 text-xs font-sans text-slate-700">
+                      {primaryFeatures.map((feat, i) => (
+                        <li key={i} className="flex items-start space-x-2">
+                          <span className="text-blue-600 font-mono text-xs select-none">—</span>
+                          <span className="text-slate-800">{feat}</span>
+                        </li>
+                      ))}
+                    </ul>
+
+                    {secondaryFeatures.length > 0 && (
+                      <div>
+                        {isExpanded && (
+                          <ul className="space-y-2 pt-2 text-xs font-sans text-slate-700 border-t border-slate-100 animate-fadeIn">
+                            {secondaryFeatures.map((feat, i) => (
+                              <li key={i} className="flex items-start space-x-2">
+                                <span className="text-blue-600 font-mono text-xs select-none">—</span>
+                                <span className="text-slate-800">{feat}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        )}
+
+                        <button
+                          type="button"
+                          onClick={() => toggleExpand(plan.id)}
+                          className="mt-2 text-[11px] font-mono text-blue-600 hover:text-blue-800 flex items-center space-x-1 transition-colors pt-1"
+                        >
+                          <span>{isExpanded ? 'Hide Extra Details' : `View ${secondaryFeatures.length} More Features`}</span>
+                          {isExpanded ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
+                        </button>
+                      </div>
+                    )}
+                  </div>
                 </div>
 
-                <div className="mt-8 pt-4 border-t border-slate-100">
+                <div className="mt-6 pt-4 border-t border-slate-100">
                   <button
                     type="button"
                     onClick={() => openTrialModal(plan, 'managed')}
                     className="nexa-grad-a-bg group relative inline-flex items-center justify-center rounded-xl p-px w-full shadow-md hover:scale-105 active:scale-95 transition-all"
                   >
-                    <span className="w-full rounded-[11px] bg-[rgb(28,78,255)] py-3 text-center text-xs font-semibold text-white transition-colors duration-300 group-hover:bg-transparent flex items-center justify-center space-x-2">
+                    <span className="w-full rounded-[11px] bg-[rgb(28,78,255)] py-2.5 text-center text-xs font-semibold text-white transition-colors duration-300 group-hover:bg-transparent flex items-center justify-center space-x-2">
                       <span>Start 14-Day Trial</span>
                       <ArrowRight className="w-3.5 h-3.5" />
                     </span>

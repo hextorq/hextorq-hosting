@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { CheckCircle2, ArrowRight, Layers } from 'lucide-react';
+import { ArrowRight, ChevronDown, ChevronUp } from 'lucide-react';
 import { useTrialModal } from '../../context/TrialModalContext';
 import { FIXED_SHARED_PLANS, FLEX_SHARED_PLANS } from '../../data/hostingData';
 import BurstVisualizer from './BurstVisualizer';
@@ -11,6 +11,7 @@ gsap.registerPlugin(ScrollTrigger);
 export default function SharedHostingSection() {
   const [activeTab, setActiveTab] = useState('fixed'); // 'fixed' | 'flex'
   const [isYearly, setIsYearly] = useState(false);
+  const [expandedCards, setExpandedCards] = useState({});
   const { openTrialModal } = useTrialModal();
 
   const sectionRef = useRef(null);
@@ -18,6 +19,10 @@ export default function SharedHostingSection() {
   const tabsRef = useRef(null);
   const bannerRef = useRef(null);
   const cardsContainerRef = useRef(null);
+
+  const toggleExpand = (id) => {
+    setExpandedCards((prev) => ({ ...prev, [id]: !prev[id] }));
+  };
 
   useEffect(() => {
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -113,11 +118,10 @@ export default function SharedHostingSection() {
     >
       <div className="max-w-7xl mx-auto relative z-10 w-full">
         
-        {/* Section Header */}
-        <div ref={headerRef} className="text-center max-w-3xl mx-auto space-y-4 mb-12">
-          <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-black/40 px-4 py-1.5 font-mono text-[11px] uppercase tracking-[0.18em] text-white/90 backdrop-blur-md shadow-lg">
-            <Layers className="w-3.5 h-3.5 text-cyan-400" />
-            <span>FULL-STACK SHARED HOSTING</span>
+        {/* Section Header without icon */}
+        <div ref={headerRef} className="text-center max-w-3xl mx-auto space-y-3 mb-12">
+          <div className="text-[11px] font-mono uppercase tracking-[0.2em] text-cyan-300 font-bold">
+            FULL-STACK SHARED HOSTING
           </div>
 
           <h2 className="font-medium text-white tracking-tight" style={{ fontSize: 'clamp(32px, 4vw, 56px)', lineHeight: 1.2 }}>
@@ -133,7 +137,7 @@ export default function SharedHostingSection() {
         {/* Product Model Selector Tabs & Yearly Toggle */}
         <div ref={tabsRef} className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-10 pb-6 border-b border-white/15">
           
-          {/* Fixed vs Flex Tabs without redundant logos */}
+          {/* Fixed vs Flex Tabs */}
           <div className="inline-flex p-1 rounded-2xl bg-black/50 border border-white/20 shadow-lg backdrop-blur-md">
             <button
               onClick={() => handleTabChange('fixed')}
@@ -205,18 +209,21 @@ export default function SharedHostingSection() {
           )}
         </div>
 
-        {/* Compact, Well-Structured Plan Cards Grid */}
-        <div ref={cardsContainerRef} className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16 items-stretch">
+        {/* Collapsible & Compact Plan Cards Grid with Competitor-Style Bullet Rows */}
+        <div ref={cardsContainerRef} className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16 items-start">
           {currentPlans.map((plan) => {
             const displayPrice = isYearly ? plan.yearlyPrice : plan.monthlyPrice;
+            const isExpanded = expandedCards[plan.id];
+            const primaryFeatures = plan.features.slice(0, 3);
+            const secondaryFeatures = plan.features.slice(3);
 
             return (
               <div
                 key={plan.id}
-                className={`relative rounded-3xl p-6 flex flex-col justify-between transition-all duration-300 backdrop-blur-xl hover:scale-[1.02] ${
+                className={`relative rounded-3xl p-6 flex flex-col justify-between transition-all duration-300 backdrop-blur-xl hover:border-white/40 ${
                   plan.highlight
                     ? 'bg-[rgba(15,10,30,0.92)] border-2 border-cyan-400/80 shadow-2xl'
-                    : 'bg-[rgba(10,5,20,0.88)] border border-white/15 hover:border-white/30 shadow-xl'
+                    : 'bg-[rgba(10,5,20,0.88)] border border-white/15 shadow-xl'
                 }`}
               >
                 {/* Top Badge */}
@@ -235,7 +242,7 @@ export default function SharedHostingSection() {
                     </p>
                   </div>
 
-                  {/* 14-Day Free Trial Tag without icon */}
+                  {/* 14-Day Free Trial Notice */}
                   <div className="px-3 py-2 rounded-xl bg-white/5 border border-white/10 flex items-center justify-between text-xs font-mono">
                     <span className="text-white font-semibold">14-Day Free Trial</span>
                     <span className="text-cyan-300 text-[10px] font-bold">₹0 upfront</span>
@@ -275,15 +282,42 @@ export default function SharedHostingSection() {
                     </div>
                   </div>
 
-                  {/* Concise Feature Checklist */}
-                  <ul className="space-y-2 pt-1 text-xs font-sans text-white/80">
-                    {plan.features.map((feat, i) => (
-                      <li key={i} className="flex items-start space-x-2">
-                        <CheckCircle2 className="w-3.5 h-3.5 text-cyan-400 shrink-0 mt-0.5" />
-                        <span className="leading-tight text-white">{feat}</span>
-                      </li>
-                    ))}
-                  </ul>
+                  {/* Competitor-Style Feature Checklist without ticks */}
+                  <div className="pt-2 space-y-2">
+                    <ul className="space-y-2 text-xs font-sans text-white/80">
+                      {primaryFeatures.map((feat, i) => (
+                        <li key={i} className="flex items-start space-x-2.5">
+                          <span className="text-cyan-400 font-mono text-xs select-none">—</span>
+                          <span className="leading-tight text-white/90">{feat}</span>
+                        </li>
+                      ))}
+                    </ul>
+
+                    {/* Expandable Collapsible Details */}
+                    {secondaryFeatures.length > 0 && (
+                      <div>
+                        {isExpanded && (
+                          <ul className="space-y-2 pt-2 text-xs font-sans text-white/80 border-t border-white/10 animate-fadeIn">
+                            {secondaryFeatures.map((feat, i) => (
+                              <li key={i} className="flex items-start space-x-2.5">
+                                <span className="text-cyan-400 font-mono text-xs select-none">—</span>
+                                <span className="leading-tight text-white/90">{feat}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        )}
+
+                        <button
+                          type="button"
+                          onClick={() => toggleExpand(plan.id)}
+                          className="mt-2 text-[11px] font-mono text-cyan-300 hover:text-cyan-200 flex items-center space-x-1 transition-colors pt-1"
+                        >
+                          <span>{isExpanded ? 'Hide Extra Details' : `View ${secondaryFeatures.length} More Features`}</span>
+                          {isExpanded ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
+                        </button>
+                      </div>
+                    )}
+                  </div>
                 </div>
 
                 {/* Card CTA */}
@@ -307,7 +341,7 @@ export default function SharedHostingSection() {
           })}
         </div>
 
-        {/* Burst Visualizer */}
+        {/* 5-Step Burst Visualizer */}
         <div className="mt-6">
           <BurstVisualizer />
         </div>

@@ -1,43 +1,80 @@
 import React, { useState, useEffect } from 'react';
-import { ArrowRight, RefreshCw, Layers } from 'lucide-react';
-import { useTrialModal } from '../../context/TrialModalContext';
-import { FLEX_SHARED_PLANS } from '../../data/hostingData';
+import { RefreshCw } from 'lucide-react';
 
 export default function BurstVisualizer() {
   const [activeStep, setActiveStep] = useState(0);
   const [isPlaying, setIsPlaying] = useState(true);
-  const { openTrialModal } = useTrialModal();
 
   const steps = [
     {
       id: 'baseline',
-      title: '1. Baseline Workload',
-      desc: 'Application operates on standard dedicated base allocations (e.g. 1 vCPU, 2 GB RAM).',
-      baseLoad: 45,
+      stepNum: '01',
+      title: '1. Baseline Operating State',
+      shortTitle: 'Baseline Workload',
+      desc: 'Application handles nominal traffic on standard dedicated allocations (e.g. 1 vCPU, 2 GB RAM).',
+      baseLoad: 40,
       burstLoad: 0,
-      status: 'Steady State Operating Normal',
+      latency: '22 ms',
+      concurrency: '120 req/s',
+      status: 'Steady State • Standard Allocation',
       statusColor: 'text-emerald-400',
-      badge: 'Baseline'
+      tag: 'Nominal Load'
     },
     {
-      id: 'spike',
-      title: '2. Sudden Traffic Surge',
-      desc: 'Flash sale or marketing campaign causes active concurrent users to double.',
+      id: 'ingress-spike',
+      stepNum: '02',
+      title: '2. Traffic Ingress Surge',
+      shortTitle: 'Ingress Spike',
+      desc: 'Sudden inbound traffic influx (campaign launch or webhook wave) drives CPU usage past 85%.',
+      baseLoad: 90,
+      burstLoad: 25,
+      latency: '29 ms',
+      concurrency: '450 req/s',
+      status: 'Spike Detected • Pre-allocating Headroom',
+      statusColor: 'text-amber-400',
+      tag: 'Surge Ingress'
+    },
+    {
+      id: 'elastic-burst',
+      stepNum: '03',
+      title: '3. Elastic Headroom Activation',
+      shortTitle: 'Headroom Active',
+      desc: 'Node hypervisor dynamically unthrottles additional shared compute slices with zero process restarts.',
       baseLoad: 100,
-      burstLoad: 60,
+      burstLoad: 75,
+      latency: '34 ms',
+      concurrency: '980 req/s',
       status: 'Elastic Headroom Absorbing Traffic',
       statusColor: 'text-cyan-400',
-      badge: 'Bursting Active'
+      tag: 'Burst Active'
     },
     {
-      id: 'stabilized',
-      title: '3. Return to Normalcy',
-      desc: 'Traffic subsides; temporary burst capacity is automatically released back to the pool.',
-      baseLoad: 50,
+      id: 'peak-stabilization',
+      stepNum: '04',
+      title: '4. Peak Throughput Absorption',
+      shortTitle: 'Peak Stabilized',
+      desc: 'Full concurrent peak load is absorbed smoothly with zero 502/504 gateway timeouts.',
+      baseLoad: 100,
+      burstLoad: 85,
+      latency: '31 ms',
+      concurrency: '1,200 req/s',
+      status: '100% Throughput Maintained • Zero Drops',
+      statusColor: 'text-cyan-300',
+      tag: 'Peak Absorption'
+    },
+    {
+      id: 'cooldown-release',
+      stepNum: '05',
+      title: '5. Cooldown & Pool Release',
+      shortTitle: 'Capacity Released',
+      desc: 'Traffic subsides to nominal levels; temporary burst resources are cleanly released back to cluster pool.',
+      baseLoad: 45,
       burstLoad: 0,
-      status: 'Capacity Released Cleanly',
+      latency: '21 ms',
+      concurrency: '135 req/s',
+      status: 'Headroom De-allocated • Pool Recycled',
       statusColor: 'text-emerald-400',
-      badge: 'Normalcy Restored'
+      tag: 'Pool Recycled'
     }
   ];
 
@@ -45,7 +82,7 @@ export default function BurstVisualizer() {
     if (!isPlaying) return;
     const interval = setInterval(() => {
       setActiveStep((prev) => (prev + 1) % steps.length);
-    }, 4500);
+    }, 4000);
     return () => clearInterval(interval);
   }, [isPlaying, steps.length]);
 
@@ -64,7 +101,7 @@ export default function BurstVisualizer() {
               </span>
             </span>
             <h3 className="text-base font-bold text-white font-display">
-              Conceptual Burst Capacity Visualizer
+              5-Step Elastic Burst Lifecycle Architecture
             </h3>
           </div>
           <p className="text-xs text-white/70 mt-1 font-sans">
@@ -78,7 +115,7 @@ export default function BurstVisualizer() {
             className="h-8 px-3 rounded-xl text-xs font-mono bg-white/5 border border-white/10 text-white hover:bg-white/10 flex items-center space-x-1.5 transition-colors"
           >
             <RefreshCw className={`w-3 h-3 ${isPlaying ? 'animate-spin' : ''}`} />
-            <span>{isPlaying ? 'Auto-Playing' : 'Paused'}</span>
+            <span>{isPlaying ? 'Auto-Advancing' : 'Paused'}</span>
           </button>
         </div>
       </div>
@@ -89,7 +126,7 @@ export default function BurstVisualizer() {
         {/* Left Interactive Gauge Meters (7 Cols) */}
         <div className="lg:col-span-7 space-y-6">
           
-          {/* Base Allocation Bar without redundant logos */}
+          {/* Base Allocation Bar */}
           <div className="space-y-2">
             <div className="flex justify-between text-xs font-mono">
               <span className="text-white flex items-center space-x-2">
@@ -106,7 +143,7 @@ export default function BurstVisualizer() {
             </div>
           </div>
 
-          {/* Burst Buffer Bar without redundant logos */}
+          {/* Burst Buffer Bar */}
           <div className="space-y-2">
             <div className="flex justify-between text-xs font-mono">
               <span className="text-white flex items-center space-x-2">
@@ -114,7 +151,7 @@ export default function BurstVisualizer() {
                 <span>Available Shared Burst Headroom</span>
               </span>
               <span className="text-cyan-300 font-bold">
-                {current.burstLoad > 0 ? `+${current.burstLoad}% Headroom In Use` : 'Idle / Standby'}
+                {current.burstLoad > 0 ? `+${current.burstLoad}% Headroom Active` : 'Standby / Released'}
               </span>
             </div>
             <div className="h-3 bg-black/40 rounded-full overflow-hidden border border-white/10 p-0.5">
@@ -129,18 +166,42 @@ export default function BurstVisualizer() {
             </div>
           </div>
 
+          {/* Real-time Telemetry Metrics Grid */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+            <div className="p-3 rounded-2xl bg-black/40 border border-white/10">
+              <span className="text-[9px] font-mono uppercase text-white/50 block">STATUS</span>
+              <div className={`text-xs font-bold font-mono mt-0.5 truncate ${current.statusColor}`}>
+                {current.tag}
+              </div>
+            </div>
+
+            <div className="p-3 rounded-2xl bg-black/40 border border-white/10">
+              <span className="text-[9px] font-mono uppercase text-white/50 block">LATENCY</span>
+              <div className="text-xs font-bold font-mono text-white mt-0.5">
+                {current.latency}
+              </div>
+            </div>
+
+            <div className="p-3 rounded-2xl bg-black/40 border border-white/10 col-span-2 sm:col-span-1">
+              <span className="text-[9px] font-mono uppercase text-white/50 block">THROUGHPUT</span>
+              <div className="text-xs font-bold font-mono text-white mt-0.5">
+                {current.concurrency}
+              </div>
+            </div>
+          </div>
+
           {/* Real-time State Card */}
           <div className="p-4 rounded-2xl bg-black/40 border border-white/10 flex items-center justify-between">
             <div className="space-y-1">
-              <span className="text-[10px] font-mono uppercase text-white/60 tracking-[0.14em]">Current Lifecycle Phase</span>
+              <span className="text-[10px] font-mono uppercase text-white/60 tracking-[0.14em]">Active Phase</span>
               <div className={`text-sm font-bold font-display ${current.statusColor}`}>
                 {current.status}
               </div>
             </div>
 
             <div className="text-right font-mono text-xs text-white/70">
-              <div>Phase {activeStep + 1} of {steps.length}</div>
-              <div className="text-white font-semibold">{current.title}</div>
+              <div>Phase {activeStep + 1} of 5</div>
+              <div className="text-white font-semibold">{current.shortTitle}</div>
             </div>
           </div>
 
@@ -149,7 +210,7 @@ export default function BurstVisualizer() {
           </div>
         </div>
 
-        {/* Right Step Timeline Navigation (5 Cols) */}
+        {/* Right 5-Step Timeline Navigation (5 Cols) */}
         <div className="lg:col-span-5 space-y-2">
           {steps.map((s, idx) => (
             <button
@@ -158,7 +219,7 @@ export default function BurstVisualizer() {
                 setActiveStep(idx);
                 setIsPlaying(false);
               }}
-              className={`w-full p-3.5 rounded-xl text-left transition-all border flex items-start space-x-3 ${
+              className={`w-full p-3 rounded-xl text-left transition-all border flex items-start space-x-3 ${
                 activeStep === idx
                   ? 'bg-white/10 border-white/30 shadow-md'
                   : 'bg-black/20 border-white/5 hover:border-white/15 opacity-70 hover:opacity-100'
@@ -169,7 +230,7 @@ export default function BurstVisualizer() {
                   ? 'bg-white text-slate-950 font-bold'
                   : 'bg-white/10 text-white/70'
               }`}>
-                {idx + 1}
+                {s.stepNum}
               </div>
               <div className="space-y-0.5">
                 <div className={`text-xs font-bold font-display ${activeStep === idx ? 'text-white' : 'text-white/70'}`}>

@@ -1,19 +1,20 @@
 import React, { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { Mail, Globe, ArrowUpRight, ShieldCheck, Sparkles, Server } from 'lucide-react';
-import { useTrialModal } from '../../context/TrialModalContext';
+import { Mail, Globe } from 'lucide-react';
 import { useSmoothScroll } from '../../context/SmoothScrollContext';
-import { SUPPORT_EMAIL, DOMAIN_URL, FIXED_SHARED_PLANS } from '../../data/hostingData';
+import { useLegalModal } from '../../context/TrialModalContext';
+import { SUPPORT_EMAIL, DOMAIN_URL } from '../../data/hostingData';
 
 gsap.registerPlugin(ScrollTrigger);
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
-  const { openTrialModal, openLegalModal } = useTrialModal();
   const { scrollTo } = useSmoothScroll();
+  const { openLegalModal } = useLegalModal();
+
   const footerRef = useRef(null);
-  const columnsRef = useRef(null);
+  const linksContainerRef = useRef(null);
   const wordmarkRef = useRef(null);
 
   useEffect(() => {
@@ -21,10 +22,10 @@ export default function Footer() {
     if (prefersReducedMotion) return;
 
     const ctx = gsap.context(() => {
-      // Columns stagger
-      if (columnsRef.current?.children) {
+      // Stagger footer columns
+      if (linksContainerRef.current?.children) {
         gsap.fromTo(
-          columnsRef.current.children,
+          linksContainerRef.current.children,
           { opacity: 0, y: 30 },
           {
             opacity: 1,
@@ -33,7 +34,7 @@ export default function Footer() {
             stagger: 0.1,
             ease: 'power3.out',
             scrollTrigger: {
-              trigger: columnsRef.current,
+              trigger: linksContainerRef.current,
               start: 'top 90%',
               toggleActions: 'play none none none'
             }
@@ -41,23 +42,24 @@ export default function Footer() {
         );
       }
 
-      // Wordmark cutout reveal
-      gsap.fromTo(
-        wordmarkRef.current,
-        { opacity: 0, scale: 0.95, y: 20 },
-        {
-          opacity: 0.25,
-          scale: 1,
-          y: 0,
-          duration: 1.2,
-          ease: 'power3.out',
-          scrollTrigger: {
-            trigger: wordmarkRef.current,
-            start: 'top 95%',
-            toggleActions: 'play none none none'
+      // Giant wordmark parallax float
+      if (wordmarkRef.current) {
+        gsap.fromTo(
+          wordmarkRef.current,
+          { opacity: 0.03, y: 40 },
+          {
+            opacity: 0.1,
+            y: 0,
+            duration: 1.2,
+            ease: 'power2.out',
+            scrollTrigger: {
+              trigger: footerRef.current,
+              start: 'top 85%',
+              toggleActions: 'play none none none'
+            }
           }
-        }
-      );
+        );
+      }
     }, footerRef);
 
     return () => ctx.revert();
@@ -68,28 +70,22 @@ export default function Footer() {
   };
 
   return (
-    <footer ref={footerRef} className="relative bg-[rgb(10,5,20)] text-white border-t border-white/10 pt-16 pb-6 overflow-hidden">
-      
+    <footer 
+      ref={footerRef}
+      className="relative border-t border-white/10 bg-[rgb(10,5,20)] text-white pt-16 pb-24 overflow-hidden"
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div ref={columnsRef} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 pb-16 border-b border-white/10">
-
-          {/* Brand Column */}
+        
+        {/* Main Links Grid */}
+        <div ref={linksContainerRef} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 pb-16 border-b border-white/10">
+          
+          {/* Brand Info (2 cols on lg) without logo icon */}
           <div className="lg:col-span-2 space-y-4">
             <button
-              onClick={() => scrollTo(0, { duration: 1.4 })}
-              className="flex items-center space-x-3 group text-left"
+              onClick={() => scrollTo(0, { duration: 1.2 })}
+              className="text-left focus:outline-none"
             >
-              <svg width="32" height="32" viewBox="0 0 28 28" fill="none" aria-hidden="true" className="shrink-0 group-hover:scale-105 transition-transform">
-                <defs>
-                  <linearGradient id="nexacore-logo-footer" x1="2" y1="2" x2="26" y2="26" gradientUnits="userSpaceOnUse">
-                    <stop stopColor="rgb(28, 78, 255)"></stop>
-                    <stop offset="0.5" stopColor="rgb(172, 36, 255)"></stop>
-                    <stop offset="1" stopColor="rgb(254, 136, 27)"></stop>
-                  </linearGradient>
-                </defs>
-                <circle cx="14" cy="14" r="11" stroke="url(#nexacore-logo-footer)" strokeWidth="2.5"></circle>
-              </svg>
-              <span className="font-display font-bold text-xl tracking-tight text-white">
+              <span className="font-display font-bold text-2xl tracking-tight text-white block">
                 HEXTORQ HOSTING
               </span>
             </button>
@@ -98,9 +94,13 @@ export default function Footer() {
               Hosting built around your modern full-stack application. Deploy your frontend and backend seamlessly with fixed predictability, flexible burst headroom, or your own dedicated VPS.
             </p>
 
-            <div className="inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-white/5 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.14em] text-white/80 backdrop-blur-sm">
-              <Sparkles className="w-3.5 h-3.5 text-cyan-400" />
-              <span>14-Day Free Trial on Every Plan</span>
+            {/* Interactive Live Status Display instead of pill badge */}
+            <div className="p-3 rounded-2xl bg-white/[0.04] border border-white/10 flex items-center space-x-3 text-xs font-mono text-white/80 hover:border-white/20 transition-colors max-w-sm">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-400"></span>
+              </span>
+              <span>All Systems Operational • 14-Day Free Evaluation</span>
             </div>
 
             <div className="pt-2 text-xs font-sans text-white/70 space-y-1.5">
@@ -227,7 +227,7 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Signature Hirael Wordmark Cutout in Footer */}
+        {/* Signature Wordmark Cutout in Footer */}
         <div className="relative pt-6 pb-2 overflow-hidden">
           <span 
             ref={wordmarkRef}
