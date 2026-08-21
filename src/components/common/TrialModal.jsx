@@ -1,17 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { 
   X, 
-  CheckCircle2, 
-  ArrowRight, 
   ShieldCheck, 
   Mail, 
   Copy, 
   ExternalLink,
-  Layers,
-  Server,
-  Zap,
-  Cpu,
-  Check
+  Check,
+  Globe
 } from 'lucide-react';
 import { useTrialModal } from '../../context/TrialModalContext';
 import { 
@@ -36,6 +31,8 @@ export default function TrialModal() {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [copied, setCopied] = useState(false);
 
+  const scrollContainerRef = useRef(null);
+
   // All plans map
   const allPlansByCategory = {
     fixed: FIXED_SHARED_PLANS,
@@ -44,8 +41,10 @@ export default function TrialModal() {
     managed: MANAGED_VPS_PLANS
   };
 
+  // Lock background body scroll when modal is active
   useEffect(() => {
     if (isTrialOpen) {
+      document.body.style.overflow = 'hidden';
       setIsSubmitted(false);
       setCopied(false);
       const cat = planCategory || 'fixed';
@@ -59,7 +58,13 @@ export default function TrialModal() {
         setActivePlan(defaultPlan);
         setProjectName('my-production-app');
       }
+    } else {
+      document.body.style.overflow = '';
     }
+
+    return () => {
+      document.body.style.overflow = '';
+    };
   }, [isTrialOpen, selectedPlan, planCategory]);
 
   if (!isTrialOpen) return null;
@@ -88,7 +93,7 @@ export default function TrialModal() {
     return `${s.vcpu || '1 vCPU'}, ${s.ram || '1 GB RAM'}, ${s.storage || '10 GB NVMe'}${s.bandwidth ? `, ${s.bandwidth}` : ''}`;
   };
 
-  const constructEmailContent = () => {
+  const constructEmailDetails = () => {
     const subject = `[Hextorq Hosting] 14-Day Free Trial Enquiry - ${currentPlan.name} (${getCategoryLabel(currentCategory)})`;
     
     const body = `Hello Hextorq Hosting Team,
@@ -112,38 +117,67 @@ Please provision the 14-Day Free Trial sandbox environment and share the server 
 
 Thank you!`;
 
-    return { subject, body };
+    const mailtoUrl = `mailto:${SUPPORT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(SUPPORT_EMAIL)}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    const outlookUrl = `https://outlook.live.com/mail/0/deeplink/compose?to=${encodeURIComponent(SUPPORT_EMAIL)}&subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+
+    return { subject, body, mailtoUrl, gmailUrl, outlookUrl };
   };
 
   const handleStartTrial = (e) => {
     if (e) e.preventDefault();
-    const { subject, body } = constructEmailContent();
-    const mailtoUrl = `mailto:${SUPPORT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    const { mailtoUrl } = constructEmailDetails();
     
-    // Redirect / open email client
-    window.location.href = mailtoUrl;
+    // Robust trigger: create anchor tag and click
+    try {
+      const a = document.createElement('a');
+      a.href = mailtoUrl;
+      a.style.display = 'none';
+      document.body.appendChild(a);
+      a.click();
+      setTimeout(() => {
+        if (document.body.contains(a)) document.body.removeChild(a);
+      }, 500);
+    } catch {
+      window.location.href = mailtoUrl;
+    }
+
     setIsSubmitted(true);
   };
 
   const handleCopyEmailDetails = () => {
-    const { subject, body } = constructEmailContent();
+    const { subject, body } = constructEmailDetails();
     const fullText = `TO: ${SUPPORT_EMAIL}\nSUBJECT: ${subject}\n\n${body}`;
     navigator.clipboard.writeText(fullText);
     setCopied(true);
     setTimeout(() => setCopied(false), 2500);
   };
 
+  const { gmailUrl, outlookUrl, mailtoUrl } = constructEmailDetails();
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-md animate-fadeIn">
+    <div 
+      data-lenis-prevent="true"
+      data-lenis-prevent-wheel="true"
+      data-lenis-prevent-touch="true"
+      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/75 backdrop-blur-md animate-fadeIn overflow-y-auto"
+      onClick={(e) => {
+        if (e.target === e.currentTarget) closeTrialModal();
+      }}
+    >
       <div 
-        className="relative w-full max-w-2xl bg-white rounded-3xl shadow-2xl overflow-hidden text-slate-900 max-h-[92vh] flex flex-col border border-slate-200"
+        data-lenis-prevent="true"
+        data-lenis-prevent-wheel="true"
+        data-lenis-prevent-touch="true"
+        onWheel={(e) => e.stopPropagation()}
+        className="relative w-full max-w-2xl bg-white rounded-3xl shadow-2xl overflow-hidden text-slate-900 max-h-[90vh] flex flex-col border border-slate-200 animate-scaleUp my-auto"
         role="dialog"
         aria-modal="true"
       >
-        {/* Header */}
-        <div className="px-6 py-4 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
+        {/* Fixed Header */}
+        <div className="px-6 py-4 bg-slate-50 border-b border-slate-200 flex items-center justify-between shrink-0">
           <div className="flex items-center space-x-3">
-            <div className="size-9 rounded-xl bg-blue-600 flex items-center justify-center text-white shadow-sm">
+            <div className="size-9 rounded-xl bg-blue-600 flex items-center justify-center text-white shadow-sm shrink-0">
               <ShieldCheck className="w-5 h-5" />
             </div>
             <div>
@@ -170,10 +204,18 @@ Thank you!`;
           </button>
         </div>
 
-        {/* Content Body */}
-        <div className="p-6 overflow-y-auto space-y-6 flex-1">
+        {/* Scrollable Body - with native smooth scroll & data-lenis-prevent */}
+        <div 
+          ref={scrollContainerRef}
+          data-lenis-prevent="true"
+          data-lenis-prevent-wheel="true"
+          data-lenis-prevent-touch="true"
+          onWheel={(e) => e.stopPropagation()}
+          className="p-6 overflow-y-auto space-y-6 flex-1 overscroll-contain"
+          style={{ WebkitOverflowScrolling: 'touch' }}
+        >
           {!isSubmitted ? (
-            <form onSubmit={handleStartTrial} className="space-y-5">
+            <form id="trial-enquiry-form" onSubmit={handleStartTrial} className="space-y-5">
               
               {/* Top Trial Banner */}
               <div className="p-4 rounded-2xl bg-blue-50/80 border border-blue-100 flex items-start space-x-3 text-xs">
@@ -181,7 +223,7 @@ Thank you!`;
                 <div className="space-y-1">
                   <div className="font-bold text-blue-950 font-display">14-Day Risk-Free Evaluation</div>
                   <p className="text-blue-900/80 font-sans leading-relaxed">
-                    Test your full application on live production infrastructure. Clicking below creates a pre-filled activation enquiry directly to our technical team at <strong className="font-mono">{SUPPORT_EMAIL}</strong> for instant setup.
+                    Test your full application on live infrastructure. Clicking below opens a pre-filled activation enquiry directly to our technical team at <strong className="font-mono">{SUPPORT_EMAIL}</strong> for instant sandbox setup.
                   </p>
                 </div>
               </div>
@@ -251,7 +293,7 @@ Thank you!`;
                 </div>
               </div>
 
-              {/* Plan Tier Selector within Category */}
+              {/* Plan Tier Selector */}
               <div className="space-y-1.5">
                 <label className="block text-[11px] font-mono uppercase text-slate-500 font-bold tracking-wider">
                   Select Plan Tier
@@ -297,7 +339,7 @@ Thank you!`;
               <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-3">
                 <div className="flex flex-wrap items-center justify-between gap-2">
                   <div>
-                    <span className="text-[10px] font-mono uppercase text-slate-500 tracking-wider">Configured Plan</span>
+                    <span className="text-[10px] font-mono uppercase text-slate-500 tracking-wider font-semibold">Configured Plan</span>
                     <h4 className="text-base font-bold text-[rgb(26,11,84)] font-display flex items-center space-x-2">
                       <span>{currentPlan.name}</span>
                       <span className="text-xs font-mono font-normal text-slate-500">({getCategoryLabel(currentCategory)})</span>
@@ -420,89 +462,115 @@ Thank you!`;
                 />
               </div>
 
-              {/* Action Buttons */}
-              <div className="pt-2">
-                <button
-                  type="submit"
-                  className="nexa-grad-a-bg group relative inline-flex items-center justify-center rounded-xl p-px w-full shadow-lg active:scale-95 transition-all"
-                >
-                  <span className="w-full rounded-[11px] bg-[rgb(28,78,255)] py-3 text-center text-sm font-semibold text-white transition-colors duration-300 group-hover:bg-transparent flex items-center justify-center space-x-2">
-                    <Mail className="w-4 h-4" />
-                    <span>Send 14-Day Trial Enquiry to {SUPPORT_EMAIL}</span>
-                    <ArrowRight className="w-4 h-4" />
-                  </span>
-                </button>
-                <div className="text-center text-[10px] font-mono text-slate-500 mt-2">
-                  Opens your email client with pre-filled configuration details • No credit card required
-                </div>
-              </div>
-
             </form>
           ) : (
-            /* Confirmation Screen with Copyable Content */
-            <div className="text-center py-6 space-y-6">
+            /* Confirmation Screen with Direct Multi-Client Links */
+            <div className="text-center py-4 space-y-5">
               <div className="size-14 rounded-2xl bg-emerald-50 border border-emerald-200 flex items-center justify-center mx-auto text-emerald-600 shadow-sm">
                 <Check className="w-7 h-7" />
               </div>
 
-              <div className="space-y-2">
+              <div className="space-y-1.5">
                 <h4 className="text-xl font-bold font-display text-[rgb(26,11,84)]">
-                  Enquiry Created & Mail Client Opened!
+                  Enquiry Prepared for {SUPPORT_EMAIL}
                 </h4>
                 <p className="text-xs text-slate-600 max-w-md mx-auto leading-relaxed">
-                  Your 14-day free trial request for <strong className="text-slate-900">{currentPlan.name}</strong> was prepared for <strong className="font-mono text-slate-900">{SUPPORT_EMAIL}</strong>.
+                  Choose your preferred email client below to send the pre-filled trial activation for <strong className="text-slate-900">{currentPlan.name}</strong>.
                 </p>
               </div>
 
-              {/* Direct Mail Actions */}
+              {/* Multi-Email Client Quick Actions */}
               <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 max-w-md mx-auto space-y-3 text-left">
-                <div className="flex items-center justify-between text-xs font-mono">
+                <div className="flex items-center justify-between text-xs font-mono pb-2 border-b border-slate-200">
                   <span className="text-slate-500">Recipient:</span>
                   <strong className="text-blue-700 font-bold">{SUPPORT_EMAIL}</strong>
                 </div>
-                <div className="flex items-center justify-between text-xs font-mono">
-                  <span className="text-slate-500">Selected Plan:</span>
-                  <strong className="text-slate-900">{currentPlan.name} (₹{displayPrice}/mo)</strong>
-                </div>
-                <div className="flex items-center justify-between text-xs font-mono">
-                  <span className="text-slate-500">Trial Period:</span>
-                  <strong className="text-emerald-600 font-bold">14 Days Free ($0 Upfront)</strong>
-                </div>
 
-                <div className="pt-2 flex gap-2">
-                  <button
-                    type="button"
-                    onClick={handleStartTrial}
-                    className="flex-1 py-2 rounded-xl bg-blue-600 text-white text-xs font-mono font-semibold hover:bg-blue-700 transition-colors flex items-center justify-center space-x-1.5"
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
+                  <a
+                    href={gmailUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-2.5 rounded-xl bg-red-600 text-white text-xs font-mono font-semibold hover:bg-red-700 transition-colors flex items-center justify-center space-x-1.5 shadow-sm text-center"
                   >
                     <ExternalLink className="w-3.5 h-3.5" />
-                    <span>Re-open Email App</span>
-                  </button>
+                    <span>Open in Gmail</span>
+                  </a>
+
+                  <a
+                    href={outlookUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-2.5 rounded-xl bg-blue-600 text-white text-xs font-mono font-semibold hover:bg-blue-700 transition-colors flex items-center justify-center space-x-1.5 shadow-sm text-center"
+                  >
+                    <ExternalLink className="w-3.5 h-3.5" />
+                    <span>Open in Outlook</span>
+                  </a>
+
+                  <a
+                    href={mailtoUrl}
+                    className="p-2.5 rounded-xl bg-slate-800 text-white text-xs font-mono font-semibold hover:bg-slate-900 transition-colors flex items-center justify-center space-x-1.5 shadow-sm text-center"
+                  >
+                    <Mail className="w-3.5 h-3.5" />
+                    <span>Default Mail App</span>
+                  </a>
 
                   <button
                     type="button"
                     onClick={handleCopyEmailDetails}
-                    className="py-2 px-3 rounded-xl bg-white border border-slate-300 text-slate-700 text-xs font-mono hover:bg-slate-100 transition-colors flex items-center space-x-1.5"
+                    className="p-2.5 rounded-xl bg-white border border-slate-300 text-slate-700 text-xs font-mono font-semibold hover:bg-slate-100 transition-colors flex items-center justify-center space-x-1.5"
                   >
                     <Copy className="w-3.5 h-3.5" />
-                    <span>{copied ? 'Copied!' : 'Copy Text'}</span>
+                    <span>{copied ? 'Copied Details!' : 'Copy Text'}</span>
                   </button>
                 </div>
               </div>
 
-              <p className="text-[11px] text-slate-500 font-sans max-w-sm mx-auto">
-                Didn’t open automatically? Simply click <strong>Copy Text</strong> and send it to <a href={`mailto:${SUPPORT_EMAIL}`} className="text-blue-600 underline font-mono">{SUPPORT_EMAIL}</a>. Our systems team responds rapidly to set up your instance.
+              <p className="text-[11px] text-slate-500 font-sans max-w-sm mx-auto leading-normal">
+                Our operations team provisions sandbox containers within 15–30 minutes and sends your setup credentials.
               </p>
+            </div>
+          )}
+        </div>
 
-              <div className="pt-2">
-                <button
-                  type="button"
-                  onClick={closeTrialModal}
-                  className="px-6 py-2.5 rounded-xl bg-slate-900 text-white text-xs font-semibold hover:bg-slate-800 transition-colors"
-                >
-                  Done & Close
-                </button>
-              </div>
+        {/* Fixed Always-Visible Footer */}
+        <div className="px-6 py-4 bg-slate-50 border-t border-slate-200 flex items-center justify-between shrink-0">
+          {!isSubmitted ? (
+            <>
+              <button
+                type="button"
+                onClick={closeTrialModal}
+                className="px-4 py-2 text-xs font-medium text-slate-600 hover:text-slate-900 transition-colors"
+              >
+                Cancel
+              </button>
+
+              <button
+                type="submit"
+                form="trial-enquiry-form"
+                className="h-10 px-6 rounded-xl text-xs font-bold text-white bg-[rgb(28,78,255)] hover:bg-blue-700 transition-all shadow-md flex items-center space-x-2 active:scale-95 cursor-pointer"
+              >
+                <Mail className="w-4 h-4" />
+                <span>Send 14-Day Trial Enquiry</span>
+              </button>
+            </>
+          ) : (
+            <div className="w-full flex items-center justify-between">
+              <button
+                type="button"
+                onClick={() => setIsSubmitted(false)}
+                className="text-xs font-mono text-blue-700 hover:underline"
+              >
+                ← Edit Plan Selection
+              </button>
+
+              <button
+                type="button"
+                onClick={closeTrialModal}
+                className="h-10 px-6 rounded-xl bg-slate-900 text-white text-xs font-semibold hover:bg-slate-800 transition-colors"
+              >
+                Done & Close
+              </button>
             </div>
           )}
         </div>

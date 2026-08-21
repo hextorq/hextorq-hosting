@@ -1,10 +1,21 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { X, Shield, FileText, RefreshCw, Layers } from 'lucide-react';
 import { useTrialModal } from '../../context/TrialModalContext';
 import { SUPPORT_EMAIL } from '../../data/hostingData';
 
 export default function LegalModal() {
   const { legalModal, closeLegalModal } = useTrialModal();
+
+  useEffect(() => {
+    if (legalModal.isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [legalModal.isOpen]);
 
   if (!legalModal.isOpen) return null;
 
@@ -108,52 +119,70 @@ export default function LegalModal() {
   const content = getContent();
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/80 backdrop-blur-md animate-fadeIn">
+    <div 
+      data-lenis-prevent="true"
+      data-lenis-prevent-wheel="true"
+      data-lenis-prevent-touch="true"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-md animate-fadeIn overflow-y-auto"
+      onClick={(e) => {
+        if (e.target === e.currentTarget) closeLegalModal();
+      }}
+    >
       <div 
-        className="relative w-full max-w-2xl bg-card border border-border rounded-[1.75rem] shadow-elevated overflow-hidden text-foreground max-h-[85vh] flex flex-col"
+        data-lenis-prevent="true"
+        data-lenis-prevent-wheel="true"
+        data-lenis-prevent-touch="true"
+        onWheel={(e) => e.stopPropagation()}
+        className="relative w-full max-w-2xl bg-white border border-slate-200 rounded-[1.75rem] shadow-2xl overflow-hidden text-slate-900 max-h-[85vh] flex flex-col my-auto"
         role="dialog"
         aria-modal="true"
       >
-        <div className="px-6 py-4 bg-muted/40 border-b border-border flex items-center justify-between">
+        <div className="px-6 py-4 bg-slate-50 border-b border-slate-200 flex items-center justify-between shrink-0">
           <div className="flex items-center space-x-3">
-            <div className="size-8 rounded-xl bg-muted border border-border flex items-center justify-center">
+            <div className="size-8 rounded-xl bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-800">
               {content.icon}
             </div>
             <div>
-              <h3 className="font-display font-bold text-base text-foreground">
+              <h3 className="font-display font-bold text-base text-[rgb(26,11,84)]">
                 {content.title}
               </h3>
-              <p className="text-xs text-muted-foreground font-mono">
+              <p className="text-xs text-slate-500 font-mono">
                 Hextorq Hosting Legal Documentation
               </p>
             </div>
           </div>
           <button
             onClick={closeLegalModal}
-            className="p-1.5 rounded-xl text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+            className="p-1.5 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-200 transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
-        <div className="p-6 overflow-y-auto space-y-6 text-xs text-muted-foreground leading-relaxed font-sans">
+        <div 
+          data-lenis-prevent="true"
+          data-lenis-prevent-wheel="true"
+          data-lenis-prevent-touch="true"
+          onWheel={(e) => e.stopPropagation()}
+          className="p-6 overflow-y-auto space-y-6 text-xs text-slate-600 leading-relaxed font-sans overscroll-contain flex-1"
+        >
           {content.sections.map((sec, i) => (
             <div key={i} className="space-y-1.5">
-              <h4 className="font-display font-bold text-sm text-foreground">
+              <h4 className="font-display font-bold text-sm text-[rgb(26,11,84)]">
                 {sec.h}
               </h4>
-              <p className="text-muted-foreground">
+              <p className="text-slate-600">
                 {sec.p}
               </p>
             </div>
           ))}
         </div>
 
-        <div className="px-6 py-3.5 bg-muted/40 border-t border-border flex items-center justify-between text-xs font-mono text-muted-foreground">
-          <span>Official Document</span>
+        <div className="px-6 py-3.5 bg-slate-50 border-t border-slate-200 flex items-center justify-between text-xs font-mono text-slate-500 shrink-0">
+          <span>Official Documentation</span>
           <button
             onClick={closeLegalModal}
-            className="h-8 px-4 rounded-xl bg-muted hover:bg-muted/80 text-foreground font-semibold border border-border transition-colors"
+            className="h-8 px-4 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-semibold transition-colors"
           >
             Close
           </button>
