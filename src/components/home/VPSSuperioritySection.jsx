@@ -74,18 +74,18 @@ export default function VPSSuperioritySection() {
           </div>
 
           <h2 className="font-medium text-[rgb(26,11,84)] tracking-tight" style={{ fontSize: 'clamp(32px, 4vw, 56px)', lineHeight: 1.15 }}>
-            Your Server. <span className="nexa-grad-text">Your Rules.</span>
+            Fixed Resources. <span className="nexa-grad-text">Multi-Site Freedom.</span>
           </h2>
 
           <p className="text-sm sm:text-base text-slate-600 font-sans leading-relaxed">
-            Full root SSH access, dedicated compute slices, high-speed NVMe storage, and complete software freedom for developers, container stacks, and scaling applications.
+            Dedicated compute slices, high-speed NVMe storage, and no cap on how many sites or apps you host — Self-Hosted or fully Managed.
           </p>
 
           {/* Quick Capability Pills */}
           <div className="flex flex-wrap items-center justify-center gap-2 pt-2 text-xs font-mono text-slate-600">
             <span className="px-3 py-1 rounded-full bg-slate-100 border border-slate-200 flex items-center space-x-1.5 text-[10px] uppercase tracking-wider">
               <Key className="w-3 h-3 text-emerald-600" />
-              <span>Full Root & SSH Access</span>
+              <span>Unlimited Sites/Apps</span>
             </span>
             <span className="px-3 py-1 rounded-full bg-slate-100 border border-slate-200 flex items-center space-x-1.5 text-[10px] uppercase tracking-wider">
               <Box className="w-3 h-3 text-emerald-600" />
@@ -193,13 +193,9 @@ export default function VPSSuperioritySection() {
                       <span className="text-slate-500">Bandwidth:</span>
                       <strong className="text-slate-900">{plan.specs.bandwidth}</strong>
                     </div>
-                    <div className="flex justify-between py-1 border-b border-slate-100">
-                      <span className="text-slate-500">Access:</span>
-                      <strong className="text-emerald-700 font-bold">{plan.specs.rootAccess}</strong>
-                    </div>
                     <div className="flex justify-between py-1">
-                      <span className="text-slate-500">IP Addr:</span>
-                      <strong className="text-slate-900">{plan.specs.ipv4}</strong>
+                      <span className="text-slate-500">Sites/Apps:</span>
+                      <strong className="text-emerald-700 font-bold">Unlimited</strong>
                     </div>
                   </div>
                 </div>

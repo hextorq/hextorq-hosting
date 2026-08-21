@@ -251,7 +251,7 @@ export default function AppArchitectureSection() {
               <div className="flex items-center space-x-3 font-mono text-xs shrink-0">
                 <span className="text-white/70">Fixed from <strong className="text-white">₹79/mo</strong></span>
                 <span className="text-white/40">|</span>
-                <span className="text-white/70">VPS from <strong className="text-white">₹399/mo</strong></span>
+                <span className="text-white/70">VPS from <strong className="text-white">₹349/mo</strong></span>
               </div>
             </div>
 

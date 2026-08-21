@@ -10,8 +10,8 @@ export default function VPSShowcasePage() {
   return (
     <>
       <SEO
-        title="High-Performance VPS Hosting — Dedicated vCPU & Root Access"
-        description="Deploy virtual private servers with dedicated compute, NVMe storage, custom OS selection, and 100% full root access."
+        title="High-Performance VPS Hosting — Fixed Resources & Multi-Site"
+        description="Deploy virtual private servers with dedicated compute, NVMe storage, and no limit on how many sites or apps you host. Self-Hosted or Managed."
         canonical="https://hosting.hextorq.tech/"
       />
 
@@ -20,19 +20,19 @@ export default function VPSShowcasePage() {
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-16 text-center space-y-6">
           <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-cyan-950/80 border border-cyan-500/30 text-cyan-300 text-xs font-mono">
             <Terminal className="w-3.5 h-3.5" />
-            <span>ROOT ACCESS & VIRTUAL SERVERS</span>
+            <span>FIXED-RESOURCE VIRTUAL SERVERS</span>
           </div>
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-display font-extrabold text-white tracking-tight">
             Your Server. <span className="text-gradient-cyan">Your Rules.</span>
           </h1>
           <p className="text-base sm:text-lg text-slate-300 max-w-2xl mx-auto leading-relaxed font-sans">
-            For customers who need root access, custom software, multiple services, and complete control.
+            For customers who need fixed dedicated resources, multi-site hosting, and complete predictability.
           </p>
 
           <div className="flex flex-wrap items-center justify-center gap-6 pt-4 text-xs font-mono text-slate-400">
             <span className="flex items-center space-x-1.5">
               <CheckCircle2 className="w-4 h-4 text-cyan-400" />
-              <span>Full Root & SSH Key Access</span>
+              <span>Unlimited Sites & Apps</span>
             </span>
             <span className="flex items-center space-x-1.5">
               <CheckCircle2 className="w-4 h-4 text-cyan-400" />
@@ -60,7 +60,7 @@ export default function VPSShowcasePage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             {VPS_TIERS.map((tier) => (
               <div
                 key={tier.id}
@@ -93,7 +93,7 @@ export default function VPSShowcasePage() {
                     <div className="flex justify-between"><span>Memory:</span> <strong className="text-white">{tier.specs.ram}</strong></div>
                     <div className="flex justify-between"><span>NVMe:</span> <strong className="text-white">{tier.specs.storage}</strong></div>
                     <div className="flex justify-between"><span>Bandwidth:</span> <strong className="text-cyan-300">{tier.specs.bandwidth}</strong></div>
-                    <div className="flex justify-between"><span>IP:</span> <strong className="text-emerald-400">{tier.specs.ipv4}</strong></div>
+                    <div className="flex justify-between"><span>Sites/Apps:</span> <strong className="text-emerald-400">Unlimited</strong></div>
                   </div>
                 </div>
 

@@ -206,11 +206,11 @@ export default function WorkloadsSection() {
               <Server className="w-4 h-4 text-purple-600" />
               <span>VPS HOSTING</span>
             </div>
-            <h4 className="text-base font-bold text-[rgb(26,11,84)] font-display">Your Server. Your Rules.</h4>
+            <h4 className="text-base font-bold text-[rgb(26,11,84)] font-display">Fixed Resources. Your Rules.</h4>
             <p className="text-xs text-slate-600 font-sans leading-relaxed">
-              Full root SSH access, Docker containers, multiple daemons, and dedicated compute slices.
+              Dedicated compute slices, NVMe storage, and no limit on how many sites or apps you host.
             </p>
-            <div className="text-xs font-mono text-purple-700 font-bold pt-1">From ₹399 / month</div>
+            <div className="text-xs font-mono text-purple-700 font-bold pt-1">From ₹349 / month</div>
           </div>
 
           <div className="space-y-2 text-left md:border-l md:border-slate-100 md:pl-6">
@@ -222,7 +222,7 @@ export default function WorkloadsSection() {
             <p className="text-xs text-slate-600 font-sans leading-relaxed">
               Raw VPS speed backed by 100% systems engineering management, backups, and security.
             </p>
-            <div className="text-xs font-mono text-emerald-700 font-bold pt-1">From ₹1,299 / month</div>
+            <div className="text-xs font-mono text-emerald-700 font-bold pt-1">From ₹449 / month</div>
           </div>
 
         </div>

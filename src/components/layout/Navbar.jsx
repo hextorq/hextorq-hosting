@@ -100,7 +100,7 @@ export default function Navbar() {
                     </div>
                     <div>
                       <div className="font-semibold text-xs">VPS Hosting</div>
-                      <div className="text-[10px] text-slate-500">Root access & dedicated compute</div>
+                      <div className="text-[10px] text-slate-500">Multi-site & dedicated compute</div>
                     </div>
                   </button>
 

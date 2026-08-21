@@ -19,7 +19,7 @@ export default function HomePage() {
     <>
       <SEO
         title="Hextorq Hosting — Hosting Built Around Your Application"
-        description="Deploy your frontend and backend with predictable shared hosting (from ₹79/mo), adaptive flexible burst capacity, or dedicated root-access VPS (from ₹399/mo). 14-day free trial on every plan."
+        description="Deploy your frontend and backend with predictable shared hosting (from ₹79/mo), adaptive flexible burst capacity, or dedicated multi-site VPS (from ₹349/mo). 14-day free trial on every plan."
         canonical="https://hosting.hextorq.tech/"
       />
 

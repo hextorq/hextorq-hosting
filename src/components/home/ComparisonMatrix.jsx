@@ -91,15 +91,15 @@ export default function ComparisonMatrix() {
                 </th>
                 <th className="p-5 text-center border-l border-slate-200 w-[18.75%] bg-blue-50/50">
                   <div className="text-sm font-bold text-[rgb(26,11,84)] font-display">Flex Shared</div>
-                  <div className="text-[11px] font-mono text-purple-700 font-bold mt-0.5">From ₹199/mo</div>
+                  <div className="text-[11px] font-mono text-purple-700 font-bold mt-0.5">From ₹589/mo</div>
                 </th>
                 <th className="p-5 text-center border-l border-slate-200 w-[18.75%]">
                   <div className="text-sm font-bold text-[rgb(26,11,84)] font-display">Standard VPS</div>
-                  <div className="text-[11px] font-mono text-indigo-700 font-bold mt-0.5">From ₹399/mo</div>
+                  <div className="text-[11px] font-mono text-indigo-700 font-bold mt-0.5">From ₹349/mo</div>
                 </th>
                 <th className="p-5 text-center border-l border-slate-200 w-[18.75%]">
                   <div className="text-sm font-bold text-[rgb(26,11,84)] font-display">Managed VPS</div>
-                  <div className="text-[11px] font-mono text-emerald-700 font-bold mt-0.5">From ₹1,299/mo</div>
+                  <div className="text-[11px] font-mono text-emerald-700 font-bold mt-0.5">From ₹449/mo</div>
                 </th>
               </tr>
             </thead>
