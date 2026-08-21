@@ -193,7 +193,7 @@ export default function SharedHostingSection() {
         </div>
 
         {/* Product Positioning Banner */}
-        <div ref={bannerRef} className="w-full max-w-5xl mb-10 p-6 sm:p-7 rounded-3xl bg-[rgba(10,5,20,0.88)] border border-white/15 flex flex-col md:flex-row items-start md:items-center justify-between gap-5 shadow-xl backdrop-blur-xl">
+        <div ref={bannerRef} className={`w-full mb-10 p-6 sm:p-7 rounded-3xl bg-[rgba(10,5,20,0.88)] border border-white/15 flex flex-col md:flex-row items-start md:items-center justify-between gap-5 shadow-xl backdrop-blur-xl transition-all duration-300 ${currentPlans.length === 4 ? 'max-w-6xl' : 'max-w-5xl'}`}>
           <div className="space-y-2">
             <div className="text-[10px] font-mono uppercase text-cyan-300 font-semibold tracking-[0.16em]">
               {activeTab === 'fixed' ? 'FIXED RESOURCE MODEL' : 'FLEXIBLE BURST MODEL'}
@@ -217,8 +217,15 @@ export default function SharedHostingSection() {
           )}
         </div>
 
-        {/* Aligned, Equal-Height Plan Cards Grid */}
-        <div ref={cardsContainerRef} className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16 items-stretch w-full max-w-5xl">
+        {/* Aligned, Equal-Height Plan Cards Grid - 3 cols for Fixed, 4 cols on the same line for Flex */}
+        <div 
+          ref={cardsContainerRef} 
+          className={`grid gap-6 mb-16 items-stretch w-full mx-auto transition-all duration-300 ${
+            currentPlans.length === 4
+              ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 max-w-6xl'
+              : 'grid-cols-1 md:grid-cols-3 max-w-5xl'
+          }`}
+        >
           {currentPlans.map((plan) => {
             const displayPrice = isYearly ? plan.yearlyPrice : plan.monthlyPrice;
             const isExpanded = expandedCards[plan.id];
@@ -350,7 +357,7 @@ export default function SharedHostingSection() {
         </div>
 
         {/* 5-Step Burst Visualizer */}
-        <div className="w-full max-w-5xl mt-6">
+        <div className={`w-full mt-6 transition-all duration-300 ${currentPlans.length === 4 ? 'max-w-6xl' : 'max-w-5xl'}`}>
           <BurstVisualizer />
         </div>
 

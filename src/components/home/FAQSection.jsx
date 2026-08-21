@@ -48,6 +48,50 @@ export default function FAQSection() {
     setOpenIndex(openIndex === idx ? -1 : idx);
   };
 
+  // Split into left and right columns for independent seamless expansion
+  const col1 = filteredFaqs.filter((_, i) => i % 2 === 0);
+  const col2 = filteredFaqs.filter((_, i) => i % 2 === 1);
+
+  const renderFaqCard = (faq) => {
+    const originalIdx = FAQS.findIndex(f => f.q === faq.q);
+    const isOpen = openIndex === originalIdx;
+
+    return (
+      <div
+        key={originalIdx}
+        className={`rounded-3xl border transition-all duration-200 overflow-hidden ${
+          isOpen
+            ? 'bg-white border-blue-500 shadow-xl'
+            : 'bg-white border-slate-200 hover:border-slate-300 shadow-md'
+        }`}
+      >
+        <button
+          type="button"
+          onClick={() => toggleFaq(originalIdx)}
+          className="w-full px-5 py-4 sm:px-6 sm:py-5 flex items-center justify-between text-left focus:outline-none"
+          aria-expanded={isOpen}
+        >
+          <span className="text-sm sm:text-base font-bold font-display text-[rgb(26,11,84)] pr-4">
+            {faq.q}
+          </span>
+          <span className="p-1 rounded-lg bg-slate-100 text-slate-600 shrink-0">
+            {isOpen ? (
+              <ChevronUp className="w-4 h-4 text-blue-700" />
+            ) : (
+              <ChevronDown className="w-4 h-4" />
+            )}
+          </span>
+        </button>
+
+        {isOpen && (
+          <div className="px-5 pb-5 sm:px-6 sm:pb-6 text-xs sm:text-sm text-slate-600 font-sans leading-relaxed border-t border-slate-100 pt-4 animate-fadeIn">
+            {faq.a}
+          </div>
+        )}
+      </div>
+    );
+  };
+
   return (
     <section 
       ref={sectionRef} 
@@ -78,59 +122,30 @@ export default function FAQSection() {
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search questions (e.g. 14-day trial, Python, Bursting)..."
+              placeholder="Search questions (e.g. 14-day trial, Runtimes, Bursting)..."
               className="w-full px-4 py-3.5 pl-11 rounded-2xl bg-white border border-slate-200 text-xs font-mono text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-600 transition-colors shadow-lg"
             />
           </div>
         </div>
 
-        {/* 2-Column Responsive & Balanced FAQ Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-start">
-          {filteredFaqs.length === 0 ? (
-            <div className="md:col-span-2 text-center py-10 text-xs font-mono text-slate-600 bg-white rounded-3xl p-6 border border-slate-200 shadow-lg">
-              No questions found matching "{searchQuery}". Reach out directly to <a href={`mailto:${SUPPORT_EMAIL}`} className="text-blue-700 underline">{SUPPORT_EMAIL}</a>.
+        {/* 2-Column Balanced FAQ Layout */}
+        {filteredFaqs.length === 0 ? (
+          <div className="text-center py-10 text-xs font-mono text-slate-600 bg-white rounded-3xl p-6 border border-slate-200 shadow-lg max-w-2xl mx-auto">
+            No questions found matching "{searchQuery}". Reach out directly to <a href={`mailto:${SUPPORT_EMAIL}`} className="text-blue-700 underline">{SUPPORT_EMAIL}</a>.
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-start">
+            {/* Left Column */}
+            <div className="space-y-4">
+              {col1.map((faq) => renderFaqCard(faq))}
             </div>
-          ) : (
-            filteredFaqs.map((faq, idx) => {
-              const isOpen = openIndex === idx;
 
-              return (
-                <div
-                  key={idx}
-                  className={`rounded-3xl border transition-all duration-200 overflow-hidden ${
-                    isOpen
-                      ? 'bg-white border-blue-500 shadow-xl'
-                      : 'bg-white border-slate-200 hover:border-slate-300 shadow-md'
-                  }`}
-                >
-                  <button
-                    type="button"
-                    onClick={() => toggleFaq(idx)}
-                    className="w-full px-5 py-4 sm:px-6 sm:py-5 flex items-center justify-between text-left focus:outline-none"
-                    aria-expanded={isOpen}
-                  >
-                    <span className="text-sm sm:text-base font-bold font-display text-[rgb(26,11,84)] pr-4">
-                      {faq.q}
-                    </span>
-                    <span className="p-1 rounded-lg bg-slate-100 text-slate-600 shrink-0">
-                      {isOpen ? (
-                        <ChevronUp className="w-4 h-4 text-blue-700" />
-                      ) : (
-                        <ChevronDown className="w-4 h-4" />
-                      )}
-                    </span>
-                  </button>
-
-                  {isOpen && (
-                    <div className="px-5 pb-5 sm:px-6 sm:pb-6 text-xs sm:text-sm text-slate-600 font-sans leading-relaxed border-t border-slate-100 pt-4 animate-fadeIn">
-                      {faq.a}
-                    </div>
-                  )}
-                </div>
-              );
-            })
-          )}
-        </div>
+            {/* Right Column */}
+            <div className="space-y-4">
+              {col2.map((faq) => renderFaqCard(faq))}
+            </div>
+          </div>
+        )}
 
         {/* Support Callout Box */}
         <div className="mt-12 p-6 rounded-3xl bg-white border border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left shadow-xl">

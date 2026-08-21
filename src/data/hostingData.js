@@ -640,12 +640,8 @@ export const FAQS = [
     a: 'As many as fit within your chosen resource allocation. Unlike Growth Platform (which is scoped to one frontend + one backend), Standard VPS has no project-count limit — deploy and manage multiple sites or applications on the same instance, Self-Hosted or Managed.'
   },
   {
-    q: 'Can I run Node.js?',
-    a: 'Yes! Node.js (including modern versions with Express, Fastify, NestJS, etc.) is fully supported across all Hextorq plans—including Fixed Shared Hosting, Flex Shared Hosting, and VPS.'
-  },
-  {
-    q: 'Can I run Python?',
-    a: 'Yes! Python runtimes (including FastAPI, Django, Flask, and Celery workers) are supported on Hextorq Shared Hosting and VPS plans.'
+    q: 'Which runtimes and frameworks are supported?',
+    a: 'We support modern full-stack developer runtimes out-of-the-box: Node.js (Express, Nest, Fastify), Python (FastAPI, Django, Flask), Go, PHP/Laravel, and frontend frameworks like React, Next.js, Vite, and Vue.'
   },
   {
     q: 'Can I upgrade later?',
