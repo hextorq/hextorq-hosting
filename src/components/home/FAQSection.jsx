@@ -7,7 +7,7 @@ import { FAQS, SUPPORT_EMAIL } from '../../data/hostingData';
 gsap.registerPlugin(ScrollTrigger);
 
 export default function FAQSection() {
-  const [openIndex, setOpenIndex] = useState(0);
+  const [openIndex, setOpenIndex] = useState(-1);
   const [searchQuery, setSearchQuery] = useState('');
 
   const sectionRef = useRef(null);
