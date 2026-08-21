@@ -87,25 +87,28 @@ export default function TrialModal() {
   };
 
   const constructEmailDetails = () => {
-    const subject = `[Hextorq Hosting] 14-Day Free Trial Enquiry - ${currentPlan.name} (${getCategoryLabel(currentCategory)})`;
+    const applicantName = userName.trim() || 'Developer';
+    const applicantEmail = userEmail.trim() || 'Not specified';
+    const subject = `14-Day Free Trial Request: ${currentPlan.name} (${getCategoryLabel(currentCategory)}) - ${applicantName}`;
     
-    const body = `Hello Hextorq Hosting Operations Team,
+    const body = `Hi Hextorq Hosting Team,
 
-I would like to activate a 14-Day Free Trial sandbox environment for the following configuration:
+I would like to start my 14-day free trial on Hextorq Hosting. Here are my selected plan and account details:
 
---- PLAN & SPECIFICATIONS ---
-• Plan Tier: ${currentPlan.name}
-• Product Model: ${getCategoryLabel(currentCategory)}
-• Pricing: ₹${displayPrice}/month (${isYearly ? 'Yearly Billing (15% Saved)' : 'Monthly Billing'})
-• Dedicated Allocation: ${getSpecsSummary()}
+PLAN & CONFIGURATION:
+• Plan: ${currentPlan.name}
+• Hosting Type: ${getCategoryLabel(currentCategory)}
+• Resources: ${getSpecsSummary()}
+• Billing: ₹${displayPrice}/month (${isYearly ? 'Yearly Billing - 15% Off' : 'Monthly Billing'})
 
---- APPLICANT CONTACT ---
-• Full Name / Company: ${userName || 'Not Specified'}
-• Contact / Delivery Email: ${userEmail || 'Not Specified'}
+CONTACT & PROVISIONING:
+• Name / Team: ${applicantName}
+• Delivery Email: ${applicantEmail}
 
-Please provision the 14-Day evaluation sandbox and email the server deployment access credentials.
+Please provision the 14-day evaluation sandbox environment and send over the server access credentials.
 
-Thank you!`;
+Thank you,
+${applicantName}`;
 
     const mailtoUrl = `mailto:${SUPPORT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
     const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(SUPPORT_EMAIL)}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
