@@ -1,5 +1,6 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
+import { Agentation } from 'agentation';
 import { TrialModalProvider } from './context/TrialModalContext';
 import { SmoothScrollProvider } from './context/SmoothScrollContext';
 import Navbar from './components/layout/Navbar';
@@ -10,23 +11,28 @@ import LegalModal from './components/common/LegalModal';
 
 export default function App() {
   return (
-    <TrialModalProvider>
-      <SmoothScrollProvider>
-        <div className="flex flex-col min-h-screen bg-[#000201] text-foreground selection:bg-cyan-500 selection:text-black">
-          <Navbar />
+    <>
+      <TrialModalProvider>
+        <SmoothScrollProvider>
+          <div className="flex flex-col min-h-screen bg-[#000201] text-foreground selection:bg-cyan-500 selection:text-black">
+            <Navbar />
 
-          <main className="flex-grow">
-            <Routes>
-              <Route path="/" element={<HomePage />} />
-              <Route path="*" element={<HomePage />} />
-            </Routes>
-          </main>
+            <main className="flex-grow">
+              <Routes>
+                <Route path="/" element={<HomePage />} />
+                <Route path="*" element={<HomePage />} />
+              </Routes>
+            </main>
 
-          <Footer />
-          <TrialModal />
-          <LegalModal />
-        </div>
-      </SmoothScrollProvider>
-    </TrialModalProvider>
+            <Footer />
+            <TrialModal />
+            <LegalModal />
+          </div>
+        </SmoothScrollProvider>
+      </TrialModalProvider>
+
+      {/* Agentation visual-feedback toolbar — dev only, tree-shaken out of production builds */}
+      {import.meta.env.DEV && <Agentation />}
+    </>
   );
 }
