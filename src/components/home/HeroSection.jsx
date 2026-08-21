@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
-import { ArrowRight, ShieldCheck, Server, Sparkles, CheckCircle2 } from 'lucide-react';
+import { ArrowRight, Server, CheckCircle2 } from 'lucide-react';
 import { useTrialModal } from '../../context/TrialModalContext';
 import { FIXED_SHARED_PLANS } from '../../data/hostingData';
 
@@ -97,17 +97,17 @@ export default function HeroSection() {
 
       <div className="relative z-10 flex max-w-4xl flex-col items-center gap-6 text-center mx-auto px-4">
         
-        {/* Top Subheading & Badge */}
+        {/* Top Subheading & Refined Professional Glass Badge */}
         <div ref={badgeRef} className="flex flex-col items-center gap-3">
           <span data-slot="gradient-text" className="nexa-grad-text text-base sm:text-lg font-bold tracking-wide drop-shadow-md">
             Infrastructure Built to Last
           </span>
 
-          <div className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-black/60 px-4 py-1.5 font-mono text-[11px] uppercase tracking-[0.18em] text-white backdrop-blur-md shadow-2xl hover:border-white/50 transition-colors">
-            <span className="size-2 rounded-full bg-cyan-400 animate-pulse"></span>
-            <span className="font-bold text-white">14-DAY FREE TRIAL ON EVERY PLAN</span>
-            <span className="opacity-40">•</span>
-            <span className="text-cyan-300 font-bold">₹0 UPFRONT</span>
+          <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.04] px-4 py-1.5 text-xs text-white/90 backdrop-blur-md shadow-[0_0_24px_rgba(0,0,0,0.5)] ring-1 ring-inset ring-white/10 hover:border-white/25 transition-all">
+            <span className="flex h-1.5 w-1.5 rounded-full bg-emerald-400"></span>
+            <span className="font-mono text-[11px] tracking-wide text-slate-200 uppercase">14-Day Free Trial</span>
+            <span className="text-white/20">|</span>
+            <span className="font-mono text-[11px] text-cyan-300 font-semibold uppercase">₹0 Upfront • Cancel Anytime</span>
           </div>
         </div>
 

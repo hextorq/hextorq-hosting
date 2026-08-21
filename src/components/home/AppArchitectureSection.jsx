@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { Layers, ArrowRight, CheckCircle2, Server, Sparkles, Terminal, Code2, Database, Shield, Zap } from 'lucide-react';
+import { ArrowRight, CheckCircle2, Code2, Database, ShieldCheck, Cpu, ArrowLeftRight, Terminal, Network } from 'lucide-react';
 import { useTrialModal } from '../../context/TrialModalContext';
 import { FIXED_SHARED_PLANS } from '../../data/hostingData';
 
@@ -235,8 +235,8 @@ export default function AppArchitectureSection() {
             {/* Bottom Result Box */}
             <div className="mt-4 p-4 rounded-2xl bg-white/5 border border-white/15 flex flex-col sm:flex-row items-center justify-between gap-4 backdrop-blur-md">
               <div className="flex items-center space-x-3 text-left">
-                <div className="size-8 rounded-xl bg-white/10 border border-white/20 flex items-center justify-center text-white shrink-0">
-                  <Sparkles className="w-4 h-4 text-cyan-300" />
+                <div className="size-8 rounded-xl bg-white/10 border border-white/20 flex items-center justify-center text-cyan-300 shrink-0">
+                  <Cpu className="w-4 h-4" />
                 </div>
                 <div>
                   <div className="text-xs font-bold text-white font-display">
@@ -261,7 +261,7 @@ export default function AppArchitectureSection() {
         {/* Section Heading */}
         <div ref={headingRef} className="text-center max-w-3xl mx-auto space-y-4 mb-16">
           <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-black/40 px-4 py-1.5 font-mono text-[11px] uppercase tracking-[0.18em] text-white/90 backdrop-blur-md shadow-lg">
-            <Layers className="w-3.5 h-3.5 text-cyan-400" />
+            <Network className="w-3.5 h-3.5 text-cyan-400" />
             <span>THE MODERN ARCHITECTURE STANDARD</span>
           </div>
 
@@ -327,8 +327,8 @@ export default function AppArchitectureSection() {
 
           {/* Center Connector (2 Cols) */}
           <div className="lg:col-span-2 flex flex-col items-center justify-center p-6 rounded-[36px] bg-[rgba(10,5,20,0.88)] border border-white/15 text-center space-y-4 shadow-2xl backdrop-blur-xl">
-            <div className="size-12 rounded-2xl bg-white/10 border border-white/20 flex items-center justify-center text-white shadow-sm">
-              <Zap className="w-5 h-5 text-cyan-300" />
+            <div className="size-12 rounded-2xl bg-white/10 border border-white/20 flex items-center justify-center text-cyan-300 shadow-sm">
+              <ArrowLeftRight className="w-5 h-5" />
             </div>
             
             <div className="space-y-1 font-mono">
@@ -392,8 +392,8 @@ export default function AppArchitectureSection() {
         {/* 14-Day Free Trial banner */}
         <div ref={bannerRef} className="mt-10 p-6 rounded-[36px] bg-[rgba(10,5,20,0.88)] border border-white/15 flex flex-col md:flex-row items-center justify-between gap-6 shadow-2xl backdrop-blur-xl">
           <div className="flex items-center space-x-4 text-left">
-            <div className="size-10 rounded-xl bg-white/10 border border-white/20 flex items-center justify-center text-white shrink-0">
-              <Sparkles className="w-5 h-5 text-cyan-300" />
+            <div className="size-10 rounded-xl bg-white/10 border border-white/20 flex items-center justify-center text-cyan-300 shrink-0">
+              <ShieldCheck className="w-5 h-5" />
             </div>
             <div>
               <h4 className="text-base font-bold text-white font-display">
